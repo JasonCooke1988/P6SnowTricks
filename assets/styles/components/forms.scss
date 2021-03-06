@@ -1,0 +1,32 @@
+.form-wrapper {
+  margin-top: 4rem;
+  h1 {
+    margin-bottom: 2rem;
+    @include bp(md) {
+      font-size: 30px;
+    }
+  }
+  form {
+    border: 2px solid black;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 1rem;
+    .form-group {
+      width: 50%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      input {
+        border: none;
+        border-bottom: 2px solid black;
+        border-radius: 0;
+      }
+    }
+    button[type="submit"] {
+      margin-top: 2rem;
+      border: 2px solid black;
+      box-shadow: 3px 3px 2px 0px rgba(0,0,0,0.75);
+    }
+  }
+}
