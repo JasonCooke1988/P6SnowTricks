@@ -24,9 +24,10 @@ class UserFixtures extends Fixture
         $user->setFirstName('Jason');
         $user->setLastName('Cooke');
         $user->setEmail('jason.cooke@hotmail.fr');
+        $user->setUsername('Jason');
         $user->setPassword($this->passwordEncoder->encodePassword(
             $user,
-            'test'
+            'testing'
         ));
         $user->setCreatedAt(new \DateTime());
 
@@ -36,9 +37,10 @@ class UserFixtures extends Fixture
         $user2->setFirstName('Stella');
         $user2->setLastName('Cooke');
         $user2->setEmail('jasonpcooke88@gmail.com');
+        $user->setUsername('Stella');
         $user2->setPassword($this->passwordEncoder->encodePassword(
             $user2,
-            'test2'
+            'testing'
         ));
         $user2->setCreatedAt(new \DateTime());
 

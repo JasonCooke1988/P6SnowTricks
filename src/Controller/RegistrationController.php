@@ -60,18 +60,11 @@ class RegistrationController extends AbstractController
                     ->htmlTemplate('registration/confirmation_email.html.twig')
             );
 
-            if (!$user->isVerified()) {
-                $this->addFlash('success', 'Veuillez verifier votre boite mail pour confirmer la création de votre compte.');
 
-                return $this->redirectToRoute('home');
-            }
+            $this->addFlash('success', 'Veuillez verifier votre boite mail pour confirmer la création de votre compte.');
 
-           // return $guardHandler->authenticateUserAndHandleSuccess(
-           //     $user,
-           //     $request,
-           //     $authenticator,
-           //     'main' // firewall name in security.yaml
-           // //);
+            return $this->redirectToRoute('home');
+
         }
 
         return $this->render('registration/register.html.twig', [
@@ -82,7 +75,7 @@ class RegistrationController extends AbstractController
     /**
      * @Route("/verify/email", name="app_verify_email")
      */
-    public function verifyUserEmail(Request $request, UserRepository $userRepository,GuardAuthenticatorHandler $guardHandler, LoginFormAuthenticator $authenticator): Response
+    public function verifyUserEmail(Request $request, UserRepository $userRepository, GuardAuthenticatorHandler $guardHandler, LoginFormAuthenticator $authenticator): Response
     {
         $id = $request->get('id');
 
@@ -115,3 +108,15 @@ class RegistrationController extends AbstractController
         );
     }
 }
+
+
+$finder = PhpCsFixer\Finder::create()
+    ->in(__DIR__ . '/src')
+    ->exclude('var');
+
+return PhpCsFixer\Config::create()
+    ->setRules([
+        '@Symfony' => true,
+        'array_syntax' => ['syntax' => 'short'],
+    ])
+    ->setFinder($finder);

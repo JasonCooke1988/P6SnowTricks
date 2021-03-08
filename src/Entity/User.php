@@ -12,6 +12,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 /**
  * @ORM\Entity(repositoryClass=UserRepository::class)
  * @UniqueEntity(fields="email", message="Adresse email déjà utilisé par un utilisateur existant")
+ * @UniqueEntity(fields="username", message="Nom d'utilisateur déjà utilisé par un utilisateur existant")
  */
 class User implements UserInterface
 {
@@ -73,7 +74,7 @@ class User implements UserInterface
     private $isVerified = false;
 
     /**
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="string", length=255, unique=true)
      * @Assert\NotBlank(message="Veuillez reinseigner un nom d'utilisateur valide.")
      */
     private $username;
