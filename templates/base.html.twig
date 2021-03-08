@@ -1,19 +1,71 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <meta charset="UTF-8">
-        <title>{% block title %}Welcome!{% endblock %}</title>
-        {# Run `composer require symfony/webpack-encore-bundle`
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>{% block title %}Welcome!{% endblock %}</title>
+    {# Run `composer require symfony/webpack-encore-bundle`
            and uncomment the following Encore helpers to start using Symfony UX #}
-        {% block stylesheets %}
-            {#{{ encore_entry_link_tags('app') }}#}
+    {% block stylesheets %}
+        <link rel="stylesheet" href="/build/app.css">
+    {% endblock %}
+
+    {% block javascripts %}
+        {# {{ encore_entry_script_tags('app') }} #}
+    {% endblock %}
+</head>
+<body>
+
+{% if header is defined and header == 'home' %}
+<header class="flex-column fullheight d-none d-md-flex">
+    {% else %}
+    <header class="flex-column d-none d-md-flex">
+        {% endif %}
+
+        {% block header %}
+            <div class="topbar d-flex justify-content-between align-items-center">
+                <div class="logo col-lg-2">
+                    <a href="{{ path('home') }}"><img src="{{ asset('images/snowboardinglogo.jpg') }}"
+                                                      alt="Logo du site"></a>
+                </div>
+                <div class="menu col-lg-3 d-flex justify-content-around">
+                    <a href="">Home</a><span>|</span>
+                    <a href="">Figure</a><span>|</span>
+                    {% if not app.user %}
+                        <a href="{{ path('app_register') }}">Inscription</a><span>|</span>
+                        <a href="{{ path('app_login') }}">Connexion</a><span>|</span>
+                    {% else %}
+                        <a href="{{ path('app_logout') }}">Déconnexion</a><span>|</span>
+                    {% endif %}
+                </div>
+            </div>
         {% endblock %}
 
-        {% block javascripts %}
-            {#{{ encore_entry_script_tags('app') }}#}
-        {% endblock %}
-    </head>
-    <body>
-        {% block body %}{% endblock %}
-    </body>
+    </header>
+
+    {% block body %}{% endblock %}
+
+    {% block footer %}
+
+        <footer class="desktop align-items-center d-none d-md-flex">
+
+            <p class="copyright">Copyright © {{ 'now'|date('Y') }} </p>
+
+        </footer>
+
+        <footer class="mobile align-items-center d-md-none">
+
+            <div class="icon-wrapper d-flex justify-content-between offset-md-1 col-md-10">
+                <a href="{{ path('home') }}"><i class="icon-home3"></i></a>
+                {% if not app.user %}
+                    <a href="{{ path('app_login') }}"><i class="icon-enter"></i></a>
+                {% else %}
+                    <a href="{{ path('app_logout') }}"><i class="icon-exit"></i></a>
+                {% endif %}
+            </div>
+
+        </footer>
+
+    {% endblock %}
+</body>
 </html>

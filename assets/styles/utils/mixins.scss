@@ -1,0 +1,42 @@
+//------------------------- BREAKPOINT
+
+$grid-breakpoints: (
+        xs: 0,
+        sm: 576px,
+        md: 768px,
+        lg: 992px,
+        xl: 1200px,
+        xxl: 1500px,
+);
+
+$container-max-widths: (
+        sm: 540px,
+        md: 720px,
+        lg: 1000px,
+        xl: 1100px,
+        xxl: 1440px,
+);
+
+@mixin bp($point) {
+
+
+  @if $point == sm{
+    @media (max-width: 576px){ @content ; }
+  }
+
+  @if $point == md {
+    @media (max-width: 768px){ @content ; }
+  }
+
+  @if $point == lg {
+    @media (max-width: 992px){ @content ; }
+  }
+
+  @if $point == xl {
+    @media (max-width: 1280px) { @content ; }
+  }
+
+  @else if $point == xxl {
+    @media (max-width: 1440px){ @content ; }
+  }
+}

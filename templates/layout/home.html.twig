@@ -1,0 +1,25 @@
+{% extends'base.html.twig' %}
+
+{% block header %}
+    {{ parent() }}
+    <div class="banner home">
+        <img src="{{ asset('images/homebanner.jpg') }}" alt="home banner">
+    </div>
+{% endblock %}
+
+{% block body %}
+
+    {% for flashError in app.flashes('verify_email_error') %}
+        <div class="alert alert-danger" role="alert">{{ flashError }}</div>
+    {% endfor %}
+
+    {% for message in app.flashes('success') %}
+        <div class="alert alert-success">
+            {{ message }}
+        </div>
+    {% endfor %}
+
+    <main></main>
+
+
+{% endblock %}
