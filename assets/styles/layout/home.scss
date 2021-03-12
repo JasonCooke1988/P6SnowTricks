@@ -13,3 +13,27 @@
     object-fit: cover;
   }
 }
+
+main.home {
+  #tricks-list {
+    margin-top: 4rem;
+    .single-trick-preview {
+      margin: 0 .5rem 2rem;
+      .trick-image {
+        object-fit: contain;
+        width: 100%;
+      }
+      .bottom-row {
+        .icons {
+          a {
+            margin: 0 .25rem;
+            color: black;
+            &:hover {
+              color: black;
+            }
+          }
+        }
+      }
+    }
+  }
+}

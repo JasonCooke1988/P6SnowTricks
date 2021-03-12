@@ -28,13 +28,13 @@ class Trick
      * @ORM\ManyToOne(targetEntity=Group::class, inversedBy="tricks")
      * @ORM\JoinColumn(nullable=false)
      */
-    private $groupID;
+    private $group;
 
     /**
      * @ORM\ManyToOne(targetEntity=User::class, inversedBy="tricks")
      * @ORM\JoinColumn(nullable=false)
      */
-    private $userID;
+    private $user;
 
     /**
      * @ORM\Column(type="text")
@@ -90,26 +90,26 @@ class Trick
         return $this;
     }
 
-    public function getGroupID(): ?Group
+    public function getgroup(): ?Group
     {
-        return $this->groupID;
+        return $this->group;
     }
 
-    public function setGroupID(?Group $groupID): self
+    public function setgroup(?Group $group): self
     {
-        $this->groupID = $groupID;
+        $this->group = $group;
 
         return $this;
     }
 
-    public function getUserID(): ?User
+    public function getuser(): ?User
     {
-        return $this->userID;
+        return $this->user;
     }
 
-    public function setUserID(?User $userID): self
+    public function setuser(?User $user): self
     {
-        $this->userID = $userID;
+        $this->user = $user;
 
         return $this;
     }
