@@ -17,6 +17,7 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 use Symfony\Component\Security\Guard\GuardAuthenticatorHandler;
 use SymfonyCasts\Bundle\VerifyEmail\Exception\VerifyEmailExceptionInterface;
+use Doctrine\Migrations\Finder\Finder;
 
 class RegistrationController extends AbstractController
 {
@@ -110,13 +111,14 @@ class RegistrationController extends AbstractController
 }
 
 
-$finder = PhpCsFixer\Finder::create()
-    ->in(__DIR__ . '/src')
-    ->exclude('var');
-
-return PhpCsFixer\Config::create()
-    ->setRules([
-        '@Symfony' => true,
-        'array_syntax' => ['syntax' => 'short'],
-    ])
-    ->setFinder($finder);
+//$finder = PhpCsFixer\Finder::create()
+//    ->in(__DIR__ . '/src')
+//    ->exclude('var');
+//
+//return PhpCsFixer\Config::create()
+//    ->setRules([
+//        '@Symfony' => true,
+//        'array_syntax' => ['syntax' => 'short'],
+//    ])
+//    ->setFinder($finder);
+//

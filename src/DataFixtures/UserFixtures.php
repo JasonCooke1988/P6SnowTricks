@@ -12,6 +12,11 @@ class UserFixtures extends Fixture
 
     private $passwordEncoder;
 
+    public const JASON_USER_REFERENCE = "jason-user";
+    public const STELLA_USER_REFERENCE = "stella-user";
+
+    public $args;
+
     public function __construct(UserPasswordEncoderInterface $passwordEncoder)
     {
      $this->passwordEncoder = $passwordEncoder;
@@ -19,33 +24,42 @@ class UserFixtures extends Fixture
 
     public function load(ObjectManager $manager)
     {
-        $user = new User();
+        $this->args = [
+            [
+                'firstName' => 'Jason',
+                'lastName' => 'Cooke',
+                'email' => 'jason.cooke@hotmail.fr',
+                'userName' => 'Jason',
+                'password' => 'testing',
+                'ref' => self::JASON_USER_REFERENCE
+            ],
+            [
+                'firstName' => 'Stella',
+                'lastName' => 'Cooke',
+                'email' => 'jasonpcooke88@gmail.com',
+                'userName' => 'Stella',
+                'password' => 'testing',
+                'ref' => self::STELLA_USER_REFERENCE
+            ]
+        ];
 
-        $user->setFirstName('Jason');
-        $user->setLastName('Cooke');
-        $user->setEmail('jason.cooke@hotmail.fr');
-        $user->setUsername('Jason');
-        $user->setPassword($this->passwordEncoder->encodePassword(
-            $user,
-            'testing'
-        ));
-        $user->setCreatedAt(new \DateTime());
+        foreach($this->args as $elt) {
 
+            $user = new User();
 
-        $user2 = new User();
+            $user->setFirstName($elt['firstName']);
+            $user->setLastName($elt['lastName']);
+            $user->setEmail($elt['email']);
+            $user->setUsername($elt['userName']);
+            $user->setPassword($this->passwordEncoder->encodePassword(
+                $user,
+                $elt['password']
+            ));
+            $user->setCreatedAt(new \DateTime());
+            $this->addReference($elt['ref'], $user);
 
-        $user2->setFirstName('Stella');
-        $user2->setLastName('Cooke');
-        $user2->setEmail('jasonpcooke88@gmail.com');
-        $user->setUsername('Stella');
-        $user2->setPassword($this->passwordEncoder->encodePassword(
-            $user2,
-            'testing'
-        ));
-        $user2->setCreatedAt(new \DateTime());
-
-        $manager->persist($user);
-        $manager->persist($user2);
+            $manager->persist($user);
+        }
 
         $manager->flush();
     }
