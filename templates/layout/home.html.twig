@@ -1,9 +1,14 @@
 {% extends'base.html.twig' %}
 
+{%  block javascripts %}
+{{ encore_entry_script_tags('clickdisplay-home') }}
+{%  endblock %}
+
 {% block header %}
     {{ parent() }}
-    <div class="banner home">
+    <div class="banner fullheight">
         <img src="{{ asset('images/homebanner.jpg') }}" alt="home banner">
+        <a href="#tricks-list"><i class="icon-arrow-down"></i></a>
     </div>
 {% endblock %}
 
@@ -24,22 +29,68 @@
         <section id="tricks-list" class="row d-flex justify-content-around">
 
             {% for trick in tricks %}
-                <div class="single-trick-preview col-lg-2">
-                    {% if trick.trickImages is defined %}
-                        <img class="trick-image" src="{{ asset('images/tricks/' . trick.trickImages.collection[0]['path']) }}" alt="Image de figure">
-                    {% else %}
-                        <img class="trick-image" src="http://via.placeholder.com/300x150" alt="Image provisoire de figure">
-                    {% endif %}
-                    <div class="bottom-row d-flex justify-content-between align-items-center my-2">
-                        <a href="" class="trick-name d-flex align-items-center m-0">{{ trick.name }}</a>
-                        <div class="icons">
-                            <a href=""><i class="icon-pencil"></i></a>
-                            <a href=""><i class="icon-bin"></i></a>
+
+                {% if loop.index > 10 %}
+
+                    <div class="single-trick-preview above-max col-lg-2">
+                        {% if trick.trickImages is defined %}
+                            <a href="{{ path('singleTrick',{id: trick.id}) }}"><img class="trick-image"
+                                                                                    src="{{ asset('images/tricks/' ~ trick.trickImages|first.path) }}"
+                                                                                    alt="Image de figure"></a>
+                        {% else %}
+                            <a href="{{ path('singleTrick',{id: trick.id}) }}"><img class="trick-image"
+                                                                                    src="http://via.placeholder.com/300x150"
+                                                                                    alt="Image provisoire de figure"></a>
+                        {% endif %}
+                        <div class="bottom-row d-flex justify-content-between align-items-center my-2">
+                            <a href="{{ path('singleTrick',{id: trick.id}) }}"
+                               class="trick-name d-flex align-items-center m-0">{{ trick.name }}</a>
+                            {% if app.user %}
+                                <div class="icons">
+                                    <a href=""><i class="icon-pencil"></i></a>
+                                    <a href=""><i class="icon-bin"></i></a>
+                                </div>
+                            {% endif %}
                         </div>
                     </div>
-                </div>
+
+                {% else %}
+
+                    <div class="single-trick-preview col-lg-2" style="display: block">
+                        {% if trick.trickImages is defined %}
+                            <a href="{{ path('singleTrick',{id: trick.id}) }}"><img class="trick-image"
+                                                                                    src="{{ asset('images/tricks/' ~ trick.trickImages|first.path) }}"
+                                                                                    alt="Image de figure"></a>
+                        {% else %}
+                            <a href="{{ path('singleTrick',{id: trick.id}) }}"><img class="trick-image"
+                                                                                    src="http://via.placeholder.com/300x150"
+                                                                                    alt="Image provisoire de figure"></a>
+                        {% endif %}
+                        <div class="bottom-row d-flex justify-content-between align-items-center my-2">
+                            <a href="{{ path('singleTrick',{id: trick.id}) }}"
+                               class="trick-name d-flex align-items-center m-0">{{ trick.name }}</a>
+                            {% if app.user %}
+                                <div class="icons">
+                                    <a href=""><i class="icon-pencil"></i></a>
+                                    <a href=""><i class="icon-bin"></i></a>
+                                </div>
+                            {% endif %}
+                        </div>
+                    </div>
+
+                {% endif %}
+
             {% endfor %}
+
         </section>
+
+        <div class="row d-flex justify-content-center">
+            <button id="display-more-tricks" class="btn btn-lg btn-primary my-2"><i class="icon-spinner mr-2"></i>Voir plus</button>
+        </div>
+
+
+        <a id="to-top" href="#"><i class="icon-arrow-up"></i></a>
+
 
     </main>
 

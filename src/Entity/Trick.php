@@ -17,52 +17,52 @@ class Trick
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
      */
-    private $id;
+    private ?int $id;
 
     /**
      * @ORM\Column(type="string", length=255)
      */
-    private $name;
+    private ?string $name;
 
     /**
      * @ORM\ManyToOne(targetEntity=Group::class, inversedBy="tricks")
      * @ORM\JoinColumn(nullable=false)
      */
-    private $group;
+    private ?Group $group;
 
     /**
      * @ORM\ManyToOne(targetEntity=User::class, inversedBy="tricks")
      * @ORM\JoinColumn(nullable=false)
      */
-    private $user;
+    private ?User $user;
 
     /**
      * @ORM\Column(type="text")
      */
-    private $description;
+    private ?string $description;
 
     /**
      * @ORM\Column(type="datetime")
      */
-    private $createdAt;
+    private ?\DateTimeInterface $createdAt;
 
     /**
      * @ORM\Column(type="datetime", nullable=true)
      */
-    private $updatedAt;
+    private ?\DateTimeInterface $updatedAt;
 
     /**
-     * @ORM\OneToMany(targetEntity=Comment::class, mappedBy="trickID", orphanRemoval=true)
+     * @ORM\OneToMany(targetEntity=Comment::class, mappedBy="trick", orphanRemoval=true)
      */
     private $comments;
 
     /**
-     * @ORM\OneToMany(targetEntity=TrickVideo::class, mappedBy="trickID", orphanRemoval=true)
+     * @ORM\OneToMany(targetEntity=TrickVideo::class, mappedBy="trick", orphanRemoval=true)
      */
     private $trickVideos;
 
     /**
-     * @ORM\OneToMany(targetEntity=TrickImage::class, mappedBy="trickID", orphanRemoval=true)
+     * @ORM\OneToMany(targetEntity=TrickImage::class, mappedBy="trick", orphanRemoval=true)
      */
     private $trickImages;
 
@@ -162,7 +162,7 @@ class Trick
     {
         if (!$this->comments->contains($comment)) {
             $this->comments[] = $comment;
-            $comment->setTrickID($this);
+            $comment->settrick($this);
         }
 
         return $this;
@@ -172,8 +172,8 @@ class Trick
     {
         if ($this->comments->removeElement($comment)) {
             // set the owning side to null (unless already changed)
-            if ($comment->getTrickID() === $this) {
-                $comment->setTrickID(null);
+            if ($comment->gettrick() === $this) {
+                $comment->settrick(null);
             }
         }
 
@@ -192,7 +192,7 @@ class Trick
     {
         if (!$this->trickVideos->contains($trickVideo)) {
             $this->trickVideos[] = $trickVideo;
-            $trickVideo->setTrickID($this);
+            $trickVideo->settrick($this);
         }
 
         return $this;
@@ -202,8 +202,8 @@ class Trick
     {
         if ($this->trickVideos->removeElement($trickVideo)) {
             // set the owning side to null (unless already changed)
-            if ($trickVideo->getTrickID() === $this) {
-                $trickVideo->setTrickID(null);
+            if ($trickVideo->gettrick() === $this) {
+                $trickVideo->settrick(null);
             }
         }
 
@@ -222,7 +222,7 @@ class Trick
     {
         if (!$this->trickImages->contains($trickImage)) {
             $this->trickImages[] = $trickImage;
-            $trickImage->setTrickID($this);
+            $trickImage->setTrick($this);
         }
 
         return $this;
@@ -232,8 +232,8 @@ class Trick
     {
         if ($this->trickImages->removeElement($trickImage)) {
             // set the owning side to null (unless already changed)
-            if ($trickImage->getTrickID() === $this) {
-                $trickImage->setTrickID(null);
+            if ($trickImage->getTrick() === $this) {
+                $trickImage->setTrick(null);
             }
         }
 

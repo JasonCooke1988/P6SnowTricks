@@ -6,7 +6,7 @@ use App\Entity\Trick;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
-/**
+/**hom
  * @method Trick|null find($id, $lockMode = null, $lockVersion = null)
  * @method Trick|null findOneBy(array $criteria, array $orderBy = null)
  * @method Trick[]    findAll()
@@ -18,6 +18,18 @@ class TrickRepository extends ServiceEntityRepository
     {
         parent::__construct($registry, Trick::class);
     }
+
+    //public function findAll()
+    //{
+//
+    //    $tricks = $this->findBy([]);
+//
+    //    foreach($tricks as $trick) {
+    //       $trick->getTrickImages();
+    //    }
+//
+    //    return $tricks;
+    //}
 
     // /**
     //  * @return Trick[] Returns an array of Trick objects
