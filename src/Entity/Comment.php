@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use App\Repository\CommentRepository;
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -15,34 +16,34 @@ class Comment
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
      */
-    private $id;
+    private ?int $id;
 
     /**
      * @ORM\Column(type="text")
      */
-    private $content;
+    private ?string $content;
 
     /**
      * @ORM\ManyToOne(targetEntity=User::class, inversedBy="comments")
      * @ORM\JoinColumn(nullable=false)
      */
-    private $userID;
+    private ?User $user;
 
     /**
      * @ORM\ManyToOne(targetEntity=Trick::class, inversedBy="comments")
      * @ORM\JoinColumn(nullable=false)
      */
-    private $trickID;
+    private ?Trick $trick;
 
     /**
      * @ORM\Column(type="datetime")
      */
-    private $createdAt;
+    private ?\DateTimeInterface $createdAt;
 
     /**
      * @ORM\Column(type="datetime", nullable=true)
      */
-    private $updatedAt;
+    private ?\DateTimeInterface $updatedAt;
 
     public function getId(): ?int
     {
@@ -61,26 +62,26 @@ class Comment
         return $this;
     }
 
-    public function getUserID(): ?User
+    public function getUser(): ?User
     {
-        return $this->userID;
+        return $this->user;
     }
 
-    public function setUserID(?User $userID): self
+    public function setUser(?User $user): self
     {
-        $this->userID = $userID;
+        $this->user = $user;
 
         return $this;
     }
 
-    public function getTrickID(): ?Trick
+    public function getTrick(): ?Trick
     {
-        return $this->trickID;
+        return $this->trick;
     }
 
-    public function setTrickID(?Trick $trickID): self
+    public function setTrick(?Trick $trick): self
     {
-        $this->trickID = $trickID;
+        $this->trick = $trick;
 
         return $this;
     }

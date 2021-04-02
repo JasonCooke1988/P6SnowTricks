@@ -30,12 +30,28 @@ class TrickImageFixtures extends Fixture implements DependentFixtureInterface
                 'trick' => TrickFixtures::MUTE_TRICK_REFERENCE
             ],
             [
+                'path' => 'mute2.jpg',
+                'trick' => TrickFixtures::TAIL_GRAB_TRICK_REFERENCE
+            ],
+            [
+                'path' => '180.jpg',
+                'trick' => TrickFixtures::MUTE_TRICK_REFERENCE
+            ],
+            [
+                'path' => '180.jpg',
+                'trick' => TrickFixtures::NOSE_GRAB_TRICK_REFERENCE
+            ],
+            [
                 'path' => '180.jpg',
                 'trick' => TrickFixtures::ROTATION_180_TRICK_REFERENCE
             ],
             [
                 'path' => '360.jpg',
                 'trick' => TrickFixtures::ROTATION_360_TRICK_REFERENCE
+            ],
+            [
+                'path' => '360.jpg',
+                'trick' => TrickFixtures::JAPAN_TRICK_REFERENCE
             ],
             [
                 'path' => '540.jpg',
@@ -54,6 +70,10 @@ class TrickImageFixtures extends Fixture implements DependentFixtureInterface
                 'trick' => TrickFixtures::FRONT_FLIP_TRICK_REFERENCE
             ],
             [
+                'path' => 'frontflip.jpg',
+                'trick' => TrickFixtures::SEAT_BELT_TRICK_REFERENCE
+            ],
+            [
                 'path' => 'backflip.jpg',
                 'trick' => TrickFixtures::BACK_FLIP_TRICK_REFERENCE
             ],
@@ -64,6 +84,10 @@ class TrickImageFixtures extends Fixture implements DependentFixtureInterface
             [
                 'path' => 'sad.jpg',
                 'trick' => TrickFixtures::SAD_TRICK_REFERENCE
+            ],
+            [
+                'path' => 'sad.jpg',
+                'trick' => TrickFixtures::TRUCK_DRIVER_TRICK_REFERENCE
             ],
             [
                 'path' => 'stalefish.jpg',

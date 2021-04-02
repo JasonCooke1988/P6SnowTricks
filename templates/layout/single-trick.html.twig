@@ -1,0 +1,113 @@
+{% extends'base.html.twig' %}
+
+{% block javascripts %}
+
+{{ encore_entry_script_tags('clickdisplay-trick') }}
+
+{% endblock %}
+
+{% block header %}
+    {{ parent() }}
+    <div class="banner fullheight single-trick">
+        {% if trick.trickImages is defined %}
+            <img src="{{ asset('images/tricks/' ~ trick.trickImages|first.path) }}" alt="home banner">
+        {% else %}
+            <img src="{{ asset('images/homebanner.jpg') }}" alt="home banner">
+        {% endif %}
+        <h1>{{ trick.name }}</h1>
+    </div>
+{% endblock %}
+
+{% block body %}
+
+    <main class="single-trick">
+
+        <div class="row justify-content-center">
+
+            <button id="display-medias" class="btn btn-lg btn-primary my-3">Voir médias</button>
+
+        </div>
+
+        <div id="media-row" class="row image-videos justify-content-around">
+            {% if trick.trickImages is defined %}
+                {% for image in trick.trickImages %}
+                    <div class="single-image col-lg-2 my-4">
+                        <img src="{{ asset('images/tricks/' ~ image.path) }}" alt="Trick image">
+                    </div>
+                {% endfor %}
+            {% endif %}
+            {% if trick.trickVideos is defined %}
+                {% for video in trick.trickVideos %}
+                    <div class="single-video col-lg-2 my-4">
+                        {{ video.embed|raw }}
+                    </div>
+                {% endfor %}
+            {% endif %}
+        </div>
+
+
+        <p class="description">
+            {{ trick.description }}
+        </p>
+
+        <div class="stats d-flex offset-lg-3 col-lg-6 justify-content-around">
+            <p class="group p-2">{{ trick.group.name }}</p>
+            <p class="creation p-2">Figure créer le : {{ trick.createdAt|date('Y-m-d') }}</p>
+            {% if trick.updatedAt is defined and trick.updatedAt is not null %}
+                <p class="update p-2">Figure modifié le : {{ trick.updatedAt|date('Y-m-d') }} </p>
+            {% endif %}
+        </div>
+
+        {% if app.user %}
+            <hr>
+            <div class="comment-form d-flex justify-content-center my-2">
+                {{ form_start(commentForm, {'attr' : {'class':'d-flex col-lg-6 align-items-center flex-column flex-sm-row'}}) }}
+                {{ form_row(commentForm.content, {'label': ' '}) }}
+                <button type="submit" class="btn btn-lg btn-primary ml-2">Laisser un commentaire</button>
+                {{ form_end(commentForm) }}
+            </div>
+            <hr>
+        {% endif %}
+
+        {% if trick.comments is defined %}
+            <div class="comment-list row flex-column align-items-center mt-4">
+                {% for comment in trick.comments %}
+
+                    {% if loop.index > 4 %}
+
+                        <div class="single-comment above-max col-lg-4 align-items-center my-1">
+                            {% if comment.user.photo is defined and comment.user.photo is not null %}
+                                <img src="" alt="" class="user-image mr-2">
+                            {% else %}
+                                <img src="https://via.placeholder.com/150" alt="User profile image"
+                                     class="user-image mr-2">
+                            {% endif %}
+                            <p class="comment mb-0 pb-4 pt-1 px-2">{{ comment.content }}</p>
+                        </div>
+
+                    {% else %}
+
+                        <div class="single-comment col-lg-4 align-items-center my-1">
+                            {% if comment.user.photo is defined and comment.user.photo is not null %}
+                                <img src="" alt="" class="user-image mr-2">
+                            {% else %}
+                                <img src="https://via.placeholder.com/150" alt="User profile image"
+                                     class="user-image mr-2">
+                            {% endif %}
+                            <p class="comment mb-0 pb-4 pt-1 px-2">{{ comment.content }}</p>
+                        </div>
+
+                    {% endif %}
+
+
+
+                {% endfor %}
+
+                <button id="display-more-comments" class="btn btn-lg btn-primary my-2">Voir plus</button>
+            </div>
+        {% endif %}
+
+    </main>
+
+{% endblock %}
+

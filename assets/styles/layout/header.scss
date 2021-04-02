@@ -1,11 +1,28 @@
 header.fullheight {
   height: 100vh;
+  .banner.fullheight {
+    position: relative;
+    a {
+      color: black;
+      &:hover {
+        color:black;
+      }
+      .icon-arrow-down {
+        position: absolute;
+        right: 1rem;
+        bottom: 2rem;
+        font-size: 40px;
+      }
+    }
+
+  }
 }
 
 header {
   .logo {
     img {
       max-width: 100px;
+      font-size: 40px;
     }
   }
 

@@ -30,8 +30,12 @@ class RegistrationController extends AbstractController
 
     /**
      * @Route("/register", name="app_register")
+     * @param Request $request
+     * @param UserPasswordEncoderInterface $passwordEncoder
+     * @return Response
+     * @throws \Exception
      */
-    public function register(Request $request, UserPasswordEncoderInterface $passwordEncoder, GuardAuthenticatorHandler $guardHandler, LoginFormAuthenticator $authenticator): Response
+    public function register(Request $request, UserPasswordEncoderInterface $passwordEncoder): Response
     {
         $user = new User();
         $form = $this->createForm(RegistrationFormType::class, $user);
@@ -109,16 +113,3 @@ class RegistrationController extends AbstractController
         );
     }
 }
-
-
-//$finder = PhpCsFixer\Finder::create()
-//    ->in(__DIR__ . '/src')
-//    ->exclude('var');
-//
-//return PhpCsFixer\Config::create()
-//    ->setRules([
-//        '@Symfony' => true,
-//        'array_syntax' => ['syntax' => 'short'],
-//    ])
-//    ->setFinder($finder);
-//

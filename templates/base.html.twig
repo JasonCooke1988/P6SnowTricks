@@ -16,10 +16,10 @@
 </head>
 <body>
 
-{% if header is defined and header == 'home' %}
-<header class="flex-column fullheight d-none d-md-flex">
+{% if header is defined and header == 'fullheight' %}
+<header class="flex-column fullheight d-flex">
     {% else %}
-    <header class="flex-column d-none d-md-flex">
+    <header class="flex-column d-flex">
         {% endif %}
 
         {% block header %}

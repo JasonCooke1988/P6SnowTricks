@@ -1,0 +1,96 @@
+.banner.single-trick {
+  h1 {
+    position: absolute;
+    top: 48%;
+    left: 48%;
+    color: white;
+    @include bp(sm) {
+      left: 40%;
+    }
+  }
+}
+
+main.single-trick {
+  #display-medias {
+    display: none;
+    @include bp(sm) {
+      display: flex;
+    }
+  }
+
+  .image-videos {
+    margin: .5rem .5rem;
+    display: flex;
+
+    @include bp(sm) {
+      display: none;
+    }
+
+    .single-image {
+      align-self: center;
+
+      img {
+        width: 100%;
+        object-fit: contain;
+      }
+    }
+
+    .single-video {
+      max-height: 8rem;
+      @include bp(sm) {
+        max-height: 17rem;
+      }
+
+      iframe {
+        max-width: 100% !important;
+        max-height: 100% !important;
+      }
+    }
+  }
+
+  .description {
+    margin: 3rem auto;
+    max-width: 80%;
+    width: max-content;
+  }
+
+  .stats {
+    p {
+      border: solid black 1px;
+      padding: .25rem;
+    }
+  }
+
+  .comment-form {
+    .btn {
+      max-height: 3rem;
+      box-shadow: 2px 2px 5px 0px rgba(0, 0, 0, 0.75);
+    }
+    .form-group {
+      flex: 1;
+      @include bp(sm) {
+        width: 100%;
+      }
+    }
+  }
+
+  .comment-list {
+    .single-comment {
+      display: flex;
+      .user-image {
+        max-width: 47px;
+        border-radius: 50%;
+      }
+
+      .comment {
+        border: 1px solid black;
+        box-shadow: 2px 2px 5px 0px rgba(0, 0, 0, 0.75);
+        width: 100%;
+      }
+
+      &.above-max {
+        display: none;
+      }
+    }
+  }
+}

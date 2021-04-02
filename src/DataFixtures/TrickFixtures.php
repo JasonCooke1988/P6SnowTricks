@@ -22,6 +22,11 @@ class TrickFixtures extends Fixture implements DependentFixtureInterface
     public const FLIP_TRICK_REFERENCE = "flip-trick";
     public const FRONT_FLIP_TRICK_REFERENCE = "front-flip-trick";
     public const BACK_FLIP_TRICK_REFERENCE = "back-flip-trick";
+    public const TAIL_GRAB_TRICK_REFERENCE = "tail-grab-trick";
+    public const NOSE_GRAB_TRICK_REFERENCE = 'nose-grab-trick';
+    public const JAPAN_TRICK_REFERENCE = "japan-grab-trick";
+    public const SEAT_BELT_TRICK_REFERENCE = "seat-belt-grab-trick";
+    public const TRUCK_DRIVER_TRICK_REFERENCE = "truck-driver-grab-trick";
 
     private object $jason;
     private object $stella;
@@ -86,6 +91,41 @@ class TrickFixtures extends Fixture implements DependentFixtureInterface
                 'group' => $this->grabs,
                 'user' => $this->jason,
                 'ref' => self::STALEFISH_TRICK_REFERENCE
+            ],
+            [
+                'name' => 'Tail grab',
+                'description' => 'Saisie de la partie arrière de la planche, avec la main arrière',
+                'group' => $this->grabs,
+                'user' => $this->jason,
+                'ref' => self::TAIL_GRAB_TRICK_REFERENCE
+            ],
+            [
+                'name' => 'Nose grab',
+                'description' => 'Saisie de la partie avant de la planche, avec la main avant',
+                'group' => $this->grabs,
+                'user' => $this->stella,
+                'ref' => self::NOSE_GRAB_TRICK_REFERENCE
+            ],
+            [
+                'name' => 'Japan',
+                'description' => 'Saisie de l\'avant de la planche, avec la main avant, du côté de la carre frontside',
+                'group' => $this->grabs,
+                'user' => $this->stella,
+                'ref' => self::JAPAN_TRICK_REFERENCE
+            ],
+            [
+                'name' => 'Seat belt',
+                'description' => 'Saisie de l\'avant de la planche, avec la main avant, du côté de la carre frontside',
+                'group' => $this->grabs,
+                'user' => $this->stella,
+                'ref' => self::SEAT_BELT_TRICK_REFERENCE
+            ],
+            [
+                'name' => 'Truck driver',
+                'description' => 'Saisie du carre avant et carre arrière avec chaque main (comme tenir un volant de voiture)',
+                'group' => $this->grabs,
+                'user' => $this->stella,
+                'ref' => self::TRUCK_DRIVER_TRICK_REFERENCE
             ],
             [
                 'name' => 'Rotation 180°',
