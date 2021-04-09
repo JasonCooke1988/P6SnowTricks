@@ -36,7 +36,7 @@ class Group
     private $updatedAt;
 
     /**
-     * @ORM\OneToMany(targetEntity=Trick::class, mappedBy="groupID")
+     * @ORM\OneToMany(targetEntity=Trick::class, mappedBy="group")
      */
     private $tricks;
 

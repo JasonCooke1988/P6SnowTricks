@@ -29,4 +29,22 @@
       box-shadow: 3px 3px 2px 0px rgba(0,0,0,0.75);
     }
   }
+
+}
+
+.trick-action {
+  border: black 1px solid;
+  background-color: white;
+  box-shadow: $box-shadow;
+  width: 8rem;
+
+
+  i {
+    color: black;
+    font-size: 24px;
+    &:hover {
+      color: black;
+      text-decoration: none;
+    }
+  }
 }

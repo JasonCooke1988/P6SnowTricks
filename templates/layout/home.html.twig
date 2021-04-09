@@ -47,8 +47,8 @@
                                class="trick-name d-flex align-items-center m-0">{{ trick.name }}</a>
                             {% if app.user %}
                                 <div class="icons">
-                                    <a href=""><i class="icon-pencil"></i></a>
-                                    <a href=""><i class="icon-bin"></i></a>
+                                    <a href="{{ path('modifyTrick',{id: trick.id}) }}"><i class="icon-pencil"></i></a>
+                                    <a href="{{ path('deleteTrick',{id: trick.id}) }}"><i class="icon-bin"></i></a>
                                 </div>
                             {% endif %}
                         </div>
@@ -71,8 +71,8 @@
                                class="trick-name d-flex align-items-center m-0">{{ trick.name }}</a>
                             {% if app.user %}
                                 <div class="icons">
-                                    <a href=""><i class="icon-pencil"></i></a>
-                                    <a href=""><i class="icon-bin"></i></a>
+                                    <a href="{{ path('modifyTrick',{id: trick.id}) }}"><i class="icon-pencil"></i></a>
+                                    <a href="{{ path('deleteTrick',{id: trick.id}) }}"><i class="icon-bin"></i></a>
                                 </div>
                             {% endif %}
                         </div>
