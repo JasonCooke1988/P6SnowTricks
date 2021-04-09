@@ -1,0 +1,38 @@
+.banner.modify-trick {
+  position: relative;
+
+  .trick-action {
+    position: absolute;
+    right: 1rem;
+    top: 2rem;
+  }
+
+  h1 {
+    position: absolute;
+    top: 48%;
+    left: 48%;
+    color: white;
+    @include bp(sm) {
+      left: 40%;
+    }
+  }
+
+}
+
+.single-trick.modify-trick {
+
+  .trick-action {
+    margin-left: auto;
+  }
+
+
+  #trick-form {
+    .form-group {
+      width: 100%;
+    }
+    .submit {
+      width: 100%;
+    }
+  }
+
+}

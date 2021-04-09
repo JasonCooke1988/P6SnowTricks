@@ -31,7 +31,7 @@ class Trick
     private ?Group $group;
 
     /**
-     * @ORM\ManyToOne(targetEntity=User::class, inversedBy="tricks")
+     * @ORM\ManyToOne(targetEntity=User::class)
      * @ORM\JoinColumn(nullable=false)
      */
     private ?User $user;
@@ -65,6 +65,11 @@ class Trick
      * @ORM\OneToMany(targetEntity=TrickImage::class, mappedBy="trick", orphanRemoval=true)
      */
     private $trickImages;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $mainImage;
 
     public function __construct()
     {
@@ -236,6 +241,33 @@ class Trick
                 $trickImage->setTrick(null);
             }
         }
+
+        return $this;
+    }
+
+    public function replaceTrickImage(TrickImage $trickImage, TrickImage $newTrickImage): self
+    {
+        $this->trickImages->set($trickImage, $newTrickImage);
+
+        return $this;
+    }
+
+
+    public function getMainImage(): ?string
+    {
+        return $this->mainImage;
+    }
+
+    public function setMainImage(?string $mainImage): self
+    {
+        $this->mainImage = $mainImage;
+
+        return $this;
+    }
+
+    public function deleteMainImage()
+    {
+        $this->mainImage = null;
 
         return $this;
     }
