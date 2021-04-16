@@ -17,6 +17,7 @@ class TrickImage
      */
     private $id;
 
+
     /**
      * @ORM\ManyToOne(targetEntity=Trick::class, inversedBy="trickImages")
      * @ORM\JoinColumn(nullable=false)
@@ -53,6 +54,14 @@ class TrickImage
         $this->trick = $trick;
 
         return $this;
+    }
+
+    /**
+     * @param mixed $id
+     */
+    public function setId($id): void
+    {
+        $this->id = $id;
     }
 
     public function getPath(): ?string

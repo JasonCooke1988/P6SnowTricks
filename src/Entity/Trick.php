@@ -9,6 +9,7 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\Entity(repositoryClass=TrickRepository::class)
+ * @ORM\Cache(usage="NONSTRICT_READ_WRITE")
  */
 class Trick
 {
@@ -27,12 +28,14 @@ class Trick
     /**
      * @ORM\ManyToOne(targetEntity=Group::class, inversedBy="tricks")
      * @ORM\JoinColumn(nullable=false)
+     * @ORM\Cache(usage="NONSTRICT_READ_WRITE")
      */
     private ?Group $group;
 
     /**
      * @ORM\ManyToOne(targetEntity=User::class)
      * @ORM\JoinColumn(nullable=false)
+     * @ORM\Cache(usage="NONSTRICT_READ_WRITE")
      */
     private ?User $user;
 
@@ -203,6 +206,14 @@ class Trick
         return $this;
     }
 
+    public function getTrickVideo($id): TrickVideo
+    {
+        foreach($this->trickVideos as $trickVideo) {
+            if($trickVideo->getId() == $id) return $trickVideo;
+        }
+        return new TrickVideo();
+    }
+
     public function removeTrickVideo(TrickVideo $trickVideo): self
     {
         if ($this->trickVideos->removeElement($trickVideo)) {
@@ -223,6 +234,14 @@ class Trick
         return $this->trickImages;
     }
 
+    public function getTrickImage($id): TrickImage
+    {
+        foreach($this->trickImages as $trickImage) {
+            if($trickImage->getId() == $id) return $trickImage;
+        }
+        return new TrickImage();
+    }
+
     public function addTrickImage(TrickImage $trickImage): self
     {
         if (!$this->trickImages->contains($trickImage)) {
@@ -241,13 +260,6 @@ class Trick
                 $trickImage->setTrick(null);
             }
         }
-
-        return $this;
-    }
-
-    public function replaceTrickImage(TrickImage $trickImage, TrickImage $newTrickImage): self
-    {
-        $this->trickImages->set($trickImage, $newTrickImage);
 
         return $this;
     }

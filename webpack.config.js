@@ -23,6 +23,7 @@ Encore
     .addEntry('app', './assets/app.js')
     .addEntry('clickdisplay-home', './assets/clickdisplay-home.js')
     .addEntry('clickdisplay-trick', './assets/clickdisplay-trick.js')
+    .addEntry('modify-trick', './assets/modify-trick.js')
     //.addEntry('bootstrapjs', './assets/bootstrap-5/js/bootstrap.js')
     .addEntry('jquery', './assets/jquery-3.6.0.min.js')
     .addEntry('popper', './assets/popper.min.js')
