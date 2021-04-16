@@ -4,33 +4,32 @@
 namespace App\Form;
 
 
-use App\Entity\TrickImage;
+use App\Entity\TrickVideo;
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class TrickFormSingleImageType extends AbstractType
+class TrickFormVideoType extends AbstractType
 {
+
+
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
+
         $builder
-            ->add('path',
-                FileType::class, [
-                    'label' => 'Remplacer l\'image sélectionnée',
-                    'required' => true,
-                    'data_class' => null
-                ])
+            ->add('embed', TextareaType::class)
             ->add('id', HiddenType::class, [
-                'data_class' => null
+                'data_class' => null,
+                'mapped' => false
             ]);
     }
 
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
-            'data_class' => TrickImage::class,
+            'data_class' => TrickVideo::class,
         ]);
     }
 }
