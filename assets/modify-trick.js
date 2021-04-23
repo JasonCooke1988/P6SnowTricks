@@ -6,9 +6,11 @@ $('input[type="file"]').change(function (e) {
 
 // Insert image id into modal
 $("#single-image-modal").on('show.bs.modal', function (event) {
+    console.log('coucou')
     let button = $(event.relatedTarget);
     let id = button.data('imageid')
     $('#single-image-modal').attr('data-imageid', id);
+    console.log($('#single-image-modal').attr('id'));
 });
 
 // Insert video id into modal

@@ -6,10 +6,13 @@ use App\Repository\TrickRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass=TrickRepository::class)
  * @ORM\Cache(usage="NONSTRICT_READ_WRITE")
+ * @UniqueEntity(fields="name", message="Une figure portant ce nom existe déjà")
  */
 class Trick
 {
@@ -21,7 +24,8 @@ class Trick
     private ?int $id;
 
     /**
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="string", length=255, unique=true)
+     * @Assert\NotBlank(message="Veuillez reinseigner un nom de figure.")
      */
     private ?string $name;
 

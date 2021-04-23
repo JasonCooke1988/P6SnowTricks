@@ -19,15 +19,20 @@ class TrickFormType extends AbstractType
     {
 
         $builder
-            ->add('name')
-            ->add('description')
+            ->add('name', null, [
+                'label' => 'Nom de la figure'
+            ])
+            ->add('description',null, [
+                'label' => 'Description de la figure'
+            ])
             ->add('group', EntityType::class, [
                 'class' => Group::class,
                 'query_builder' => function (EntityRepository $er) {
                     return $er->createQueryBuilder('g')
                         ->orderBy('g.name', 'ASC');
                 },
-                'choice_label' => 'name'
+                'choice_label' => 'name',
+                'label' => 'Le groupe de la figure'
             ]);
     }
 

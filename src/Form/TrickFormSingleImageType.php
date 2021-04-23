@@ -10,6 +10,7 @@ use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Validator\Constraints\Image;
 
 class TrickFormSingleImageType extends AbstractType
 {
@@ -18,12 +19,19 @@ class TrickFormSingleImageType extends AbstractType
         $builder
             ->add('path',
                 FileType::class, [
-                    'label' => 'Remplacer l\'image sélectionnée',
+                    'label' => 'Ajouter / Remplacer une image',
                     'required' => true,
-                    'data_class' => null
+                    'data_class' => null,
+                    'constraints' => [
+                        new Image([
+                            'maxSize' => '2M',
+                            'maxSizeMessage' => 'Le fichier est trop volumineux ({{ size }} {{ suffix }}). La taille maximum autorisé est de {{ limit }} {{ suffix }}'
+                        ])
+                    ]
                 ])
             ->add('id', HiddenType::class, [
-                'data_class' => null
+                'data_class' => null,
+                'required' => false
             ]);
     }
 

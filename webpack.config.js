@@ -21,9 +21,10 @@ Encore
      * and one CSS file (e.g. app.css) if your JavaScript imports CSS.
      */
     .addEntry('app', './assets/app.js')
-    .addEntry('clickdisplay-home', './assets/clickdisplay-home.js')
+    .addEntry('home', './assets/home.js')
     .addEntry('clickdisplay-trick', './assets/clickdisplay-trick.js')
     .addEntry('modify-trick', './assets/modify-trick.js')
+    .addEntry('delete-modal', './assets/delete-modal.js')
     //.addEntry('bootstrapjs', './assets/bootstrap-5/js/bootstrap.js')
     .addEntry('jquery', './assets/jquery-3.6.0.min.js')
     .addEntry('popper', './assets/popper.min.js')

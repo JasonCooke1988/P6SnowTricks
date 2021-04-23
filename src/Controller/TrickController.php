@@ -30,14 +30,13 @@ use Symfony\Component\String\Slugger\SluggerInterface;
 class TrickController extends AbstractController
 {
     /**
-     * @Route("/single-trick/{id}",name="singleTrick")
+     * @Route("/single-trick/{name}",name="singleTrick")
      * @param Trick $trick
      * @param Request $request
-     * @param Security $security
      * @return Response
      * @throws Exception
      */
-    public function singleTrick(Trick $trick, Request $request)
+    public function singleTrick(Trick $trick, Request $request): Response
     {
 
         $comment = new Comment();
@@ -73,14 +72,14 @@ class TrickController extends AbstractController
 
 
     /**
-     * @Route("/modify-trick/{id}",name="modifyTrick")
+     * @Route("/modify-trick/{name}",name="modifyTrick")
      * @param Trick $trick
      * @param Request $request
      * @param SluggerInterface $slugger
      * @return Response
      * @throws Exception
      */
-    public function modifyTrick(Trick $trick, Request $request, SluggerInterface $slugger)
+    public function modifyTrick(Trick $trick, Request $request, SluggerInterface $slugger): Response
     {
         $this->denyAccessUnlessGranted('ROLE_USER');
 
@@ -92,9 +91,6 @@ class TrickController extends AbstractController
 
         $videoForm = $this->createForm(TrickFormVideoType::class);
         $videoForm->handleRequest($request);
-
-        $addImageForm = $this->createForm(AddTrickSingleImageFormType::class);
-        $addImageForm->handleRequest($request);
 
         $addVideoForm = $this->createForm(AddTrickVideoFormType::class);
         $addVideoForm->handleRequest($request);
@@ -133,11 +129,16 @@ class TrickController extends AbstractController
             $entityManager->persist($trick);
             $entityManager->flush();
 
+            $this->addFlash('success', 'Image modifié.');
+
+
         } else if ($singleImageForm->isSubmitted() && $singleImageForm->isValid()) {
 
             $singleImageFile = $singleImageForm->get('path')->getData();
 
             $singleImageId = $singleImageForm->get('id')->getData();
+
+            var_dump($singleImageId);die;
 
             if ($singleImageFile) {
 
@@ -170,43 +171,51 @@ class TrickController extends AbstractController
             $entityManager->persist($trick);
             $entityManager->flush();
 
-        } else if ($addImageForm->isSubmitted() && $addImageForm->isValid()) {
+            $this->addFlash('success', 'Image modifié.');
 
-            $newTrickImage = new TrickImage();
-            $singleImageFile = $addImageForm->get('path')->getData();
 
-            if ($singleImageFile) {
-
-                $originalFilename = pathinfo($singleImageFile->getClientOriginalName(), PATHINFO_FILENAME);
-                // this is needed to safely include the file name as part of the URL
-                $safeFilename = $slugger->slug($originalFilename);
-                $newFilename = $safeFilename . '-' . uniqid() . '.' . $singleImageFile->guessExtension();
-
-                // Move the file to the directory where brochures are stored
-
-                $singleImageFile->move(
-                    './images/tricks/',
-                    $newFilename
-                );
-            }
-
-            $newTrickImage->setPath($newFilename);
-            $newTrickImage->setTrick($trick);
-            $newTrickImage->setCreatedAt(new \DateTime('now', new DateTimeZone('Europe/Paris')));
-
-            $entityManager = $this->getDoctrine()->getManager();
-            $entityManager->persist($newTrickImage);
-            $entityManager->flush();
-
-            $trick->addTrickImage($newTrickImage);
-
-            $trick->setUpdatedAt(new \DateTime('now', new DateTimeZone('Europe/Paris')));
-
-            $entityManager = $this->getDoctrine()->getManager();
-            $entityManager->persist($trick);
-            $entityManager->flush();
-
-        } else if ($videoForm->isSubmitted() && $videoForm->isValid()) {
+        }
+       // else if ($addImageForm->isSubmitted() && $addImageForm->isValid()) {
+//
+       //     $newTrickImage = new TrickImage();
+       //     $singleImageFile = $addImageForm->get('path')->getData();
+//
+       //     if ($singleImageFile) {
+//
+       //         $originalFilename = pathinfo($singleImageFile->getClientOriginalName(), PATHINFO_FILENAME);
+       //         // this is needed to safely include the file name as part of the URL
+       //         $safeFilename = $slugger->slug($originalFilename);
+       //         $newFilename = $safeFilename . '-' . uniqid() . '.' . $singleImageFile->guessExtension();
+//
+       //         // Move the file to the directory where brochures are stored
+//
+       //         $singleImageFile->move(
+       //             './images/tricks/',
+       //             $newFilename
+       //         );
+       //     }
+//
+       //     $newTrickImage->setPath($newFilename);
+       //     $newTrickImage->setTrick($trick);
+       //     $newTrickImage->setCreatedAt(new \DateTime('now', new DateTimeZone('Europe/Paris')));
+//
+       //     $entityManager = $this->getDoctrine()->getManager();
+       //     $entityManager->persist($newTrickImage);
+       //     $entityManager->flush();
+//
+       //     $trick->addTrickImage($newTrickImage);
+//
+       //     $trick->setUpdatedAt(new \DateTime('now', new DateTimeZone('Europe/Paris')));
+//
+       //     $entityManager = $this->getDoctrine()->getManager();
+       //     $entityManager->persist($trick);
+       //     $entityManager->flush();
+//
+       //     $this->addFlash('success', 'Image ajouté.');
+//
+//
+       // }
+        else if ($videoForm->isSubmitted() && $videoForm->isValid()) {
 
             $videoPath = $videoForm->get('embed')->getData();
 
@@ -226,6 +235,8 @@ class TrickController extends AbstractController
 
             $entityManager->persist($trick);
             $entityManager->flush();
+
+            $this->addFlash('success', 'Video modifié.');
 
         } else if ($addVideoForm->isSubmitted() && $addVideoForm->isValid()) {
 
@@ -248,6 +259,9 @@ class TrickController extends AbstractController
             $entityManager->persist($trick);
             $entityManager->flush();
 
+            $this->addFlash('success', 'Video ajouté.');
+
+
         } elseif ($trickForm->isSubmitted() && $trickForm->isValid()) {
 
             $trick = $trickForm->getData();
@@ -259,6 +273,8 @@ class TrickController extends AbstractController
             $entityManager->persist($trick);
             $entityManager->flush();
 
+            $this->addFlash('success', 'Figure modifié.');
+
         }
 
         return $this->render('layout/modify-trick.html.twig', [
@@ -267,7 +283,6 @@ class TrickController extends AbstractController
             'trickSingleImageForm' => $singleImageForm->createView(),
             'trickVideoForm' => $videoForm->createView(),
             'trickForm' => $trickForm->createView(),
-            'addImageForm' => $addImageForm->createView(),
             'addVideoForm' => $addVideoForm->createView(),
             'trick' => $trick
         ]);
@@ -351,7 +366,7 @@ class TrickController extends AbstractController
     }
 
     /**
-     * @Route("delete-trick/{id}", name="deleteTrick")
+     * @Route("delete-trick/{name}", name="deleteTrick")
      * @param Trick $trick
      * @return RedirectResponse
      */

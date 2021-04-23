@@ -7,16 +7,6 @@
     top: 2rem;
   }
 
-  h1 {
-    position: absolute;
-    top: 48%;
-    left: 48%;
-    color: white;
-    @include bp(sm) {
-      left: 40%;
-    }
-  }
-
 }
 
 .single-trick.modify-trick {
