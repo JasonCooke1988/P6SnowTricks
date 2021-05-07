@@ -23,7 +23,7 @@
 
         <div class="trick-action py-2 px-1 d-flex justify-content-around">
             <a data-toggle="modal" data-target="#main-image-modal" href="#"><i class="icon-pencil"></i></a>
-            <a href="#" data-toggle="modal" data-target="#delete-modal"c
+            <a href="#" data-toggle="modal" data-target="#delete-modal"
                data-href="{{ path('deleteMainImageTrick', {id: trick.id}) }}"><i class="icon-bin"></i></a>
         </div>
 
@@ -31,6 +31,7 @@
 {% endblock %}
 
 {% block body %}
+
 
 <main class="single-trick modify-trick">
 
@@ -55,7 +56,7 @@
     <div id="media-row" class="row image-videos justify-content-around my-5">
         {% if trick.trickImages is defined %}
             {% for image in trick.trickImages %}
-                <div class="single-image col-lg-2 my-4">
+                <div class="single-image col-lg-2">
                     <img class="single-image-img" src="{{ asset('images/tricks/' ~ image.path) }}"
                          alt="Trick image">
                     <div class="trick-action py-2 px-1 d-flex justify-content-around mt-4">
@@ -71,9 +72,9 @@
         {% endif %}
         {% if trick.trickVideos is defined %}
             {% for video in trick.trickVideos %}
-                <div class="single-video col-lg-2 my-4">
+                <div class="single-video col-lg-2">
                     {{ video.embed|raw }}
-                    <div class="trick-action py-2 px-1 d-flex justify-content-around mt-4">
+                    <div class="trick-action py-2 px-1 d-flex justify-content-around mt-3">
                         <a data-videoid="{{ video.id }}" data-toggle="modal" data-target="#video-modal" href="#"><i
                                     class="icon-pencil"></i></a>
                         <a href="#" data-toggle="modal" data-target="#delete-modal"
@@ -94,7 +95,7 @@
                     class="btn btn-lg btn-primary">Ajouter une image
             </button>
 
-            <button data-toggle="modal" data-target="#add-video-modal" id="add-video-button"
+            <button data-toggle="modal" data-target="#video-modal" id="add-video-button"
                     class="btn btn-lg btn-primary">Ajouter une vidéo
             </button>
 
@@ -112,36 +113,13 @@
                data-target="#delete-modal" data-href="{{ path('deleteTrick', {name: trick.name}) }}">Supprimer</a>
             <button type="submit" class="btn btn-lg btn-primary ml-2">Sauvegarder</button>
         </div>
-        {{ form_end(trickForm) }}
+        {{ form_end(trickForm, {'render_rest' : false}) }}
     </section>
 
 
     {% block deletemodal %}
     {{ parent() }}
     {% endblock %}
-
-    <!-- Video add modal -->
-    <div class="modal fade" id="add-video-modal" tabindex="-1" role="dialog" aria-labelledby="add-video-modal"
-         aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    {{ form_start(addVideoForm, {'attr' : {'class':'d-flex align-items-center flex-column flex-sm-row', 'id' :'add-video-form'}}) }}
-                    {{ form_row(addVideoForm.embed) }}
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
-                    <button type="submit" class="btn btn-primary">Sauvegarder</button>
-                    {{ form_end(addVideoForm) }}
-                </div>
-            </div>
-        </div>
-    </div>
 
     <!-- Main Image modal -->
     <div class="modal fade" id="main-image-modal" tabindex="-1" role="dialog" aria-labelledby="main-image-modal"
@@ -154,13 +132,13 @@
                     </button>
                 </div>
                 <div class="modal-body d-flex">
-                    {{ form_start(trickMainImageForm, {'attr' : {'class':'d-flex align-items-center flex-column flex-sm-row'}}) }}
-                    {{ form_row(trickMainImageForm.mainImage, {'attr': {'class': 'form-control-file.'}}) }}
+                    {{ form_start(trickForm, {'attr' : {'class':'d-flex align-items-center flex-column flex-sm-row'}}) }}
+                    {{ form_row(trickForm.mainImage, {'attr': {'class': 'form-control-file.'}}) }}
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
                     <button type="submit" class="btn btn-primary">Sauvegarder</button>
-                    {{ form_end(trickMainImageForm) }}
+                    {{ form_end(trickForm, {'render_rest' : false}) }}
                 </div>
             </div>
         </div>
@@ -179,8 +157,8 @@
                 </div>
                 <div class="modal-body d-flex">
                     {{ form_start(trickSingleImageForm, {'attr' : {'class':'d-flex align-items-center flex-column flex-sm-row', 'id' : 'single-image-form'}}) }}
-                    {{ form_row(trickSingleImageForm.path, {'attr': {'class': 'form-control-file.'}}) }}
-                    {{ form_row(trickSingleImageForm.id, {'attr:' : {'id' : 'hidden-single-image-id'}}) }}
+                    {{ form_row(trickSingleImageForm.path, {'attr': {'class': 'form-control-file'}}) }}
+                    {{ form_row(trickSingleImageForm.id, {'attr' : {'id' : 'hidden-single-image-id'}}) }}
                 </div>
                 <div class="single-image-modify-submit modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>

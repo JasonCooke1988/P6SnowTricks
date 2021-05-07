@@ -31,6 +31,4 @@ function checkDisplayBlock(array) {
         document.getElementById('to-top').style.display = "block";
     }
 
-    console.log('new block result is : ')
-    console.log(blockResult);
 }

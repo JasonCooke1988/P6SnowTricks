@@ -26,10 +26,6 @@ Encore
     .addEntry('modify-trick', './assets/modify-trick.js')
     .addEntry('delete-modal', './assets/delete-modal.js')
     //.addEntry('bootstrapjs', './assets/bootstrap-5/js/bootstrap.js')
-    .addEntry('jquery', './assets/jquery-3.6.0.min.js')
-    .addEntry('popper', './assets/popper.min.js')
-    .addEntry('bootstrap', './assets/bootstrap.js')
-
     // enables the Symfony UX Stimulus bridge (used in assets/bootstrap.js)
     .enableStimulusBridge('./assets/controllers.json')
 

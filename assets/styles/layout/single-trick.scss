@@ -24,20 +24,20 @@ main.single-trick {
       align-self: center;
 
       img {
+        height: 100%;
         width: 100%;
         object-fit: contain;
       }
     }
 
     .single-video {
-      max-height: 9rem;
       @include bp(sm) {
         max-height: 17rem;
       }
 
       iframe {
-        max-width: 100% !important;
-        max-height: 100% !important;
+        height: 121px;
+        width: 100%;
       }
     }
   }
