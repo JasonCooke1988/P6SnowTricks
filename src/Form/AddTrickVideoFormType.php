@@ -18,7 +18,9 @@ class AddTrickVideoFormType extends AbstractType
     {
 
         $builder
-            ->add('embed', TextareaType::class);
+            ->add('embed', TextareaType::class,[
+                'label' => 'Copier le code \'embed\' récupéré depuis youtube pour la vidéo que vous souhaitez ajouter :'
+            ]);
     }
 
     public function configureOptions(OptionsResolver $resolver)

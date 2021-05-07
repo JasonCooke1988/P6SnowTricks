@@ -10,6 +10,7 @@ use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Validator\Constraints\NotBlank;
 
 class TrickFormVideoType extends AbstractType
 {
@@ -19,7 +20,14 @@ class TrickFormVideoType extends AbstractType
     {
 
         $builder
-            ->add('embed', TextareaType::class)
+            ->add('embed', TextareaType::class, [
+                'label' => 'Copier le code \'embed\' récupéré depuis youtube pour la vidéo que vous souhaitez ajouter / modifier :',
+                'constraints' => [
+                    new NotBlank([
+                        'message' => 'Veuillez renseigner le code embed pour la vidéo',
+                    ])
+                ]
+            ])
             ->add('id', HiddenType::class, [
                 'data_class' => null,
                 'mapped' => false

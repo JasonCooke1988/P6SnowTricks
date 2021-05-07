@@ -8,6 +8,7 @@ use App\Security\EmailVerifier;
 use App\Security\LoginFormAuthenticator;
 use App\Repository\UserRepository;
 use DateTimeZone;
+use Exception;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -33,7 +34,7 @@ class RegistrationController extends AbstractController
      * @param Request $request
      * @param UserPasswordEncoderInterface $passwordEncoder
      * @return Response
-     * @throws \Exception
+     * @throws Exception
      */
     public function register(Request $request, UserPasswordEncoderInterface $passwordEncoder): Response
     {
@@ -79,6 +80,11 @@ class RegistrationController extends AbstractController
 
     /**
      * @Route("/verify/email", name="app_verify_email")
+     * @param Request $request
+     * @param UserRepository $userRepository
+     * @param GuardAuthenticatorHandler $guardHandler
+     * @param LoginFormAuthenticator $authenticator
+     * @return Response
      */
     public function verifyUserEmail(Request $request, UserRepository $userRepository, GuardAuthenticatorHandler $guardHandler, LoginFormAuthenticator $authenticator): Response
     {
