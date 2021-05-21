@@ -24,6 +24,7 @@ Encore
     .addEntry('home', './assets/home.js')
     .addEntry('clickdisplay-trick', './assets/clickdisplay-trick.js')
     .addEntry('modify-trick', './assets/modify-trick.js')
+    .addEntry('add-trick', './assets/add-trick.js')
     .addEntry('delete-modal', './assets/delete-modal.js')
     //.addEntry('bootstrapjs', './assets/bootstrap-5/js/bootstrap.js')
     // enables the Symfony UX Stimulus bridge (used in assets/bootstrap.js)

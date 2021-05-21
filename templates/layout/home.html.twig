@@ -36,21 +36,21 @@
 
                     <div class="single-trick-preview above-max col-lg-2">
                         {% if trick.trickImages is defined %}
-                            <a href="{{ path('singleTrick',{name: trick.name}) }}"><img class="trick-image"
+                            <a href="{{ path('singleTrick',{slug: trick.slug}) }}"><img class="trick-image"
                                                                                     src="{{ asset('images/tricks/' ~ trick.trickImages|first.path) }}"
                                                                                     alt="Image de figure"></a>
                         {% else %}
-                            <a href="{{ path('singleTrick',{name: trick.name}) }}"><img class="trick-image"
+                            <a href="{{ path('singleTrick',{slug: trick.slug}) }}"><img class="trick-image"
                                                                                     src="http://via.placeholder.com/300x150"
                                                                                     alt="Image provisoire de figure"></a>
                         {% endif %}
                         <div class="bottom-row d-flex justify-content-between align-items-center my-2">
-                            <a href="{{ path('singleTrick',{name: trick.name}) }}"
-                               class="trick-name d-flex align-items-center m-0">{{ trick.name }}</a>
+                            <a href="{{ path('singleTrick',{slug: trick.slug}) }}"
+                               class="trick-name d-flex align-items-center m-0">{{ trick.slug }}</a>
                             {% if app.user %}
                                 <div class="icons">
-                                    <a href="{{ path('modifyTrick',{name: trick.name}) }}"><i class="icon-pencil"></i></a>
-                                    <a id="delete-trick-submit" href="#" data-toggle="modal" data-target="#delete-modal" data-href="{{ path('deleteTrick',{name: trick.name}) }}"><i class="icon-bin"></i></a>
+                                    <a href="{{ path('modifyTrick',{slug: trick.slug}) }}"><i class="icon-pencil"></i></a>
+                                    <a id="delete-trick-submit" href="#" data-toggle="modal" data-target="#delete-modal" data-href="{{ path('deleteTrick',{slug: trick.slug}) }}"><i class="icon-bin"></i></a>
                                 </div>
                             {% endif %}
                         </div>
@@ -59,22 +59,22 @@
                 {% else %}
 
                     <div class="single-trick-preview col-lg-2" style="display: block">
-                        {% if trick.trickImages is defined %}
-                            <a href="{{ path('singleTrick',{name: trick.name}) }}"><img class="trick-image"
+                        {% if trick.trickImages|length > 0 %}
+                            <a href="{{ path('singleTrick',{slug: trick.slug}) }}"><img class="trick-image"
                                                                                     src="{{ asset('images/tricks/' ~ trick.trickImages|first.path) }}"
                                                                                     alt="Image de figure"></a>
                         {% else %}
-                            <a href="{{ path('singleTrick',{name: trick.name}) }}"><img class="trick-image"
+                            <a href="{{ path('singleTrick',{slug: trick.slug}) }}"><img class="trick-image"
                                                                                     src="http://via.placeholder.com/300x150"
                                                                                     alt="Image provisoire de figure"></a>
                         {% endif %}
                         <div class="bottom-row d-flex justify-content-between align-items-center my-2">
-                            <a href="{{ path('singleTrick',{name: trick.name}) }}"
-                               class="trick-name d-flex align-items-center m-0">{{ trick.name }}</a>
+                            <a href="{{ path('singleTrick',{slug: trick.slug}) }}"
+                               class="trick-name d-flex align-items-center m-0">{{ trick.slug }}</a>
                             {% if app.user %}
                                 <div class="icons">
-                                    <a href="{{ path('modifyTrick',{name: trick.name}) }}"><i class="icon-pencil"></i></a>
-                                    <a id="delete-trick-submit" href="#" data-toggle="modal" data-target="#delete-modal" data-href="{{ path('deleteTrick',{name: trick.name}) }}"><i class="icon-bin"></i></a>
+                                    <a href="{{ path('modifyTrick',{slug: trick.slug}) }}"><i class="icon-pencil"></i></a>
+                                    <a id="delete-trick-submit" href="#" data-toggle="modal" data-target="#delete-modal" data-href="{{ path('deleteTrick',{slug: trick.slug}) }}"><i class="icon-bin"></i></a>
                                 </div>
                             {% endif %}
                         </div>
