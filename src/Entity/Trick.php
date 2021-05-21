@@ -6,6 +6,7 @@ use App\Repository\TrickRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Gedmo\Mapping\Annotation as Gedmo;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -76,7 +77,13 @@ class Trick
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
      */
-    private $mainImage;
+    private ?string $mainImage;
+
+    /**
+     * @ORM\Column(type="string", length=255)
+     * @Gedmo\Slug(fields={"name"})
+     */
+    private ?string $slug;
 
     public function __construct()
     {
@@ -95,7 +102,7 @@ class Trick
         return $this->name;
     }
 
-    public function setName(string $name): self
+    public function setName(?string $name): self
     {
         $this->name = $name;
 
@@ -131,7 +138,7 @@ class Trick
         return $this->description;
     }
 
-    public function setDescription(string $description): self
+    public function setDescription(?string $description): self
     {
         $this->description = $description;
 
@@ -284,6 +291,18 @@ class Trick
     public function deleteMainImage()
     {
         $this->mainImage = null;
+
+        return $this;
+    }
+
+    public function getSlug(): ?string
+    {
+        return $this->slug;
+    }
+
+    public function setSlug(string $slug): self
+    {
+        $this->slug = $slug;
 
         return $this;
     }

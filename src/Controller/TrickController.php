@@ -28,7 +28,7 @@ use Symfony\Component\String\Slugger\SluggerInterface;
 class TrickController extends AbstractController
 {
     /**
-     * @Route("/single-trick/{name}",name="singleTrick")
+     * @Route("/single-trick/{slug}",name="singleTrick")
      * @param Trick $trick
      * @param Request $request
      * @return Response
@@ -69,7 +69,7 @@ class TrickController extends AbstractController
     }
 
     /**
-     * @Route("/modifyTrickVideo/{name}",name="modifyTrickVideo")
+     * @Route("/modifyTrickVideo/{slug}",name="modifyTrickVideo")
      * @param Trick $trick
      * @param Request $request
      * @param SluggerInterface $slugger
@@ -113,11 +113,11 @@ class TrickController extends AbstractController
 
         }
 
-        return $this->redirectToRoute('modifyTrick', ['name' => $trick->getName()]);
+        return $this->redirectToRoute('modifyTrick', ['slug' => $trick->getSlug()]);
     }
 
     /**
-     * @Route("/modifyTrickMainImage/{name}",name="modifyTrickMainImage")
+     * @Route("/modifyTrickMainImage/{slug}",name="modifyTrickMainImage")
      * @param Trick $trick
      * @param Request $request
      * @param SluggerInterface $slugger
@@ -129,6 +129,9 @@ class TrickController extends AbstractController
 
         $mainImageForm = $this->createForm(TrickFormMainImageType::class, $trick);
         $mainImageForm->handleRequest($request);
+
+        $mainImageForm->isSubmitted();
+        $mainImageForm->isValid();
 
         if ($mainImageForm->isSubmitted() && $mainImageForm->isValid()) {
 
@@ -163,11 +166,11 @@ class TrickController extends AbstractController
             $this->addFlash('success', 'Image principal modifié.');
 
         }
-        return $this->redirectToRoute('modifyTrick', ['name' => $trick->getName()]);
+        return $this->redirectToRoute('modifyTrick', ['slug' => $trick->getSlug()]);
     }
 
     /**
-     * @Route("/modifyTrickImage/{name}",name="modifyTrickImage")
+     * @Route("/modifyTrickImage/{slug}",name="modifyTrickImage")
      * @param Trick $trick
      * @param Request $request
      * @param SluggerInterface $slugger
@@ -233,12 +236,58 @@ class TrickController extends AbstractController
             }
 
         }
-        return $this->redirectToRoute('modifyTrick', ['name' => $trick->getName()]);
+        return $this->redirectToRoute('modifyTrick', ['slug' => $trick->getSlug()]);
     }
 
 
     /**
-     * @Route("/modify-trick/{name}",name="modifyTrick")
+     * @Route("/add-trick/",name="addTrick")
+     * @param Trick $trick
+     * @param Request $request
+     * @param SluggerInterface $slugger
+     * @return Response
+     * @throws Exception
+     */
+    public function addTrick(Request $request): Response
+    {
+
+        $this->denyAccessUnlessGranted('ROLE_USER');
+
+        $trick = new Trick();
+
+        $trickForm = $this->createForm(TrickFormType::class, $trick);
+        $trickForm->handleRequest($request);
+
+        if ($trickForm->isSubmitted() && $trickForm->isValid()) {
+
+            var_dump('coucou');die;
+
+            $trickUpdated = $trickForm->getData();
+
+            $this->addFlash('success', 'Figure Ajoutée.');
+
+            $trickUpdated->setUpdatedAt(new \DateTime('now', new DateTimeZone('Europe/Paris')));
+
+            $entityManager = $this->getDoctrine()->getManager();
+
+            $entityManager->persist($trickUpdated);
+            $entityManager->flush();
+
+        }
+
+
+
+        return $this->render('layout/modify-trick.html.twig', [
+            'trickForm' => $trickForm->createView()
+        ]);
+
+    }
+
+
+
+
+    /**
+     * @Route("/modify-trick/{slug}",name="modifyTrick")
      * @param Trick $trick
      * @param Request $request
      * @param SluggerInterface $slugger
@@ -254,52 +303,31 @@ class TrickController extends AbstractController
         $this->denyAccessUnlessGranted('ROLE_USER');
 
         $singleImageForm = $this->createForm(TrickFormSingleImageType::class, $trickImage, [
-            'action' => $this->generateUrl('modifyTrickImage', array('name' => $trick->getName()))
+            'action' => $this->generateUrl('modifyTrickImage', array('slug' => $trick->getSlug()))
         ]);
         $singleImageForm->handleRequest($request);
 
         $videoForm = $this->createForm(TrickFormVideoType::class, $trickVideo, [
-            'action' => $this->generateUrl('modifyTrickVideo', array('name' => $trick->getName()))
+            'action' => $this->generateUrl('modifyTrickVideo', array('slug' => $trick->getSlug()))
         ]);
         $videoForm->handleRequest($request);
 
-        $trickForm = $this->createForm(TrickFormType::class, $trick);
+        $trickForm = clone $trick;
+        $trickMainImageForm = clone $trick;
+
+        $trickForm = $this->createForm(TrickFormType::class, $trickForm);
         $trickForm->handleRequest($request);
+
+        $trickMainImageForm = $this->createForm(TrickFormMainImageType::class, $trickMainImageForm, [
+            'action' => $this->generateUrl('modifyTrickMainImage', array('slug' => $trick->getSlug()))
+        ]);
+        $trickMainImageForm->handleRequest($request);
 
         if ($trickForm->isSubmitted() && $trickForm->isValid()) {
 
-            if ($trickForm->get('main_image')->getData() === null) {
+            $trickUpdated = $trickForm->getData();
 
-                $trickUpdated = $trickForm->getData();
-
-                $this->addFlash('success', 'Figure modifié.');
-
-            } else {
-
-                $mainImageFile = $trickForm->get('mainImage')->getData();
-
-                $trickUpdated = $trickForm->getData();
-
-                if ($mainImageFile) {
-
-                    $originalFilename = pathinfo($mainImageFile->getClientOriginalName(), PATHINFO_FILENAME);
-                    // this is needed to safely include the file name as part of the URL
-                    $safeFilename = $slugger->slug($originalFilename);
-                    $newFilename = $safeFilename . '-' . uniqid() . '.' . $mainImageFile->guessExtension();
-
-                    // Move the file to the directory where brochures are stored
-
-                    $mainImageFile->move(
-                        './images/tricks/',
-                        $newFilename
-                    );
-
-                    $trickUpdated->setMainImage($newFilename);
-                }
-
-                $this->addFlash('success', 'Image principal modifié.');
-
-            }
+            $this->addFlash('success', 'Figure modifiée.');
 
             $trickUpdated->setUpdatedAt(new \DateTime('now', new DateTimeZone('Europe/Paris')));
 
@@ -315,6 +343,7 @@ class TrickController extends AbstractController
             'trickSingleImageForm' => $singleImageForm->createView(),
             'trickVideoForm' => $videoForm->createView(),
             'trickForm' => $trickForm->createView(),
+            'trickMainImageForm' => $trickMainImageForm->createView(),
             'trick' => $trick
         ]);
 
@@ -340,7 +369,7 @@ class TrickController extends AbstractController
         $entityManager->persist($trick);
         $entityManager->flush();
 
-        return $this->redirectToRoute('modifyTrick', ['name' => $trick->getName()]);
+        return $this->redirectToRoute('modifyTrick', ['slug' => $trick->getSlug()]);
     }
 
     /**
@@ -365,9 +394,9 @@ class TrickController extends AbstractController
         $entityManager->persist($trick);
         $entityManager->flush();
 
-        $this->addFlash('success', 'Image supprimé.');
+        $this->addFlash('success', 'Image supprimée.');
 
-        return $this->redirectToRoute('modifyTrick', ['name' => $trick->getName()]);
+        return $this->redirectToRoute('modifyTrick', ['slug' => $trick->getSlug()]);
     }
 
     /**
@@ -392,11 +421,11 @@ class TrickController extends AbstractController
         $entityManager->persist($trick);
         $entityManager->flush();
 
-        return $this->redirectToRoute('modifyTrick', ['name' => $trick->getName()]);
+        return $this->redirectToRoute('modifyTrick', ['slug' => $trick->getSlug()]);
     }
 
     /**
-     * @Route("delete-trick/{name}", name="deleteTrick")
+     * @Route("delete-trick/{slug}", name="deleteTrick")
      * @param Trick $trick
      * @return RedirectResponse
      */

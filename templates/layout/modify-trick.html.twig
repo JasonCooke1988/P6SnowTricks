@@ -54,7 +54,7 @@
     </div>
 
     <div id="media-row" class="row image-videos justify-content-around my-5">
-        {% if trick.trickImages is defined %}
+        {% if trick.trickImages|length > 0 %}
             {% for image in trick.trickImages %}
                 <div class="single-image col-lg-2">
                     <img class="single-image-img" src="{{ asset('images/tricks/' ~ image.path) }}"
@@ -70,7 +70,7 @@
                 </div>
             {% endfor %}
         {% endif %}
-        {% if trick.trickVideos is defined %}
+        {% if trick.trickVideos|length > 0 %}
             {% for video in trick.trickVideos %}
                 <div class="single-video col-lg-2">
                     {{ video.embed|raw }}
@@ -108,9 +108,10 @@
         {{ form_row(trickForm.name,{'attr' : {'class' : 'col-lg-10'}}) }}
         {{ form_row(trickForm.description,{'attr' : {'class' : 'col-lg-12'}}) }}
         {{ form_row(trickForm.group,{'attr' : {'class' : 'col-lg-4'}}) }}
+        {{ form_row(trickForm._token) }}
         <div class="submit d-flex justify-content-end">
             <a id="delete-trick-submit" class="btn btn-lg btn-danger ml-2" href="#" data-toggle="modal"
-               data-target="#delete-modal" data-href="{{ path('deleteTrick', {name: trick.name}) }}">Supprimer</a>
+               data-target="#delete-modal" data-href="{{ path('deleteTrick', {slug: trick.slug}) }}">Supprimer</a>
             <button type="submit" class="btn btn-lg btn-primary ml-2">Sauvegarder</button>
         </div>
         {{ form_end(trickForm, {'render_rest' : false}) }}
@@ -132,13 +133,14 @@
                     </button>
                 </div>
                 <div class="modal-body d-flex">
-                    {{ form_start(trickForm, {'attr' : {'class':'d-flex align-items-center flex-column flex-sm-row'}}) }}
-                    {{ form_row(trickForm.mainImage, {'attr': {'class': 'form-control-file.'}}) }}
+                    {{ form_start(trickMainImageForm, {'attr' : {'class':'d-flex align-items-center flex-column flex-sm-row'}}) }}
+                    {{ form_row(trickMainImageForm.mainImage, {'attr': {'class': 'form-control-file.'}}) }}
+                    {{ form_row(trickMainImageForm._token) }}
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
                     <button type="submit" class="btn btn-primary">Sauvegarder</button>
-                    {{ form_end(trickForm, {'render_rest' : false}) }}
+                    {{ form_end(trickMainImageForm, {'render_rest' : false}) }}
                 </div>
             </div>
         </div>
