@@ -22,6 +22,7 @@ class TrickFormSingleImageType extends AbstractType
                 FileType::class, [
                     'label' => 'Ajouter / Remplacer une image',
                     'required' => true,
+                    'multiple' => true,
                     'constraints' => [
                         new Image([
                             'maxSize' => '2M',

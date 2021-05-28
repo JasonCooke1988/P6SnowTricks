@@ -23,6 +23,7 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\String\Slugger\SluggerInterface;
 
 class TrickController extends AbstractController
@@ -196,8 +197,6 @@ class TrickController extends AbstractController
                 $safeFilename = $slugger->slug($originalFilename);
                 $newFilename = $safeFilename . '-' . uniqid() . '.' . $singleImageFile->guessExtension();
 
-                // Move the file to the directory where brochures are stored
-
                 $singleImageFile->move(
                     './images/tricks/',
                     $newFilename
@@ -242,13 +241,13 @@ class TrickController extends AbstractController
 
     /**
      * @Route("/add-trick/",name="addTrick")
-     * @param Trick $trick
      * @param Request $request
+     * @param UserInterface $user
      * @param SluggerInterface $slugger
      * @return Response
      * @throws Exception
      */
-    public function addTrick(Request $request): Response
+    public function addTrick(Request $request, UserInterface $user, SluggerInterface $slugger): Response
     {
 
         $this->denyAccessUnlessGranted('ROLE_USER');
@@ -260,30 +259,35 @@ class TrickController extends AbstractController
 
         if ($trickForm->isSubmitted() && $trickForm->isValid()) {
 
-            var_dump('coucou');die;
+            $trick = $trickForm->getData();
+            $trick->setCreatedAt(new \DateTime('now', new DateTimeZone('Europe/Paris')));
+            $trick->setUser($user);
 
-            $trickUpdated = $trickForm->getData();
+            $trickImages = $trickForm->get('trickImages')->getData();
 
-            $this->addFlash('success', 'Figure Ajoutée.');
-
-            $trickUpdated->setUpdatedAt(new \DateTime('now', new DateTimeZone('Europe/Paris')));
+            foreach ($trickImages as &$trickImage) {
+                $trickImage = $trickImage->getData();
+                $fileName = md5(uniqid()).'.'.$trickImage->guessExtension();
+                $trickImage->move(
+                    './images/tricks/',
+                    $fileName
+                );
+            }
 
             $entityManager = $this->getDoctrine()->getManager();
-
-            $entityManager->persist($trickUpdated);
+            $entityManager->persist($trick);
             $entityManager->flush();
 
+            $this->addFlash('success', 'Figure Ajoutée.');
+            return $this->redirectToRoute('home');
         }
 
 
-
-        return $this->render('layout/modify-trick.html.twig', [
+        return $this->render('layout/add-trick.html.twig', [
             'trickForm' => $trickForm->createView()
         ]);
 
     }
-
-
 
 
     /**

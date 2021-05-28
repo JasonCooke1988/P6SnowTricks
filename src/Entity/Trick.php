@@ -3,11 +3,13 @@
 namespace App\Entity;
 
 use App\Repository\TrickRepository;
+use DateTimeZone;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Symfony\Component\String\Slugger\SluggerInterface;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
@@ -65,12 +67,12 @@ class Trick
     private $comments;
 
     /**
-     * @ORM\OneToMany(targetEntity=TrickVideo::class, mappedBy="trick", orphanRemoval=true)
+     * @ORM\OneToMany(targetEntity=TrickVideo::class, mappedBy="trick", orphanRemoval=true, cascade="all")
      */
     private $trickVideos;
 
     /**
-     * @ORM\OneToMany(targetEntity=TrickImage::class, mappedBy="trick", orphanRemoval=true)
+     * @ORM\OneToMany(targetEntity=TrickImage::class, mappedBy="trick", orphanRemoval=true, cascade="all")
      */
     private $trickImages;
 
@@ -210,6 +212,7 @@ class Trick
     public function addTrickVideo(TrickVideo $trickVideo): self
     {
         if (!$this->trickVideos->contains($trickVideo)) {
+            $trickVideo->setCreatedAt(new \DateTime('now', new DateTimeZone('Europe/Paris')));
             $this->trickVideos[] = $trickVideo;
             $trickVideo->settrick($this);
         }
@@ -219,8 +222,8 @@ class Trick
 
     public function getTrickVideo($id): TrickVideo
     {
-        foreach($this->trickVideos as $trickVideo) {
-            if($trickVideo->getId() == $id) return $trickVideo;
+        foreach ($this->trickVideos as $trickVideo) {
+            if ($trickVideo->getId() == $id) return $trickVideo;
         }
         return new TrickVideo();
     }
@@ -247,18 +250,18 @@ class Trick
 
     public function getTrickImage($id): TrickImage
     {
-        foreach($this->trickImages as $trickImage) {
-            if($trickImage->getId() == $id) return $trickImage;
+        foreach ($this->trickImages as $trickImage) {
+            if ($trickImage->getId() == $id) return $trickImage;
         }
         return new TrickImage();
     }
 
     public function addTrickImage(TrickImage $trickImage): self
     {
-        if (!$this->trickImages->contains($trickImage)) {
-            $this->trickImages[] = $trickImage;
-            $trickImage->setTrick($this);
-        }
+
+        $trickImage->setCreatedAt(new \DateTime('now', new DateTimeZone('Europe/Paris')));
+        $this->trickImages[] = $trickImage;
+        $trickImage->setTrick($this);
 
         return $this;
     }
