@@ -1,7 +1,15 @@
 .single-trick.add-trick {
   .media-row {
-    .single-image,.single-video {
+    .single-image, .single-video {
       display: none;
     }
+  }
+
+  .image-list, .video-list {
+    list-style: none;
+  }
+
+  label[for="trick_form_mainImage"] {
+    width: 50%;
   }
 }

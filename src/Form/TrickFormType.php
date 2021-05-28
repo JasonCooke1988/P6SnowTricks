@@ -61,7 +61,6 @@ class TrickFormType extends AbstractType
                 FileType::class, [
                     'label' => 'Image à afficher à la une de la figure',
                     'required' => false,
-                    'allow_add' => true,
                     'data_class' => null,
                     'constraints' => [
                         new Image([
@@ -71,34 +70,22 @@ class TrickFormType extends AbstractType
                     ]
                 ])
             ->add('trickVideos', CollectionType::class, [
-                'entry_type' => TextareaType::class, [
-                    'label' => 'Copier le code \'embed\' récupéré depuis youtube pour la vidéo que vous souhaitez ajouter / modifier :',
-                    'required' => false,
-                    'allow_add' => true,
-                    'prototype' => true,
-                    'constraints' => [
-                        new NotBlank([
-                            'message' => 'Veuillez renseigner le code embed pour la vidéo',
-                        ])
-                    ]
-                ]
+                'entry_type' => TrickFormVideoType::class,
+                'by_reference' => false,
+                'label' => 'Copier le code \'embed\' pour la vidéo à ajouter / modifier :',
+                'required' => false,
+                'allow_add' => true,
+                'allow_delete' => true,
+                'prototype' => true,
             ])
             ->add('trickImages', CollectionType::class, [
-                'entry_type' => FileType::class, [
-                    'label' => 'Ajouter une image',
-                    'required' => true,
-                    'allow_add' => true,
-                    'prototype' => true,
-                    'constraints' => [
-                        new Image([
-                            'maxSize' => '2M',
-                            'maxSizeMessage' => 'Le fichier est trop volumineux ({{ size }} {{ suffix }}). La taille maximum autorisé est de {{ limit }} {{ suffix }}'
-                        ]),
-                        new NotBlank([
-                            'message' => 'Veuillez renseigner un fichier pour cette image',
-                        ])
-                    ]
-                ]
+                'entry_type' => TrickFormSingleImageType::class,
+                'by_reference' => false,
+                'label' => 'Ajouter une image',
+                'required' => true,
+                'allow_add' => true,
+                'allow_delete' => true,
+                'prototype' => true,
             ]);
     }
 

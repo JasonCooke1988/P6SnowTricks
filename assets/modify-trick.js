@@ -1,9 +1,3 @@
-//Insert file name into file upload input field
-$('input[type="file"]').change(function (e) {
-    var fileName = e.target.files[0].name;
-    $('.custom-file-label').html(fileName);
-});
-
 // Insert image id into modal
 $("#single-image-modal").on('show.bs.modal', function (event) {
     let button = $(event.relatedTarget);

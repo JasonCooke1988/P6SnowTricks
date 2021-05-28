@@ -35,7 +35,7 @@
                 {% if loop.index > 10 %}
 
                     <div class="single-trick-preview above-max col-lg-2">
-                        {% if trick.trickImages is defined %}
+                        {% if trick.trickImages|length > 0 %}
                             <a href="{{ path('singleTrick',{slug: trick.slug}) }}"><img class="trick-image"
                                                                                     src="{{ asset('images/tricks/' ~ trick.trickImages|first.path) }}"
                                                                                     alt="Image de figure"></a>
