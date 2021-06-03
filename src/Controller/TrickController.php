@@ -258,7 +258,7 @@ class TrickController extends AbstractController
 
         $trick = new Trick();
 
-        $trickForm = $this->createForm(TrickFormType::class, $trick);
+        $trickForm = $this->createForm(TrickFormType::class, $trick, ['validation_groups' => 'new']);
         $trickForm->handleRequest($request);
 
         if ($trickForm->isSubmitted() && $trickForm->isValid()) {
@@ -314,7 +314,7 @@ class TrickController extends AbstractController
 
         $trickForm = clone $trick;
 
-        $trickForm = $this->createForm(TrickFormType::class, $trickForm);
+        $trickForm = $this->createForm(TrickFormType::class, $trickForm, ['validation_groups' => 'edit']);
         $trickForm->handleRequest($request);
 
         if ($trickForm->isSubmitted() && $trickForm->isValid()) {
@@ -449,15 +449,14 @@ class TrickController extends AbstractController
      */
     public function getImageData(Request $request, TrickImageRepository $imageRepository): JsonResponse
     {
-
         $IdArray = $request->request->get('array');
 
         $pathArray = array();
 
         foreach($IdArray as $elt) {
+            //$pathArray[$elt] = $imageRepository->findAll();
             $pathArray[$elt] = $imageRepository->getImagePath($elt);
         }
-
 
         $response = array(
             'success' => true,

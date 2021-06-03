@@ -16,7 +16,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 /**
  * @ORM\Entity(repositoryClass=TrickRepository::class)
  * @ORM\Cache(usage="NONSTRICT_READ_WRITE")
- * @UniqueEntity(fields="name", message="Une figure portant ce nom existe déjà")
+ * @UniqueEntity(fields="name", message="Une figure portant ce nom existe déjà", groups={"new"})
  */
 class Trick
 {
@@ -29,7 +29,7 @@ class Trick
 
     /**
      * @ORM\Column(type="string", length=255, unique=true)
-     * @Assert\NotBlank(message="Veuillez reinseigner un nom de figure.")
+     * @Assert\NotBlank(message="Veuillez reinseigner un nom de figure.", groups={"new","edit"})
      */
     private ?string $name;
 
