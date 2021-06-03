@@ -14,11 +14,15 @@ use App\Form\TrickFormMainImageType;
 use App\Form\TrickFormSingleImageType;
 use App\Form\TrickFormType;
 use App\Form\TrickFormVideoType;
+use App\Repository\TrickImageRepository;
 use App\Repository\TrickRepository;
+use App\Service\FileUploader;
+use DateTime;
 use DateTimeZone;
 use Exception;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -50,7 +54,7 @@ class TrickController extends AbstractController
 
             $comment->setUser($user);
             $comment->setTrick($trick);
-            $comment->setCreatedAt(new \DateTime('now', new DateTimeZone('Europe/Paris')));
+            $comment->setCreatedAt(new DateTime('now', new DateTimeZone('Europe/Paris')));
 
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($comment);
@@ -92,14 +96,14 @@ class TrickController extends AbstractController
 
             if ($videoId === null) {
                 $trickVideo->setTrick($trick);
-                $trickVideo->setCreatedAt(new \DateTime('now', new DateTimeZone('Europe/Paris')));
+                $trickVideo->setCreatedAt(new DateTime('now', new DateTimeZone('Europe/Paris')));
                 $trick->addTrickVideo($trickVideo);
-                $trick->setUpdatedAt(new \DateTime('now', new DateTimeZone('Europe/Paris')));
+                $trick->setUpdatedAt(new DateTime('now', new DateTimeZone('Europe/Paris')));
                 $this->addFlash('success', 'Video créée.');
 
             } else {
                 $trickVideo = $trick->getTrickVideo($videoId);
-                $trickVideo->setUpdatedAt(new \DateTime('now', new DateTimeZone('Europe/Paris')));
+                $trickVideo->setUpdatedAt(new DateTime('now', new DateTimeZone('Europe/Paris')));
                 $this->addFlash('success', 'Video modifié.');
 
             }
@@ -157,7 +161,7 @@ class TrickController extends AbstractController
                 $trick->setMainImage($newFilename);
             }
 
-            $trick->setUpdatedAt(new \DateTime('now', new DateTimeZone('Europe/Paris')));
+            $trick->setUpdatedAt(new DateTime('now', new DateTimeZone('Europe/Paris')));
 
             $entityManager = $this->getDoctrine()->getManager();
 
@@ -208,7 +212,7 @@ class TrickController extends AbstractController
 
                     $trickImage->setPath($newFilename);
                     $trickImage->setTrick($trick);
-                    $trickImage->setCreatedAt(new \DateTime('now', new DateTimeZone('Europe/Paris')));
+                    $trickImage->setCreatedAt(new DateTime('now', new DateTimeZone('Europe/Paris')));
 
                     $trick->addTrickImage($trickImage);
 
@@ -220,13 +224,13 @@ class TrickController extends AbstractController
                     $trickImage = $trick->getTrickImage($singleImageId);
 
                     $trickImage->setPath($newFilename);
-                    $trickImage->setUpdatedAt(new \DateTime('now', new DateTimeZone('Europe/Paris')));
+                    $trickImage->setUpdatedAt(new DateTime('now', new DateTimeZone('Europe/Paris')));
 
                     $this->addFlash('success', 'Image modifié.');
 
                 }
 
-                $trick->setUpdatedAt(new \DateTime('now', new DateTimeZone('Europe/Paris')));
+                $trick->setUpdatedAt(new DateTime('now', new DateTimeZone('Europe/Paris')));
                 $entityManager = $this->getDoctrine()->getManager();
                 $entityManager->persist($trick);
                 $entityManager->persist($trickImage);
@@ -260,19 +264,24 @@ class TrickController extends AbstractController
         if ($trickForm->isSubmitted() && $trickForm->isValid()) {
 
             $trick = $trickForm->getData();
-            $trick->setCreatedAt(new \DateTime('now', new DateTimeZone('Europe/Paris')));
+            $trick->setCreatedAt(new DateTime('now', new DateTimeZone('Europe/Paris')));
             $trick->setUser($user);
 
-            $trickImages = $trickForm->get('trickImages')->getData();
+            foreach ($trick->getTrickImages() as $trickImage) {
+                $fileNameOriginal = $trickImage->getFile();
 
-            foreach ($trickImages as &$trickImage) {
-                $trickImage = $trickImage->getData();
-                $fileName = md5(uniqid()).'.'.$trickImage->guessExtension();
-                $trickImage->move(
-                    './images/tricks/',
-                    $fileName
-                );
+                $fileUploader = new FileUploader('./images/tricks/', $slugger);
+                $fileName = $fileUploader->upload($fileNameOriginal);
+                $trickImage->setPath($fileName);
             }
+
+            if ($trick->getMainImageFile() != null) {
+                $fileNameOriginal = $trick->getMainImageFile();
+                $fileUploader = new FileUploader('./images/tricks/', $slugger);
+                $fileName = $fileUploader->upload($fileNameOriginal);
+                $trick->setMainImage($fileName);
+            }
+
 
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($trick);
@@ -298,42 +307,30 @@ class TrickController extends AbstractController
      * @return Response
      * @throws Exception
      */
-    public function modifyTrick(Trick $trick, Request $request, SluggerInterface $slugger, TrickRepository $trickRepository): Response
+    public function modifyTrick(Trick $trick, Request $request, SluggerInterface $slugger): Response
     {
-
-        $trickImage = new TrickImage();
-        $trickVideo = new TrickVideo();
 
         $this->denyAccessUnlessGranted('ROLE_USER');
 
-        $singleImageForm = $this->createForm(TrickFormSingleImageType::class, $trickImage, [
-            'action' => $this->generateUrl('modifyTrickImage', array('slug' => $trick->getSlug()))
-        ]);
-        $singleImageForm->handleRequest($request);
-
-        $videoForm = $this->createForm(TrickFormVideoType::class, $trickVideo, [
-            'action' => $this->generateUrl('modifyTrickVideo', array('slug' => $trick->getSlug()))
-        ]);
-        $videoForm->handleRequest($request);
-
         $trickForm = clone $trick;
-        $trickMainImageForm = clone $trick;
 
         $trickForm = $this->createForm(TrickFormType::class, $trickForm);
         $trickForm->handleRequest($request);
 
-        $trickMainImageForm = $this->createForm(TrickFormMainImageType::class, $trickMainImageForm, [
-            'action' => $this->generateUrl('modifyTrickMainImage', array('slug' => $trick->getSlug()))
-        ]);
-        $trickMainImageForm->handleRequest($request);
-
         if ($trickForm->isSubmitted() && $trickForm->isValid()) {
+
+            if ($trick->getMainImageFile() != null) {
+                $fileNameOriginal = $trick->getMainImageFile();
+                $fileUploader = new FileUploader('./images/tricks/', $slugger);
+                $fileName = $fileUploader->upload($fileNameOriginal);
+                $trick->setMainImage($fileName);
+            }
 
             $trickUpdated = $trickForm->getData();
 
             $this->addFlash('success', 'Figure modifiée.');
 
-            $trickUpdated->setUpdatedAt(new \DateTime('now', new DateTimeZone('Europe/Paris')));
+            $trickUpdated->setUpdatedAt(new DateTime('now', new DateTimeZone('Europe/Paris')));
 
             $entityManager = $this->getDoctrine()->getManager();
 
@@ -344,10 +341,7 @@ class TrickController extends AbstractController
 
         return $this->render('layout/modify-trick.html.twig', [
             'header' => 'fullheight',
-            'trickSingleImageForm' => $singleImageForm->createView(),
-            'trickVideoForm' => $videoForm->createView(),
             'trickForm' => $trickForm->createView(),
-            'trickMainImageForm' => $trickMainImageForm->createView(),
             'trick' => $trick
         ]);
 
@@ -366,7 +360,7 @@ class TrickController extends AbstractController
 
         $trick->deleteMainImage();
 
-        $trick->setUpdatedAt(new \DateTime('now', new DateTimeZone('Europe/Paris')));
+        $trick->setUpdatedAt(new DateTime('now', new DateTimeZone('Europe/Paris')));
 
         $entityManager = $this->getDoctrine()->getManager();
 
@@ -391,7 +385,7 @@ class TrickController extends AbstractController
 
         $trick->removeTrickImage($trickImage);
 
-        $trick->setUpdatedAt(new \DateTime('now', new DateTimeZone('Europe/Paris')));
+        $trick->setUpdatedAt(new DateTime('now', new DateTimeZone('Europe/Paris')));
 
         $entityManager = $this->getDoctrine()->getManager();
 
@@ -418,7 +412,7 @@ class TrickController extends AbstractController
 
         $trick->removeTrickVideo($trickVideo);
 
-        $trick->setUpdatedAt(new \DateTime('now', new DateTimeZone('Europe/Paris')));
+        $trick->setUpdatedAt(new DateTime('now', new DateTimeZone('Europe/Paris')));
 
         $entityManager = $this->getDoctrine()->getManager();
 
@@ -435,7 +429,6 @@ class TrickController extends AbstractController
      */
     public function deleteTrick(Trick $trick): RedirectResponse
     {
-
         $this->denyAccessUnlessGranted('ROLE_USER');
 
         $entityManager = $this->getDoctrine()->getManager();
@@ -443,7 +436,35 @@ class TrickController extends AbstractController
         $entityManager->remove($trick);
         $entityManager->flush();
 
+        $this->addFlash('success', 'Figure supprimée.');
+
         return $this->redirectToRoute('home');
+    }
+
+    /**
+     * @Route("get-image-data", name="getImageData")
+     * @param Request $request
+     * @param TrickImageRepository $imageRepository
+     * @return JsonResponse
+     */
+    public function getImageData(Request $request, TrickImageRepository $imageRepository): JsonResponse
+    {
+
+        $IdArray = $request->request->get('array');
+
+        $pathArray = array();
+
+        foreach($IdArray as $elt) {
+            $pathArray[$elt] = $imageRepository->getImagePath($elt);
+        }
+
+
+        $response = array(
+            'success' => true,
+            'data' => $pathArray
+        );
+
+        return new JsonResponse($response);
     }
 
 }

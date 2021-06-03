@@ -9,6 +9,7 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\String\Slugger\SluggerInterface;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -67,12 +68,12 @@ class Trick
     private $comments;
 
     /**
-     * @ORM\OneToMany(targetEntity=TrickVideo::class, mappedBy="trick", orphanRemoval=true, cascade="all")
+     * @ORM\OneToMany(targetEntity=TrickVideo::class, mappedBy="trick", orphanRemoval=true, cascade={"persist"})
      */
     private $trickVideos;
 
     /**
-     * @ORM\OneToMany(targetEntity=TrickImage::class, mappedBy="trick", orphanRemoval=true, cascade="all")
+     * @ORM\OneToMany(targetEntity=TrickImage::class, mappedBy="trick", orphanRemoval=true, cascade={"persist"})
      */
     private $trickImages;
 
@@ -86,6 +87,24 @@ class Trick
      * @Gedmo\Slug(fields={"name"})
      */
     private ?string $slug;
+
+    private $mainImageFile;
+
+    /**
+     * @return mixed
+     */
+    public function getMainImageFile()
+    {
+        return $this->mainImageFile;
+    }
+
+    /**
+     * @param mixed $file
+     */
+    public function setMainImageFile(UploadedFile $mainImageFile)
+    {
+        $this->mainImageFile = $mainImageFile;
+    }
 
     public function __construct()
     {

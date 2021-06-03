@@ -1,18 +1,23 @@
 {% extends'base.html.twig' %}
 
 {% block javascripts %}
-{{ encore_entry_script_tags('clickdisplay-trick') }}
+    {{ encore_entry_script_tags('clickdisplay-trick') }}
 
 {% endblock %}
 
 {% block header %}
     {{ parent() }}
     <div class="banner fullheight single-trick d-flex justify-content-center align-items-center">
-        {% if trick.trickImages is defined %}
-            <img src="{{ asset('images/tricks/' ~ trick.trickImages|first.path) }}" alt="home banner">
+        {% if trick.mainImage is defined %}
+            <img src="{{ asset('images/tricks/' ~ trick.mainImage) }}" alt="home banner">
         {% else %}
-            <img src="{{ asset('images/homebanner.jpg') }}" alt="home banner">
+            {% if trick.trickImages|length > 0 %}
+                <img src="{{ asset('images/tricks/' ~ trick.trickImages|first.path) }}" alt="home banner">
+            {% else %}
+                <img src="{{ asset('images/homebanner.jpg') }}" alt="home banner">
+            {% endif %}
         {% endif %}
+
         <h1>{{ trick.name }}</h1>
     </div>
 {% endblock %}
@@ -51,9 +56,11 @@
 
         <div class="stats d-flex offset-lg-2 col-lg-8 justify-content-around">
             <p class="group p-2">{{ trick.group.name }}</p>
-            <p class="creation p-2">Figure créer le : {{ trick.createdAt|format_datetime('full', 'none', locale='fr') }}</p>
+            <p class="creation p-2">Figure créer le
+                : {{ trick.createdAt|format_datetime('full', 'none', locale='fr') }}</p>
             {% if trick.updatedAt is defined and trick.updatedAt is not null %}
-                <p class="update p-2">Figure modifié le : {{ trick.updatedAt|format_datetime('full', 'none', locale='fr') }} </p>
+                <p class="update p-2">Figure modifié le
+                    : {{ trick.updatedAt|format_datetime('full', 'none', locale='fr') }} </p>
             {% endif %}
         </div>
 

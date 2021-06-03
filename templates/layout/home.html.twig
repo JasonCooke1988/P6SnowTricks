@@ -1,9 +1,9 @@
 {% extends'base.html.twig' %}
 
-{%  block javascripts %}
+{% block javascripts %}
     {{ encore_entry_script_tags('home') }}
-{{ encore_entry_script_tags('delete-modal') }}
-{%  endblock %}
+    {{ encore_entry_script_tags('delete-modal') }}
+{% endblock %}
 
 {% block header %}
     {{ parent() }}
@@ -32,62 +32,53 @@
 
             {% for trick in tricks %}
 
-                {% if loop.index > 10 %}
+            {% if loop.index > 10 %}
+            <div class="single-trick-preview above-max col-lg-2">
+            {% else %}
+            <div class="single-trick-preview col-lg-2" style="display: block">
+            {% endif %}
 
-                    <div class="single-trick-preview above-max col-lg-2">
-                        {% if trick.trickImages|length > 0 %}
-                            <a href="{{ path('singleTrick',{slug: trick.slug}) }}"><img class="trick-image"
-                                                                                    src="{{ asset('images/tricks/' ~ trick.trickImages|first.path) }}"
-                                                                                    alt="Image de figure"></a>
-                        {% else %}
-                            <a href="{{ path('singleTrick',{slug: trick.slug}) }}"><img class="trick-image"
-                                                                                    src="http://via.placeholder.com/300x150"
-                                                                                    alt="Image provisoire de figure"></a>
-                        {% endif %}
-                        <div class="bottom-row d-flex justify-content-between align-items-center my-2">
-                            <a href="{{ path('singleTrick',{slug: trick.slug}) }}"
-                               class="trick-name d-flex align-items-center m-0">{{ trick.slug }}</a>
-                            {% if app.user %}
-                                <div class="icons">
-                                    <a href="{{ path('modifyTrick',{slug: trick.slug}) }}"><i class="icon-pencil"></i></a>
-                                    <a id="delete-trick-submit" href="#" data-toggle="modal" data-target="#delete-modal" data-href="{{ path('deleteTrick',{slug: trick.slug}) }}"><i class="icon-bin"></i></a>
-                                </div>
-                            {% endif %}
-                        </div>
-                    </div>
+                    <a href="{{ path('singleTrick',{slug: trick.slug}) }}">
+                        {% if trick.mainImage is defined  and trick.mainImage is not null %}
+
+                        <img class="trick-image"
+                             src="{{ asset('images/tricks/' ~ trick.mainImage) }}"
+                             alt="Image de figure"></a>
+
+                {% elseif trick.trickImages|length > 0 %}
+
+                    <img class="trick-image"
+                         src="{{ asset('images/tricks/' ~ trick.trickImages|first.path) }}"
+                         alt="Image de figure"></a>
 
                 {% else %}
-
-                    <div class="single-trick-preview col-lg-2" style="display: block">
-                        {% if trick.trickImages|length > 0 %}
-                            <a href="{{ path('singleTrick',{slug: trick.slug}) }}"><img class="trick-image"
-                                                                                    src="{{ asset('images/tricks/' ~ trick.trickImages|first.path) }}"
-                                                                                    alt="Image de figure"></a>
-                        {% else %}
-                            <a href="{{ path('singleTrick',{slug: trick.slug}) }}"><img class="trick-image"
-                                                                                    src="http://via.placeholder.com/300x150"
-                                                                                    alt="Image provisoire de figure"></a>
+                    <img class="trick-image" src="http://via.placeholder.com/300x150"
+                         alt="Image provisoire de figure">
+                    {% endif %}
+                    </a>
+                    <div class="bottom-row d-flex justify-content-between align-items-center my-2">
+                        <a href="{{ path('singleTrick',{slug: trick.slug}) }}"
+                           class="trick-name d-flex align-items-center m-0">{{ trick.slug }}</a>
+                        {% if app.user %}
+                            <div class="icons">
+                                <a href="{{ path('modifyTrick',{slug: trick.slug}) }}"><i
+                                            class="icon-pencil"></i></a>
+                                <a id="delete-trick-submit" href="#" data-toggle="modal" data-target="#delete-modal"
+                                   data-href="{{ path('deleteTrick',{slug: trick.slug}) }}"><i class="icon-bin"></i></a>
+                            </div>
                         {% endif %}
-                        <div class="bottom-row d-flex justify-content-between align-items-center my-2">
-                            <a href="{{ path('singleTrick',{slug: trick.slug}) }}"
-                               class="trick-name d-flex align-items-center m-0">{{ trick.slug }}</a>
-                            {% if app.user %}
-                                <div class="icons">
-                                    <a href="{{ path('modifyTrick',{slug: trick.slug}) }}"><i class="icon-pencil"></i></a>
-                                    <a id="delete-trick-submit" href="#" data-toggle="modal" data-target="#delete-modal" data-href="{{ path('deleteTrick',{slug: trick.slug}) }}"><i class="icon-bin"></i></a>
-                                </div>
-                            {% endif %}
-                        </div>
                     </div>
+                </div>
 
-                {% endif %}
 
-            {% endfor %}
+                {% endfor %}
 
         </section>
 
         <div class="row d-flex justify-content-center">
-            <button id="display-more-tricks" class="btn btn-lg btn-primary my-2"><i class="icon-spinner mr-2"></i>Voir plus</button>
+            <button id="display-more-tricks" class="btn btn-lg btn-primary my-2"><i class="icon-spinner mr-2"></i>Voir
+                plus
+            </button>
         </div>
 
 
@@ -95,7 +86,7 @@
 
 
         {% block deletemodal %}
-        {{ parent() }}
+            {{ parent() }}
         {% endblock %}
 
     </main>

@@ -1,12 +1,12 @@
 // add-collection-widget.js
 $(document).ready(function () {
+    var counter = 0;
     $('#add-another-image, #add-another-video').click(function (e) {
         if (e.target.id === 'add-another-image') {
             var list = $('.image-list');
         } else {
             var list = $('.video-list');
         }
-        var counter = 0;
         // grab the prototype template
         var newWidget = list.attr('data-prototype');
         // replace the "__name__" used in the id and name of the prototype

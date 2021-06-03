@@ -1,5 +1,6 @@
 header.fullheight {
   height: 100vh;
+  border-bottom: 1px solid;
   .banner.fullheight {
     position: relative;
     h1 {
@@ -24,6 +25,9 @@ header.fullheight {
 }
 
 header {
+  .topbar {
+    padding: 15px 0;
+  }
   .logo {
     img {
       max-width: 100px;

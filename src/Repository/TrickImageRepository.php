@@ -19,6 +19,20 @@ class TrickImageRepository extends ServiceEntityRepository
         parent::__construct($registry, TrickImage::class);
     }
 
+    public function getImagePath($id)
+    {
+
+        $qb = $this->createQueryBuilder('i')
+            ->select('i.path')
+            ->where('i.id > :id')
+            ->setParameter('id', $id);
+
+        $query = $qb->getQuery();
+
+        return $query->execute();
+
+    }
+
     // /**
     //  * @return TrickImage[] Returns an array of TrickImage objects
     //  */

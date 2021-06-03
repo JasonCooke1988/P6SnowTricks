@@ -57,7 +57,7 @@ class TrickFormType extends AbstractType
                     ])
                 ]
             ])
-            ->add('mainImage',
+            ->add('mainImageFile',
                 FileType::class, [
                     'label' => 'Image à afficher à la une de la figure',
                     'required' => false,
