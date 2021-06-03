@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use App\Repository\TrickImageRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 /**
  * @ORM\Entity(repositoryClass=TrickImageRepository::class)
@@ -23,6 +24,24 @@ class TrickImage
      * @ORM\JoinColumn(nullable=false)
      */
     private $trick;
+
+    private $file;
+
+    /**
+     * @return mixed
+     */
+    public function getFile()
+    {
+        return $this->file;
+    }
+
+    /**
+     * @param mixed $file
+     */
+    public function setFile(UploadedFile $file)
+    {
+        $this->file = $file;
+    }
 
     /**
      * @ORM\Column(type="string", length=255)
@@ -55,6 +74,8 @@ class TrickImage
 
         return $this;
     }
+
+
 
     /**
      * @param mixed $id
