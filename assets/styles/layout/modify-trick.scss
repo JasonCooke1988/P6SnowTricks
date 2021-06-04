@@ -20,8 +20,35 @@
     .form-group {
       width: 100%;
     }
+
     .submit {
       width: 100%;
+    }
+
+    div.media-row {
+      width: 100%;
+      flex-wrap: wrap;
+      div.image-wrapper {
+        display: flex;
+        flex-direction: column;
+        img.trick-image {
+          max-height: 120px;
+          max-width: 100%;
+          object-fit: contain;
+          box-shadow: $box-shadow-light;
+        }
+      }
+
+      div.video-wrapper {
+        iframe {
+          box-shadow: $box-shadow-light;
+          width: 100%;
+          height: 120px;
+        }
+      }
+      .hide-input {
+        display: none;
+      }
     }
   }
 

@@ -319,12 +319,23 @@ class TrickController extends AbstractController
 
         if ($trickForm->isSubmitted() && $trickForm->isValid()) {
 
+            $fileUploader = new FileUploader('./images/tricks/', $slugger);
+
+
             if ($trick->getMainImageFile() != null) {
                 $fileNameOriginal = $trick->getMainImageFile();
-                $fileUploader = new FileUploader('./images/tricks/', $slugger);
                 $fileName = $fileUploader->upload($fileNameOriginal);
                 $trick->setMainImage($fileName);
             }
+
+            foreach ($trick->getTrickImages() as $trickImage) {
+                if ($trickImage->getFile() != null) {
+                    $fileNameOriginal = $trickImage->getFile();
+                    $fileName = $fileUploader->upload($fileNameOriginal);
+                    $trickImage->setPath($fileName);
+                }
+            }
+
 
             $trickUpdated = $trickForm->getData();
 
@@ -336,6 +347,8 @@ class TrickController extends AbstractController
 
             $entityManager->persist($trickUpdated);
             $entityManager->flush();
+
+//            $entityManager->refresh($trick);
 
         }
 
@@ -453,7 +466,7 @@ class TrickController extends AbstractController
 
         $pathArray = array();
 
-        foreach($IdArray as $elt) {
+        foreach ($IdArray as $elt) {
             //$pathArray[$elt] = $imageRepository->findAll();
             $pathArray[$elt] = $imageRepository->getImagePath($elt);
         }
