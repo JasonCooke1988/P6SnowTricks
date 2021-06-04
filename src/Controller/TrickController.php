@@ -220,7 +220,6 @@ class TrickController extends AbstractController
 
 
                 } else {
-
                     $trickImage = $trick->getTrickImage($singleImageId);
 
                     $trickImage->setPath($newFilename);
@@ -319,36 +318,37 @@ class TrickController extends AbstractController
 
         if ($trickForm->isSubmitted() && $trickForm->isValid()) {
 
+            $entityManager = $this->getDoctrine()->getManager();
+
             $fileUploader = new FileUploader('./images/tricks/', $slugger);
+            $trick = $trickForm->getData();
 
-
-            if ($trick->getMainImageFile() != null) {
-                $fileNameOriginal = $trick->getMainImageFile();
-                $fileName = $fileUploader->upload($fileNameOriginal);
-                $trick->setMainImage($fileName);
-            }
+//         Main image edit
+            $fileNameOriginal = $trick->getMainImageFile();
+            $fileName = $fileUploader->upload($fileNameOriginal);
+            $trick->setMainImage($fileName);
 
             foreach ($trick->getTrickImages() as $trickImage) {
                 if ($trickImage->getFile() != null) {
                     $fileNameOriginal = $trickImage->getFile();
                     $fileName = $fileUploader->upload($fileNameOriginal);
-                    $trickImage->setPath($fileName);
+                    if ($trick->getTrickImage($trickImage) != null) {
+                        $trickImage = $trick->getTrickImage($trickImage);
+                        $trickImage->setPath($fileName);
+                    } else {
+                        $trickImage->setPath($fileName);
+                        $trick->setTrickImage($trickImage);
+                        $entityManager->persist($trickImage);
+                    }
                 }
             }
 
-
-            $trickUpdated = $trickForm->getData();
-
             $this->addFlash('success', 'Figure modifiée.');
 
-            $trickUpdated->setUpdatedAt(new DateTime('now', new DateTimeZone('Europe/Paris')));
+            $trick->setUpdatedAt(new DateTime('now', new DateTimeZone('Europe/Paris')));
 
-            $entityManager = $this->getDoctrine()->getManager();
-
-            $entityManager->persist($trickUpdated);
+            $entityManager->persist($trick);
             $entityManager->flush();
-
-//            $entityManager->refresh($trick);
 
         }
 
