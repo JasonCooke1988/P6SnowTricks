@@ -32,9 +32,9 @@
         display: flex;
         flex-direction: column;
         img.trick-image {
-          max-height: 120px;
+          max-height: 170px;
           max-width: 100%;
-          object-fit: contain;
+          object-fit: cover;
           box-shadow: $box-shadow-light;
         }
       }
@@ -43,7 +43,7 @@
         iframe {
           box-shadow: $box-shadow-light;
           width: 100%;
-          height: 120px;
+          max-height: 170px;
         }
       }
       .hide-input {

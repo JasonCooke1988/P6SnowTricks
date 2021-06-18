@@ -38,5 +38,13 @@ header {
   .menu {
     margin-right: 4rem;
     height: min-content;
+    a {
+      font-size: 50px;
+      color: black;
+      font-family: 'snowboarding',sans-serif;
+      &:hover {
+        text-decoration: none;
+      }
+    }
   }
 }

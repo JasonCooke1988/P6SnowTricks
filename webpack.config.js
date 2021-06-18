@@ -24,7 +24,7 @@ Encore
     .addEntry('home', './assets/home.js')
     .addEntry('clickdisplay-trick', './assets/clickdisplay-trick.js')
     .addEntry('modify-trick', './assets/modify-trick.js')
-    .addEntry('add-trick', './assets/add-trick.js')
+    .addEntry('add-collection-entity', './assets/add-collection-entity.js')
     .addEntry('delete-modal', './assets/delete-modal.js')
     .addEntry('forms', './assets/forms.js')
     //.addEntry('bootstrapjs', './assets/bootstrap-5/js/bootstrap.js')

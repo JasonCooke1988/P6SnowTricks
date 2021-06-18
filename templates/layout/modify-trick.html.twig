@@ -5,6 +5,7 @@
     {{ encore_entry_script_tags('modify-trick') }}
     {{ encore_entry_script_tags('delete-modal') }}
     {{ encore_entry_script_tags('forms') }}
+    {{ encore_entry_script_tags('add-collection-entity') }}
 
 {% endblock %}
 
@@ -53,38 +54,50 @@
         </div>
 
 
-        <section class="row">
-
-            <div class="wrapper d-flex col-lg-12 justify-content-around my-4">
-
-                <button data-toggle="modal" data-target="#single-image-modal" id="add-single-image-button"
-                        class="btn btn-lg btn-primary">Ajouter une image
-                </button>
-
-                <button data-toggle="modal" data-target="#video-modal" id="add-video-button"
-                        class="btn btn-lg btn-primary">Ajouter une vidéo
-                </button>
-
-            </div>
-
-        </section>
-
         <section class="row my-5">
             {{ form_start(trickForm, {'attr' : {'class':'d-flex align-items-center flex-sm-column flex-row offset-lg-1 col-lg-10', 'id' : 'trick-form'}}) }}
 
+            <div class="wrapper new-media d-flex col-lg-12 justify-content-around my-4">
+
+                <div>
+                    <button data-toggle="modal" data-target="#single-image-modal" id="add-another-image"
+                            class="btn btn-lg btn-primary">Ajouter une image
+                    </button>
+                    <ul class="image-list"
+                        data-prototype='{{ form_widget(trickForm.trickImages.vars.prototype) }}'
+                        data-widget-tags="{{ '<li class="my-4"></li>'|e }}"
+                        data-widget-counter="">
+                    </ul>
+                </div>
+
+
+                <div>
+                    <button data-toggle="modal" data-target="#video-modal" id="add-another-video"
+                            class="btn btn-lg btn-primary">Ajouter une vidéo
+                    </button>
+                    <ul class="video-list"
+                        data-prototype='{{ form_widget(trickForm.trickVideos.vars.prototype) }}'
+                        data-widget-tags="{{ '<li></li>'|e }}"
+                        data-widget-counter="">
+
+                    </ul>
+                </div>
+
+            </div>
 
             <div class="media-row d-flex">
 
-                {% for picture in trickForm.trickImages %}
+                {% for image in trickForm.trickImages %}
                     <div class="my-4 col-lg-3 image-wrapper">
-                        <img src="{{ path('home')~'images/tricks/'~picture.vars.data.path }}" alt="Trick image"
+                        <img src="{{ path('home')~'images/tricks/'~image.vars.data.path }}" alt="Trick image"
                              class="trick-image">
                         <div class="trick-action py-2 px-1 mt-4 d-flex justify-content-around">
                             <a class="modify-image" href="#"><i class="icon-pencil"></i></a>
                             <a href="#" data-toggle="modal" data-target="#delete-modal"><i class="icon-bin"></i></a>
                         </div>
-                        <input type="file" id="{{ picture.vars.id }}" name="{{ picture.vars.full_name }}[file]"
+                        <input type="file" id="{{ image.vars.id }}_file" name="{{ image.vars.full_name }}[file]"
                                class="mt-4 hide-input">
+                        <input type="hidden" name="{{ image.vars.full_name }}[id]" value="{{ image.vars.data.id }}">
                     </div>
                 {% endfor %}
 

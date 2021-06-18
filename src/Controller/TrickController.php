@@ -74,175 +74,6 @@ class TrickController extends AbstractController
     }
 
     /**
-     * @Route("/modifyTrickVideo/{slug}",name="modifyTrickVideo")
-     * @param Trick $trick
-     * @param Request $request
-     * @param SluggerInterface $slugger
-     * @return RedirectResponse
-     * @throws Exception
-     */
-    public function modifyVideo(Trick $trick, Request $request): RedirectResponse
-    {
-        $trickVideo = new TrickVideo();
-
-        $videoForm = $this->createForm(TrickFormVideoType::class, $trickVideo);
-        $videoForm->handleRequest($request);
-
-        if ($videoForm->isSubmitted() && $videoForm->isValid()) {
-
-            $videoEmbed = $videoForm->get('embed')->getData();
-
-            $videoId = $videoForm->get('id')->getData();
-
-            if ($videoId === null) {
-                $trickVideo->setTrick($trick);
-                $trickVideo->setCreatedAt(new DateTime('now', new DateTimeZone('Europe/Paris')));
-                $trick->addTrickVideo($trickVideo);
-                $trick->setUpdatedAt(new DateTime('now', new DateTimeZone('Europe/Paris')));
-                $this->addFlash('success', 'Video créée.');
-
-            } else {
-                $trickVideo = $trick->getTrickVideo($videoId);
-                $trickVideo->setUpdatedAt(new DateTime('now', new DateTimeZone('Europe/Paris')));
-                $this->addFlash('success', 'Video modifié.');
-
-            }
-
-
-            $trickVideo->setEmbed($videoEmbed);
-
-            $entityManager = $this->getDoctrine()->getManager();
-            $entityManager->persist($trickVideo);
-            $entityManager->persist($trick);
-            $entityManager->flush();
-
-        }
-
-        return $this->redirectToRoute('modifyTrick', ['slug' => $trick->getSlug()]);
-    }
-
-    /**
-     * @Route("/modifyTrickMainImage/{slug}",name="modifyTrickMainImage")
-     * @param Trick $trick
-     * @param Request $request
-     * @param SluggerInterface $slugger
-     * @return RedirectResponse
-     * @throws Exception
-     */
-    public function modifyMainImage(Trick $trick, Request $request, SluggerInterface $slugger): RedirectResponse
-    {
-
-        $mainImageForm = $this->createForm(TrickFormMainImageType::class, $trick);
-        $mainImageForm->handleRequest($request);
-
-        $mainImageForm->isSubmitted();
-        $mainImageForm->isValid();
-
-        if ($mainImageForm->isSubmitted() && $mainImageForm->isValid()) {
-
-            $mainImageFile = $mainImageForm->get('mainImage')->getData();
-
-            $trick = $mainImageForm->getData();
-
-            if ($mainImageFile) {
-
-                $originalFilename = pathinfo($mainImageFile->getClientOriginalName(), PATHINFO_FILENAME);
-                // this is needed to safely include the file name as part of the URL
-                $safeFilename = $slugger->slug($originalFilename);
-                $newFilename = $safeFilename . '-' . uniqid() . '.' . $mainImageFile->guessExtension();
-
-                // Move the file to the directory where brochures are stored
-
-                $mainImageFile->move(
-                    './images/tricks/',
-                    $newFilename
-                );
-
-                $trick->setMainImage($newFilename);
-            }
-
-            $trick->setUpdatedAt(new DateTime('now', new DateTimeZone('Europe/Paris')));
-
-            $entityManager = $this->getDoctrine()->getManager();
-
-            $entityManager->persist($trick);
-            $entityManager->flush();
-
-            $this->addFlash('success', 'Image principal modifié.');
-
-        }
-        return $this->redirectToRoute('modifyTrick', ['slug' => $trick->getSlug()]);
-    }
-
-    /**
-     * @Route("/modifyTrickImage/{slug}",name="modifyTrickImage")
-     * @param Trick $trick
-     * @param Request $request
-     * @param SluggerInterface $slugger
-     * @return RedirectResponse
-     * @throws Exception
-     */
-    public function modifyImage(Trick $trick, Request $request, SluggerInterface $slugger): RedirectResponse
-    {
-
-        $singleImageForm = $this->createForm(TrickFormSingleImageType::class);
-        $singleImageForm->handleRequest($request);
-
-        if ($singleImageForm->isSubmitted() && $singleImageForm->isValid()) {
-
-            $singleImageFile = $singleImageForm->get('path')->getData();
-
-            $singleImageId = $singleImageForm->get('id')->getData();
-
-            if ($singleImageFile) {
-
-                $originalFilename = pathinfo($singleImageFile->getClientOriginalName(), PATHINFO_FILENAME);
-                // this is needed to safely include the file name as part of the URL
-                $safeFilename = $slugger->slug($originalFilename);
-                $newFilename = $safeFilename . '-' . uniqid() . '.' . $singleImageFile->guessExtension();
-
-                $singleImageFile->move(
-                    './images/tricks/',
-                    $newFilename
-                );
-
-
-                if ($singleImageId === NULL) {
-                    $trickImage = new TrickImage();
-
-                    $trickImage->setPath($newFilename);
-                    $trickImage->setTrick($trick);
-                    $trickImage->setCreatedAt(new DateTime('now', new DateTimeZone('Europe/Paris')));
-
-                    $trick->addTrickImage($trickImage);
-
-                    $this->addFlash('success', 'Image ajouté.');
-
-
-                } else {
-                    $trickImage = $trick->getTrickImage($singleImageId);
-
-                    $trickImage->setPath($newFilename);
-                    $trickImage->setUpdatedAt(new DateTime('now', new DateTimeZone('Europe/Paris')));
-
-                    $this->addFlash('success', 'Image modifié.');
-
-                }
-
-                $trick->setUpdatedAt(new DateTime('now', new DateTimeZone('Europe/Paris')));
-                $entityManager = $this->getDoctrine()->getManager();
-                $entityManager->persist($trick);
-                $entityManager->persist($trickImage);
-                $entityManager->flush();
-
-            }
-
-        }
-        return $this->redirectToRoute('modifyTrick', ['slug' => $trick->getSlug()]);
-    }
-
-
-    /**
      * @Route("/add-trick/",name="addTrick")
      * @param Request $request
      * @param UserInterface $user
@@ -324,16 +155,20 @@ class TrickController extends AbstractController
             $trick = $trickForm->getData();
 
 //         Main image edit
-            $fileNameOriginal = $trick->getMainImageFile();
-            $fileName = $fileUploader->upload($fileNameOriginal);
-            $trick->setMainImage($fileName);
+            if ($trick->getMainImageFile() != null) {
+                $fileNameOriginal = $trick->getMainImageFile();
+                $fileName = $fileUploader->upload($fileNameOriginal);
+                $trick->setMainImage($fileName);
 
+
+            }
             foreach ($trick->getTrickImages() as $trickImage) {
                 if ($trickImage->getFile() != null) {
                     $fileNameOriginal = $trickImage->getFile();
                     $fileName = $fileUploader->upload($fileNameOriginal);
-                    if ($trick->getTrickImage($trickImage) != null) {
-                        $trickImage = $trick->getTrickImage($trickImage);
+                    if ($trick->getTrickImage($trickImage->getId()) != null) {
+                        $id = $trickImage->getId();
+                        $trickImage = $trick->getTrickImage($id);
                         $trickImage->setPath($fileName);
                     } else {
                         $trickImage->setPath($fileName);
@@ -342,11 +177,9 @@ class TrickController extends AbstractController
                     }
                 }
             }
-
             $this->addFlash('success', 'Figure modifiée.');
 
             $trick->setUpdatedAt(new DateTime('now', new DateTimeZone('Europe/Paris')));
-
             $entityManager->persist($trick);
             $entityManager->flush();
 
