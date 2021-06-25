@@ -59,8 +59,8 @@
 
             <div class="wrapper new-media d-flex col-lg-12 justify-content-around my-4">
 
-                <div>
-                    <button data-toggle="modal" data-target="#single-image-modal" id="add-another-image"
+                <div class="col-lg-6 d-flex flex-column align-items-center">
+                    <button id="add-another-image"
                             class="btn btn-lg btn-primary">Ajouter une image
                     </button>
                     <ul class="image-list"
@@ -71,9 +71,9 @@
                 </div>
 
 
-                <div>
-                    <button data-toggle="modal" data-target="#video-modal" id="add-another-video"
-                            class="btn btn-lg btn-primary">Ajouter une vidéo
+                <div class="col-lg-6 d-flex flex-column align-items-center">
+                    <button id="add-another-video"
+                            class="btn btn-lg btn-primary mb-4">Ajouter une vidéo
                     </button>
                     <ul class="video-list"
                         data-prototype='{{ form_widget(trickForm.trickVideos.vars.prototype) }}'
@@ -93,7 +93,9 @@
                              class="trick-image">
                         <div class="trick-action py-2 px-1 mt-4 d-flex justify-content-around">
                             <a class="modify-image" href="#"><i class="icon-pencil"></i></a>
-                            <a href="#" data-toggle="modal" data-target="#delete-modal"><i class="icon-bin"></i></a>
+                            <a href=""
+                               data-href="{{ path('deleteSingleImageTrick', {id: trick.id, trickImage_id: image.vars.value.id}) }}"
+                               data-toggle="modal" data-target="#delete-modal"><i class="icon-bin"></i></a>
                         </div>
                         <input type="file" id="{{ image.vars.id }}_file" name="{{ image.vars.full_name }}[file]"
                                class="mt-4 hide-input">

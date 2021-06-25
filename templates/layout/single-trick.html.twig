@@ -2,13 +2,13 @@
 
 {% block javascripts %}
     {{ encore_entry_script_tags('clickdisplay-trick') }}
-
+    {{ encore_entry_script_tags('delete-modal') }}
 {% endblock %}
 
 {% block header %}
     {{ parent() }}
     <div class="banner fullheight single-trick d-flex justify-content-center align-items-center">
-        {% if trick.mainImage is defined %}
+        {% if trick.mainImage is defined and trick.mainImage is not null %}
             <img src="{{ asset('images/tricks/' ~ trick.mainImage) }}" alt="home banner">
         {% else %}
             {% if trick.trickImages|length > 0 %}
@@ -36,7 +36,7 @@
             {% if trick.trickImages is defined %}
                 {% for image in trick.trickImages %}
                     <div class="single-image col-lg-2 my-4">
-                        <img src="{{ asset('images/tricks/' ~ image.path) }}" alt="Trick image">
+                        <img class="trick-image" src="{{ asset('images/tricks/' ~ image.path) }}" alt="Trick image">
                     </div>
                 {% endfor %}
             {% endif %}
@@ -73,6 +73,17 @@
                 {{ form_end(commentForm) }}
             </div>
             <hr>
+
+            {% if app.user %}
+                <div class="d-flex justify-content-end">
+                    <a id="delete-trick-submit" class="btn btn-lg btn-danger" href="#" data-toggle="modal"
+                       data-target="#delete-modal" data-href="{{ path('deleteTrick',{slug: trick.slug}) }}">Supprimer</a>
+                    <a href="{{ path('modifyTrick',{slug: trick.slug}) }}" class="btn btn-lg btn-primary ml-2">Modifier
+                        la
+                        figure</a>
+                </div>
+            {% endif %}
+
         {% endif %}
 
         {% if trick.comments is defined %}
@@ -112,5 +123,9 @@
         {% endif %}
 
     </main>
+
+    {% block deletemodal %}
+        {{ parent() }}
+    {% endblock %}
 
 {% endblock %}

@@ -1,12 +1,14 @@
 // add-collection-widget.js
 $(document).ready(function () {
     if ($('main').hasClass('modify-trick')) {
-        var counter = $('.image-wrapper').length;
-        console.log('yo')
+        var imageCounter = $('.image-wrapper').length;
+        var videoCounter = $('.video-wrapper').length;
     } else {
-        var counter = 0;
+        var imageCounter = 0;
+        var videoCounter = 0;
     }
     $('#add-another-image, #add-another-video').click(function (e) {
+        e.preventDefault()
         if (e.target.id === 'add-another-image') {
             var list = $('.image-list');
         } else {
@@ -14,16 +16,17 @@ $(document).ready(function () {
         }
         // grab the prototype template
         let newWidget = list.attr('data-prototype');
-        // replace the "__name__" used in the id and name of the prototype
-        // with a number that's unique to your emails
-        // end name attribute looks like name="contact[emails][2]"
-        newWidget = newWidget.replace(/__name__/g, counter);
-        // Increase the counter
-        counter++;
-        // And store it, the length cannot be used if deleting widgets is allowed
-        list.data('widget-counter', counter);
-        // create a new list element and add it to the list
-        //let newElem = $(list.attr('data-widget-tags')).html(newWidget);
+
+        if (list.hasClass('.image-list')) {
+            newWidget = newWidget.replace(/__name__/g, imageCounter);
+            imageCounter++;
+            list.data('widget-counter', imageCounter);
+        } else {
+            newWidget = newWidget.replace(/__name__/g, videoCounter);
+            videoCounter++;
+            list.data('widget-counter', videoCounter);
+        }
+
         let newElem = $(list.attr('data-widget-tags')).html(newWidget);
         newElem.appendTo(list);
     });

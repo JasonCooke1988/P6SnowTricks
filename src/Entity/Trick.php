@@ -68,12 +68,12 @@ class Trick
     private $comments;
 
     /**
-     * @ORM\OneToMany(targetEntity=TrickVideo::class, mappedBy="trick", orphanRemoval=true, cascade={"persist"})
+     * @ORM\OneToMany(targetEntity=TrickVideo::class, mappedBy="trick", orphanRemoval=true, cascade={"persist","remove"})
      */
     private $trickVideos;
 
     /**
-     * @ORM\OneToMany(targetEntity=TrickImage::class, mappedBy="trick", orphanRemoval=true, cascade={"persist"})
+     * @ORM\OneToMany(targetEntity=TrickImage::class, mappedBy="trick", orphanRemoval=true, cascade={"persist","remove"})
      */
     private $trickImages;
 
@@ -312,6 +312,8 @@ class Trick
 
     public function deleteMainImage()
     {
+        unlink('images/tricks/'.$this->mainImage);
+
         $this->mainImage = null;
 
         return $this;
