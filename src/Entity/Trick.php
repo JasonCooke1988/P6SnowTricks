@@ -16,7 +16,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 /**
  * @ORM\Entity(repositoryClass=TrickRepository::class)
  * @ORM\Cache(usage="NONSTRICT_READ_WRITE")
- * @UniqueEntity(fields="name", message="Une figure portant ce nom existe déjà")
+ * @UniqueEntity(fields="name", message="Une figure portant ce nom existe déjà", groups={"new"})
  */
 class Trick
 {
@@ -29,7 +29,7 @@ class Trick
 
     /**
      * @ORM\Column(type="string", length=255, unique=true)
-     * @Assert\NotBlank(message="Veuillez reinseigner un nom de figure.")
+     * @Assert\NotBlank(message="Veuillez reinseigner un nom de figure.", groups={"new","edit"})
      */
     private ?string $name;
 
@@ -68,12 +68,12 @@ class Trick
     private $comments;
 
     /**
-     * @ORM\OneToMany(targetEntity=TrickVideo::class, mappedBy="trick", orphanRemoval=true, cascade={"persist"})
+     * @ORM\OneToMany(targetEntity=TrickVideo::class, mappedBy="trick", orphanRemoval=true, cascade={"persist","remove"})
      */
     private $trickVideos;
 
     /**
-     * @ORM\OneToMany(targetEntity=TrickImage::class, mappedBy="trick", orphanRemoval=true, cascade={"persist"})
+     * @ORM\OneToMany(targetEntity=TrickImage::class, mappedBy="trick", orphanRemoval=true, cascade={"persist","remove"})
      */
     private $trickImages;
 
@@ -312,6 +312,8 @@ class Trick
 
     public function deleteMainImage()
     {
+        unlink('images/tricks/'.$this->mainImage);
+
         $this->mainImage = null;
 
         return $this;

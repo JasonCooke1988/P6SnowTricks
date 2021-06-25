@@ -5,6 +5,7 @@
     {{ encore_entry_script_tags('modify-trick') }}
     {{ encore_entry_script_tags('delete-modal') }}
     {{ encore_entry_script_tags('forms') }}
+    {{ encore_entry_script_tags('add-collection-entity') }}
 
 {% endblock %}
 
@@ -34,87 +35,138 @@
 {% block body %}
 
 
-<main class="single-trick modify-trick">
+    <main class="single-trick modify-trick">
 
-    <div class="row justify-content-center">
+        <div class="row justify-content-center">
 
-        {% for message in app.flashes('maxSizeMessage') %}
-            <div class="alert alert-success my-4">
-                {{ message }}
-            </div>
-        {% endfor %}
+            {% for message in app.flashes('maxSizeMessage') %}
+                <div class="alert alert-success my-4">
+                    {{ message }}
+                </div>
+            {% endfor %}
 
-        {% for message in app.flashes('success') %}
-            <div class="alert alert-success my-4">
-                {{ message }}
-            </div>
-        {% endfor %}
-
-    </div>
-
-
-
-    <section class="row">
-
-        <div class="wrapper d-flex col-lg-12 justify-content-around my-4">
-
-            <button data-toggle="modal" data-target="#single-image-modal" id="add-single-image-button"
-                    class="btn btn-lg btn-primary">Ajouter une image
-            </button>
-
-            <button data-toggle="modal" data-target="#video-modal" id="add-video-button"
-                    class="btn btn-lg btn-primary">Ajouter une vidéo
-            </button>
+            {% for message in app.flashes('success') %}
+                <div class="alert alert-success my-4">
+                    {{ message }}
+                </div>
+            {% endfor %}
 
         </div>
 
-    </section>
 
-    <section class="row my-5">
-        {{ form_start(trickForm, {'attr' : {'class':'d-flex align-items-center flex-sm-column flex-row offset-lg-3 col-lg-6', 'id' : 'trick-form'}}) }}
+        <section class="row my-5">
+            {{ form_start(trickForm, {'attr' : {'class':'d-flex align-items-center flex-sm-column flex-row offset-lg-1 col-lg-10', 'id' : 'trick-form'}}) }}
 
-        {{ form_row(trickForm.trickImages,{'attr' : {'class' : 'col-lg-10 image-input-list'}}) }}
-        {{ form_row(trickForm.trickVideos,{'attr' : {'class' : 'col-lg-10'}}) }}
-        {{ form_row(trickForm.name,{'attr' : {'class' : 'col-lg-10'}}) }}
-        {{ form_row(trickForm.description,{'attr' : {'class' : 'col-lg-12'}}) }}
-        {{ form_row(trickForm.group,{'attr' : {'class' : 'col-lg-4'}}) }}
-        {{ form_row(trickForm._token) }}
-        <div class="submit d-flex justify-content-end">
-            <a id="delete-trick-submit" class="btn btn-lg btn-danger ml-2" href="#" data-toggle="modal"
-               data-target="#delete-modal" data-href="{{ path('deleteTrick', {slug: trick.slug}) }}">Supprimer</a>
-            <button type="submit" class="btn btn-lg btn-primary ml-2">Sauvegarder</button>
-        </div>
-    </section>
+            <div class="wrapper new-media d-flex col-lg-12 justify-content-around my-4">
 
-
-    {% block deletemodal %}
-    {{ parent() }}
-    {% endblock %}
-
-    <!-- Main Image modal -->
-    <div class="modal fade" id="main-image-modal" tabindex="-1" role="dialog" aria-labelledby="main-image-modal"
-         aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
+                <div class="col-lg-6 d-flex flex-column align-items-center">
+                    <button id="add-another-image"
+                            class="btn btn-lg btn-primary">Ajouter une image
                     </button>
+                    <ul class="image-list"
+                        data-prototype='{{ form_widget(trickForm.trickImages.vars.prototype) }}'
+                        data-widget-tags="{{ '<li class="my-4"></li>'|e }}"
+                        data-widget-counter="">
+                    </ul>
                 </div>
-                <div class="modal-body d-flex">
-                    {{ form_row(trickForm.mainImageFile, {'attr': {'class': 'form-control-file.'}}) }}
+
+
+                <div class="col-lg-6 d-flex flex-column align-items-center">
+                    <button id="add-another-video"
+                            class="btn btn-lg btn-primary mb-4">Ajouter une vidéo
+                    </button>
+                    <ul class="video-list"
+                        data-prototype='{{ form_widget(trickForm.trickVideos.vars.prototype) }}'
+                        data-widget-tags="{{ '<li></li>'|e }}"
+                        data-widget-counter="">
+
+                    </ul>
                 </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
-                    <button type="submit" class="btn btn-primary">Sauvegarder</button>
+
+            </div>
+
+            <div class="media-row d-flex">
+
+                {% for image in trickForm.trickImages %}
+                    <div class="my-4 col-lg-3 image-wrapper">
+                        <img src="{{ path('home')~'images/tricks/'~image.vars.data.path }}" alt="Trick image"
+                             class="trick-image">
+                        <div class="trick-action py-2 px-1 mt-4 d-flex justify-content-around">
+                            <a class="modify-image" href="#"><i class="icon-pencil"></i></a>
+                            <a href=""
+                               data-href="{{ path('deleteSingleImageTrick', {id: trick.id, trickImage_id: image.vars.value.id}) }}"
+                               data-toggle="modal" data-target="#delete-modal"><i class="icon-bin"></i></a>
+                        </div>
+                        <input type="file" id="{{ image.vars.id }}_file" name="{{ image.vars.full_name }}[file]"
+                               class="mt-4 hide-input">
+                        <input type="hidden" name="{{ image.vars.full_name }}[id]" value="{{ image.vars.data.id }}">
+                    </div>
+                {% endfor %}
+
+                {% for video in trickForm.trickVideos %}
+                    <div class="my-4 col-lg-3 video-wrapper">
+                        {% if video.vars.value.embed is defined %}
+                            {{ video.vars.value.embed|raw }}
+                        {% else %}
+                            {{ video.vars.value|raw }}
+                        {% endif %}
+                        <div class="trick-action py-2 px-1 mt-4 d-flex justify-content-around">
+                            <a class="modify-video" href="#"><i class="icon-pencil"></i></a>
+                            <a href="#" data-toggle="modal" data-target="#delete-modal"><i class="icon-bin"></i></a>
+                        </div>
+                        <textarea name="{{ video.vars.full_name }}[embed]" id="{{ video.vars.id }}" cols="30"
+                                  rows="10" class="mt-4 hide-input">
+                            {% if video.vars.value.embed is defined %}
+                                {{ video.vars.value.embed|raw }}
+                            {% else %}
+                                {{ video.vars.value|raw }}
+                            {% endif %}
+                        </textarea>
+                    </div>
+                {% endfor %}
+
+            </div>
+
+            {{ form_row(trickForm.name,{'attr' : {'class' : 'col-lg-10'}}) }}
+            {{ form_row(trickForm.description,{'attr' : {'class' : 'col-lg-12'}}) }}
+            {{ form_row(trickForm.group,{'attr' : {'class' : 'col-lg-4'}}) }}
+            {{ form_row(trickForm._token) }}
+            <div class="submit d-flex justify-content-end">
+                <a id="delete-trick-submit" class="btn btn-lg btn-danger ml-2" href="#" data-toggle="modal"
+                   data-target="#delete-modal" data-href="{{ path('deleteTrick', {slug: trick.slug}) }}">Supprimer</a>
+                <button type="submit" class="btn btn-lg btn-primary ml-2">Sauvegarder</button>
+            </div>
+        </section>
+
+
+        {% block deletemodal %}
+            {{ parent() }}
+        {% endblock %}
+
+        <!-- Main Image modal -->
+        <div class="modal fade" id="main-image-modal" tabindex="-1" role="dialog" aria-labelledby="main-image-modal"
+             aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body d-flex">
+                        {{ form_row(trickForm.mainImageFile, {'attr': {'class': 'form-control-file.'}}) }}
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
+                        <button type="submit" class="btn btn-primary">Sauvegarder</button>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
 
-    {{ form_end(trickForm, {'render_rest': false}) }}
+        {{ form_end(trickForm, {'render_rest': false}) }}
 
-</main>
+    </main>
 
 
 {% endblock %}

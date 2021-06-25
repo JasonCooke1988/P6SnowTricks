@@ -1,7 +1,7 @@
 {% extends'base.html.twig' %}
 
 {% block javascripts %}
-    {{ encore_entry_script_tags('add-trick') }}
+    {{ encore_entry_script_tags('add-collection-entity') }}
     {{ encore_entry_script_tags('forms') }}
 {% endblock %}
 
@@ -43,29 +43,29 @@
             <section id="media-row" class="row image-videos justify-content-between my-5 mx-0">
 
                 <div class="images col-lg-5 p-0">
+                    <button type="button"
+                            id="add-another-image" class="btn btn-lg btn-primary">Ajouter une image
+                    </button>
+
                     {# store the prototype on the data-prototype attribute #}
                     <ul class="image-list pl-0"
                         data-prototype='{{ form_widget(trickForm.trickImages.vars.prototype) }}'
                         data-widget-tags="{{ '<li></li>'|e }}"
                         data-widget-counter="">
                     </ul>
-
-                    <button type="button"
-                            id="add-another-image" class="btn btn-lg btn-primary">Ajouter une image
-                    </button>
                 </div>
 
                 <div class="videos col-lg-5 p-0">
+                    <button type="button"
+                            id="add-another-video" class="btn btn-lg btn-primary">Ajouter une video
+                    </button>
+
                     {# store the prototype on the data-prototype attribute #}
                     <ul class="video-list pl-0"
                         data-prototype='{{ form_widget(trickForm.trickVideos.vars.prototype) }}'
                         data-widget-tags="{{ '<li></li>'|e }}"
                         data-widget-counter="">
                     </ul>
-
-                    <button type="button"
-                            id="add-another-video" class="btn btn-lg btn-primary">Ajouter une video
-                    </button>
                 </div>
 
 

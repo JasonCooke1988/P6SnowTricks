@@ -33,14 +33,14 @@
                     <a href="{{ path('home') }}"><img src="{{ asset('images/snowboardinglogo.jpg') }}"
                                                       alt="Logo du site"></a>
                 </div>
-                <div class="menu col-lg-4 d-flex justify-content-around">
-                    <a href="">Accueil</a><span>|</span>
+                <div class="menu col-lg-6 d-flex justify-content-end align-items-center">
+                    <a class="mx-4" href="">Accueil</a><span>|</span>
                     {% if not app.user %}
-                        <a href="{{ path('app_register') }}">Inscription</a><span>|</span>
-                        <a href="{{ path('app_login') }}">Connexion</a><span>|</span>
+                        <a class="mx-4" href="{{ path('app_register') }}">Inscription</a><span>|</span>
+                        <a class="mx-4" href="{{ path('app_login') }}">Connexion</a><span>|</span>
                     {% else %}
-                        <a href="{{ path('addTrick') }}">Ajouter une figure</a><span>|</span>
-                        <a href="{{ path('app_logout') }}">Déconnexion</a><span>|</span>
+                        <a class="mx-4" href="{{ path('addTrick') }}">Ajouter une figure</a><span>|</span>
+                        <a class="mx-4" href="{{ path('app_logout') }}">Déconnexion</a><span>|</span>
                     {% endif %}
                 </div>
             </div>

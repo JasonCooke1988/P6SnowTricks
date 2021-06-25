@@ -22,6 +22,7 @@ class TrickFormVideoType extends AbstractType
         $builder
             ->add('embed', TextareaType::class, [
                 'label' => 'Copier le code \'embed\' récupéré depuis youtube pour la vidéo que vous souhaitez ajouter / modifier :',
+                'required' => true,
                 'constraints' => [
                     new NotBlank([
                         'message' => 'Veuillez renseigner le code embed pour la vidéo',
