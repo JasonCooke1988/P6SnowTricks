@@ -10,7 +10,6 @@ use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
-use Symfony\Component\String\Slugger\SluggerInterface;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
@@ -69,6 +68,12 @@ class Trick
 
     /**
      * @ORM\OneToMany(targetEntity=TrickVideo::class, mappedBy="trick", orphanRemoval=true, cascade={"persist","remove"})
+     * @Assert\Valid()
+     * @Assert\Collection(
+     *     fields = {
+     *          "embed" = @Assert\NotBlank(message="Veuillez renseigner le code embed pour la vidéo", groups={"new","edit"})
+     *     }
+     * )
      */
     private $trickVideos;
 
@@ -99,7 +104,7 @@ class Trick
     }
 
     /**
-     * @param mixed $file
+     * @param UploadedFile $mainImageFile
      */
     public function setMainImageFile(UploadedFile $mainImageFile)
     {

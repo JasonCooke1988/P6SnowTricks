@@ -20,9 +20,8 @@ class TrickVideo
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Assert\NotBlank
      */
-    private string $embed;
+    private ?string $embed;
 
     /**
      * @ORM\ManyToOne(targetEntity=Trick::class, inversedBy="trickVideos")
@@ -39,6 +38,18 @@ class TrickVideo
      * @ORM\Column(type="datetime", nullable=true)
      */
     private ?\DateTimeInterface $updatedAt;
+
+    public function __construct()
+    {
+        if (!isset($this->embed)) {
+            $this->embed = null;
+        }
+
+
+        if (!isset($this->id)) {
+            $this->id = null;
+        }
+    }
 
     public function getId(): ?int
     {

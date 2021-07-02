@@ -5,6 +5,7 @@ namespace App\Entity;
 use App\Repository\TrickImageRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass=TrickImageRepository::class)
@@ -16,14 +17,14 @@ class TrickImage
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
      */
-    private $id;
+    private ?int $id;
 
 
     /**
      * @ORM\ManyToOne(targetEntity=Trick::class, inversedBy="trickImages")
      * @ORM\JoinColumn(nullable=false)
      */
-    private $trick;
+    private ?Trick $trick;
 
     private $file;
 
@@ -45,18 +46,19 @@ class TrickImage
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Assert\NotBlank
      */
-    private $path;
+    private ?string $path;
 
     /**
      * @ORM\Column(type="datetime")
      */
-    private $createdAt;
+    private ?\DateTimeInterface $createdAt;
 
     /**
      * @ORM\Column(type="datetime", nullable=true)
      */
-    private $updatedAt;
+    private ?\DateTimeInterface $updatedAt;
 
     public function getId(): ?int
     {

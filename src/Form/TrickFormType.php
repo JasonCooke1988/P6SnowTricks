@@ -6,8 +6,6 @@ namespace App\Form;
 
 use App\Entity\Group;
 use App\Entity\Trick;
-use App\Entity\TrickImage;
-use App\Entity\TrickVideo;
 use Doctrine\ORM\EntityRepository;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
@@ -72,19 +70,15 @@ class TrickFormType extends AbstractType
             ->add('trickVideos', CollectionType::class, [
                 'entry_type' => TrickFormVideoType::class,
                 'by_reference' => false,
-                'label' => 'Copier le code \'embed\' pour la vidéo à ajouter / modifier :',
-                'required' => false,
+                'required' => true,
                 'allow_add' => true,
-                'allow_delete' => true,
-                'prototype' => true,
+                'prototype' => true
             ])
             ->add('trickImages', CollectionType::class, [
                 'entry_type' => TrickFormSingleImageType::class,
                 'by_reference' => false,
-                'label' => 'Ajouter une image',
                 'required' => true,
                 'allow_add' => true,
-                'allow_delete' => true,
                 'prototype' => true,
             ]);
     }

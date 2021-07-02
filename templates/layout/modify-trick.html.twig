@@ -112,7 +112,9 @@
                         {% endif %}
                         <div class="trick-action py-2 px-1 mt-4 d-flex justify-content-around">
                             <a class="modify-video" href="#"><i class="icon-pencil"></i></a>
-                            <a href="#" data-toggle="modal" data-target="#delete-modal"><i class="icon-bin"></i></a>
+                            <a href=""
+                               data-href="{{ path('deleteTrickVideo', {id: trick.id, trickVideo_id: video.vars.value.id}) }}"
+                               data-toggle="modal" data-target="#delete-modal"><i class="icon-bin"></i></a>
                         </div>
                         <textarea name="{{ video.vars.full_name }}[embed]" id="{{ video.vars.id }}" cols="30"
                                   rows="10" class="mt-4 hide-input">
