@@ -17,8 +17,7 @@ class TrickImage
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
      */
-    private ?int $id;
-
+    private ?int $id = null;
 
     /**
      * @ORM\ManyToOne(targetEntity=Trick::class, inversedBy="trickImages")
@@ -76,8 +75,6 @@ class TrickImage
 
         return $this;
     }
-
-
 
     /**
      * @param mixed $id

@@ -22,11 +22,12 @@ main.single-trick {
 
     .single-image {
       align-self: center;
+      height: 121px;
 
       img {
         height: 100%;
         width: 100%;
-        object-fit: contain;
+        object-fit: cover;
       }
     }
 
@@ -60,6 +61,7 @@ main.single-trick {
       max-height: 3rem;
       box-shadow: 2px 2px 5px 0px rgba(0, 0, 0, 0.75);
     }
+
     .form-group {
       flex: 1;
       @include bp(sm) {
@@ -70,20 +72,24 @@ main.single-trick {
 
   .comment-list {
     .single-comment {
-      display: flex;
-      .user-image {
-        max-width: 47px;
-        border-radius: 50%;
-      }
-
-      .comment {
-        border: 1px solid black;
-        box-shadow: 2px 2px 5px 0px rgba(0, 0, 0, 0.75);
+      .content {
         width: 100%;
-      }
+        display: flex;
+        .user-image {
+          max-width: 47px;
+          border-radius: 50%;
+          object-fit: contain;
+        }
 
-      &.above-max {
-        display: none;
+        .comment {
+          border: 1px solid black;
+          box-shadow: 2px 2px 5px 0px rgba(0, 0, 0, 0.75);
+          width: 100%;
+        }
+
+        &.above-max {
+          display: none;
+        }
       }
     }
   }

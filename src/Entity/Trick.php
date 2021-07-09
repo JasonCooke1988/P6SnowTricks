@@ -64,23 +64,17 @@ class Trick
     /**
      * @ORM\OneToMany(targetEntity=Comment::class, mappedBy="trick", orphanRemoval=true)
      */
-    private $comments;
+    private Collection $comments;
 
     /**
      * @ORM\OneToMany(targetEntity=TrickVideo::class, mappedBy="trick", orphanRemoval=true, cascade={"persist","remove"})
-     * @Assert\Valid()
-     * @Assert\Collection(
-     *     fields = {
-     *          "embed" = @Assert\NotBlank(message="Veuillez renseigner le code embed pour la vidéo", groups={"new","edit"})
-     *     }
-     * )
      */
-    private $trickVideos;
+    private Collection $trickVideos;
 
     /**
      * @ORM\OneToMany(targetEntity=TrickImage::class, mappedBy="trick", orphanRemoval=true, cascade={"persist","remove"})
      */
-    private $trickImages;
+    private Collection $trickImages;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)

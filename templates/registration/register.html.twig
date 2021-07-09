@@ -2,11 +2,15 @@
 
 {% block title %}Création de compte{% endblock %}
 
+{% block javascripts %}
+    {{ encore_entry_script_tags('forms') }}
+{% endblock %}
+
 {% block body %}
 
     <main>
 
-        <div class="form-wrapper offset-lg-4 col-lg-4 offset-md-1 col-md-10 d-flex flex-column">
+        <div class="form-wrapper offset-lg-3 col-lg-6 offset-md-1 col-md-10 d-flex flex-column">
 
             {% for flashError in app.flashes('verify_email_error') %}
                 <div class="alert alert-danger" role="alert">{{ flashError }}</div>
@@ -36,6 +40,7 @@
             {{ form_row(registrationForm.lastName, {
                 label: 'Nom de famille :'
             }) }}
+            {{ form_row(registrationForm.file) }}
             <button type="submit" class="btn btn-lg btn-primary">Créer un compte</button>
             {{ form_end(registrationForm) }}
 
