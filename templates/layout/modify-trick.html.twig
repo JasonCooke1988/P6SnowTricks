@@ -1,12 +1,8 @@
 {% extends'base.html.twig' %}
 
 {% block javascripts %}
-
-    {{ encore_entry_script_tags('modify-trick') }}
     {{ encore_entry_script_tags('delete-modal') }}
     {{ encore_entry_script_tags('forms') }}
-    {{ encore_entry_script_tags('add-collection-entity') }}
-
 {% endblock %}
 
 {% block header %}
@@ -57,71 +53,46 @@
         <section class="row my-5">
             {{ form_start(trickForm, {'attr' : {'class':'d-flex align-items-center flex-sm-column flex-row offset-lg-1 col-lg-10', 'id' : 'trick-form'}}) }}
 
-            <div class="wrapper new-media d-flex col-lg-12 justify-content-around my-4">
+            <div class="col-lg-10 image-videos justify-content-around my-5 mx-0">
 
-                <div class="col-lg-6 d-flex flex-column align-items-center">
-                    <button id="add-another-image"
-                            class="btn btn-lg btn-primary">Ajouter une image
-                    </button>
-                    <ul class="image-list"
-                        data-prototype='{{ form_widget(trickForm.trickImages.vars.prototype) }}'
-                        data-widget-tags="{{ '<li class="my-4"></li>'|e }}"
-                        data-widget-counter="">
-                    </ul>
+                <div class="images p-0">
+                    <a href="{{ path('addImage', {slug : trick.slug}) }}" class="btn btn-lg btn-primary">Ajouter une image</a>
                 </div>
 
-
-                <div class="col-lg-6 d-flex flex-column align-items-center">
-                    <button id="add-another-video"
-                            class="btn btn-lg btn-primary mb-4">Ajouter une vidéo
-                    </button>
-                    <ul class="video-list"
-                        data-prototype='{{ form_widget(trickForm.trickVideos.vars.prototype) }}'
-                        data-widget-tags="{{ '<li></li>'|e }}"
-                        data-widget-counter="">
-
-                    </ul>
+                <div class="videos p-0">
+                    <a href="{{ path('addVideo', {slug : trick.slug}) }}" class="btn btn-lg btn-primary">Ajouter une video</a>
                 </div>
+
 
             </div>
 
+
             <div class="media-row d-flex">
 
-                {% for image in trickForm.trickImages %}
+                {% for image in trick.trickImages %}
                     <div class="my-4 col-lg-3 image-wrapper">
-                        <img src="{{ path('home')~'images/tricks/'~image.vars.data.path }}" alt="Trick image"
+                        <img src="{{ path('home')~'images/tricks/'~image.path }}" alt="Trick image"
                              class="trick-image">
                         <div class="trick-action py-2 px-1 mt-4 d-flex justify-content-around">
-                            <a class="modify-image" href="#"><i class="icon-pencil"></i></a>
+                            <a class="modify-image" href="{{ path('modifyImage',{slug: trick.slug, trickImage_id: image.id}) }}"><i class="icon-pencil"></i></a>
                             <a href=""
-                               data-href="{{ path('deleteSingleImageTrick', {id: trick.id, trickImage_id: image.vars.value.id}) }}"
+                               data-href="{{ path('deleteSingleImageTrick', {id: trick.id, trickImage_id: image.id}) }}"
                                data-toggle="modal" data-target="#delete-modal"><i class="icon-bin"></i></a>
                         </div>
-                        <input type="file" id="{{ image.vars.id }}_file" name="{{ image.vars.full_name }}[file]"
-                               class="mt-4 hide-input">
-                        <input type="hidden" name="{{ image.vars.full_name }}[id]" value="{{ image.vars.data.id }}">
                     </div>
                 {% endfor %}
 
-                {% for video in trickForm.trickVideos %}
+                {% for video in trick.trickVideos %}
                     <div class="my-4 col-lg-3 video-wrapper">
-                        {% if video.vars.value.embed is defined %}
-                            {{ video.vars.value.embed|raw }}
-                        {% else %}
-                            {{ video.vars.value|raw }}
+                        {% if video.embed is defined %}
+                        {{ video.embed|raw }}
                         {% endif %}
                         <div class="trick-action py-2 px-1 mt-4 d-flex justify-content-around">
-                            <a class="modify-video" href="#"><i class="icon-pencil"></i></a>
-                            <a href="#" data-toggle="modal" data-target="#delete-modal"><i class="icon-bin"></i></a>
+                            <a class="modify-video" href="{{ path('modifyVideo',{slug: trick.slug, trickVideo_id: video.id}) }}"><i class="icon-pencil"></i></a>
+                            <a href=""
+                               data-href="{{ path('deleteTrickVideo', {id: trick.id, trickVideo_id: video.id}) }}"
+                               data-toggle="modal" data-target="#delete-modal"><i class="icon-bin"></i></a>
                         </div>
-                        <textarea name="{{ video.vars.full_name }}[embed]" id="{{ video.vars.id }}" cols="30"
-                                  rows="10" class="mt-4 hide-input">
-                            {% if video.vars.value.embed is defined %}
-                                {{ video.vars.value.embed|raw }}
-                            {% else %}
-                                {{ video.vars.value|raw }}
-                            {% endif %}
-                        </textarea>
                     </div>
                 {% endfor %}
 

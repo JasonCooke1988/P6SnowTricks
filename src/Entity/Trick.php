@@ -10,7 +10,6 @@ use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
-use Symfony\Component\String\Slugger\SluggerInterface;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
@@ -65,17 +64,17 @@ class Trick
     /**
      * @ORM\OneToMany(targetEntity=Comment::class, mappedBy="trick", orphanRemoval=true)
      */
-    private $comments;
+    private Collection $comments;
 
     /**
      * @ORM\OneToMany(targetEntity=TrickVideo::class, mappedBy="trick", orphanRemoval=true, cascade={"persist","remove"})
      */
-    private $trickVideos;
+    private Collection $trickVideos;
 
     /**
      * @ORM\OneToMany(targetEntity=TrickImage::class, mappedBy="trick", orphanRemoval=true, cascade={"persist","remove"})
      */
-    private $trickImages;
+    private Collection $trickImages;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
@@ -99,7 +98,7 @@ class Trick
     }
 
     /**
-     * @param mixed $file
+     * @param UploadedFile $mainImageFile
      */
     public function setMainImageFile(UploadedFile $mainImageFile)
     {

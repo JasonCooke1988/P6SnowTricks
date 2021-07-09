@@ -1,0 +1,70 @@
+{% extends'base.html.twig' %}
+
+{% block javascripts %}
+    {{ encore_entry_script_tags('forms') }}
+{% endblock %}
+
+{% block header %}
+    {{ parent() }}
+    <div class="banner fullheight modify-trick d-flex justify-content-center align-items-center">
+        {% if trick.mainImage is defined and trick.mainImage is not null %}
+            <img src="{{ asset('images/tricks/' ~ trick.mainImage) }}" alt="home banner">
+        {% else %}
+            {% if trick.trickImages is defined %}
+                <img src="{{ asset('images/tricks/' ~ trick.trickImages|first.path) }}" alt="home banner">
+            {% else %}
+                <img src="{{ asset('images/homebanner.jpg') }}" alt="home banner">
+            {% endif %}
+        {% endif %}
+        <h1>{{ trick.name }}</h1>
+
+    </div>
+{% endblock %}
+
+{% block body %}
+
+
+    <main class="single-trick modify-trick">
+
+        <div class="row justify-content-center">
+
+            {% for message in app.flashes('success') %}
+                <div class="alert alert-success my-4">
+                    {{ message }}
+                </div>
+            {% endfor %}
+
+        </div>
+
+
+        <section class="row my-5">
+            {{ form_start(trickVideoForm, {'attr' : {'class':'d-flex align-items-center flex-sm-column flex-row offset-lg-1 col-lg-10', 'id' : 'trick-form'}}) }}
+
+            <div class="media-row d-flex justify-content-center">
+
+                    <div class="my-4 col-lg-6 image-wrapper">
+                        {{ form_row(trickVideoForm.embed) }}
+                    </div>
+
+            </div>
+
+            <div class="submit d-flex justify-content-end">
+                <button type="submit" class="btn btn-lg btn-primary ml-2">Sauvegarder</button>
+            </div>
+
+            {{ form_row(trickVideoForm._token) }}
+        </section>
+
+
+        {% block deletemodal %}
+            {{ parent() }}
+        {% endblock %}
+
+        {{ form_end(trickVideoForm, {'render_rest': false}) }}
+
+    </main>
+
+
+{% endblock %}
+
+

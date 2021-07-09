@@ -16,13 +16,13 @@ class TrickVideo
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
      */
-    private ?int $id;
+    private ?int $id = null;
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Assert\NotBlank
+     * @Assert\NotBlank,
      */
-    private string $embed;
+    private ?string $embed = null;
 
     /**
      * @ORM\ManyToOne(targetEntity=Trick::class, inversedBy="trickVideos")

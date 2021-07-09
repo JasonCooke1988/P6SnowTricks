@@ -31,6 +31,7 @@ class UserFixtures extends Fixture
                 'email' => 'jason.cooke@hotmail.fr',
                 'userName' => 'Jason',
                 'password' => 'testing',
+                'photo' => 'man.png',
                 'ref' => self::JASON_USER_REFERENCE
             ],
             [
@@ -39,6 +40,7 @@ class UserFixtures extends Fixture
                 'email' => 'jasonpcooke88@gmail.com',
                 'userName' => 'Stella',
                 'password' => 'testing',
+                'photo' => 'female.png',
                 'ref' => self::STELLA_USER_REFERENCE
             ]
         ];
@@ -51,6 +53,7 @@ class UserFixtures extends Fixture
             $user->setLastName($elt['lastName']);
             $user->setEmail($elt['email']);
             $user->setUsername($elt['userName']);
+            $user->setPhoto($elt['photo']);
             $user->setPassword($this->passwordEncoder->encodePassword(
                 $user,
                 $elt['password']

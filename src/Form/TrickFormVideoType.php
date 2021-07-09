@@ -25,12 +25,13 @@ class TrickFormVideoType extends AbstractType
                 'required' => true,
                 'constraints' => [
                     new NotBlank([
-                        'message' => 'Veuillez renseigner le code embed pour la vidéo',
+                        'message' => 'Veuillez renseigner un groupe pour la figure',
                     ])
                 ]
             ])
             ->add('id', HiddenType::class, [
                 'data_class' => null,
+                'required' => false,
                 'mapped' => false
             ]);
     }

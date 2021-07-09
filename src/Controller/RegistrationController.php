@@ -7,6 +7,7 @@ use App\Form\RegistrationFormType;
 use App\Security\EmailVerifier;
 use App\Security\LoginFormAuthenticator;
 use App\Repository\UserRepository;
+use App\Service\FileUploader;
 use DateTimeZone;
 use Exception;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
@@ -17,6 +18,7 @@ use Symfony\Component\Mime\Address;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 use Symfony\Component\Security\Guard\GuardAuthenticatorHandler;
+use Symfony\Component\String\Slugger\SluggerInterface;
 use SymfonyCasts\Bundle\VerifyEmail\Exception\VerifyEmailExceptionInterface;
 use Doctrine\Migrations\Finder\Finder;
 
@@ -36,7 +38,7 @@ class RegistrationController extends AbstractController
      * @return Response
      * @throws Exception
      */
-    public function register(Request $request, UserPasswordEncoderInterface $passwordEncoder): Response
+    public function register(Request $request, UserPasswordEncoderInterface $passwordEncoder, SluggerInterface $slugger): Response
     {
         $user = new User();
         $form = $this->createForm(RegistrationFormType::class, $user);
@@ -50,6 +52,11 @@ class RegistrationController extends AbstractController
                     $form->get('plainPassword')->getData()
                 )
             );
+
+            if(($file = $user->getFile()) != null) {
+                $fileUploader = new FileUploader('./images/users/', $slugger);
+                $this->uploadImage($file, $user, $fileUploader);
+            }
 
             $user->setCreatedAt(new \DateTime('now', new DateTimeZone('Europe/Paris')));
 
@@ -65,7 +72,6 @@ class RegistrationController extends AbstractController
                     ->subject('Please Confirm your Email')
                     ->htmlTemplate('registration/confirmation_email.html.twig')
             );
-
 
             $this->addFlash('success', 'Veuillez verifier votre boite mail pour confirmer la création de votre compte.');
 
@@ -118,4 +124,14 @@ class RegistrationController extends AbstractController
             'main' // firewall name in security.yaml
         );
     }
+
+
+    public function uploadImage($file, $user, $fileUploader)
+    {
+        $fileNameOriginal = $file;
+        $fileName = $fileUploader->upload($fileNameOriginal);
+
+        $user->setPhoto($fileName);
+    }
+
 }
