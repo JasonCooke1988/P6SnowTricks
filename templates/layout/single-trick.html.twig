@@ -32,7 +32,7 @@
 
         </div>
 
-        <div id="media-row" class="row image-videos justify-content-around">
+        <div id="media-row" class="row image-videos justify-content-center justify-content-lg-around">
             {% if trick.trickImages is defined %}
                 {% for image in trick.trickImages %}
                     <div class="single-image col-lg-2 my-4">
@@ -87,27 +87,10 @@
         {% endif %}
 
         {% if trick.comments is defined %}
-            <div class="comment-list row flex-column align-items-center mt-4">
+            <div class="comment-list d-flex flex-column align-items-center mt-4">
                 {% for comment in trick.comments|sort((a,b) => a.createdAt < b.createdAt) %}
 
-                    {% if loop.index > 4 %}
-
-                        <div class="single-comment above-max col-lg-4 align-items-center my-1">
-                            <p>{{ comment.user.firstName ~ ' ' ~ comment.user.lastName }} - Crée le {{ comment.createdAt|format_datetime('full', 'none', locale='fr') }}</p>
-                            <div>
-                            {% if comment.user.photo is defined and comment.user.photo is not null %}
-                                <img src="{{ asset('images/users/' ~ comment.user.photo) }}" alt="Image de profile utilisateur" class="user-image mr-2">
-                            {% else %}
-                                <img src="https://via.placeholder.com/150" alt="User profile image"
-                                     class="user-image mr-2">
-                            {% endif %}
-                                <p class="comment mb-0 pb-4 pt-1 px-2">{{ comment.content }}</p>
-                            </div>
-                        </div>
-
-                    {% else %}
-
-                        <div class="single-comment col-lg-4 align-items-center my-1">
+                        <div class="single-comment {% if loop.index > 10 %} above-max {% endif %} col-lg-5 col-10 align-items-center my-3">
                             <p>{{ comment.user.firstName ~ ' ' ~ comment.user.lastName }} - Crée le {{ comment.createdAt|format_datetime('full', 'none', locale='fr') }}</p>
                             <div class="content">
                             {% if comment.user.photo is defined and comment.user.photo is not null %}
@@ -116,11 +99,9 @@
                                 <img src="https://via.placeholder.com/150" alt="User profile image"
                                      class="user-image mr-2">
                             {% endif %}
-                                <p class="comment mb-0 pb-4 pt-1 px-2">{{ comment.content }}</p>
+                                <p class="comment mb-0 p-2">{{ comment.content }}</p>
                             </div>
                         </div>
-
-                    {% endif %}
 
                 {% endfor %}
 

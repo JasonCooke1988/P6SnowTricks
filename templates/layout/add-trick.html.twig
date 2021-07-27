@@ -16,11 +16,18 @@
 
         <div class="row justify-content-center">
 
-            {% for message in app.flashes('maxSizeMessage') %}
-                <div class="alert alert-success my-4">
-                    {{ message }}
-                </div>
-            {% endfor %}
+            <div>
+                {% for message in app.flashes('error') %}
+                    <div class="alert alert-danger my-4">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+                {% for message in app.flashes('maxSizeMessage') %}
+                    <div class="alert alert-danger my-4">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            </div>
 
             {% for message in app.flashes('success') %}
                 <div class="alert alert-success my-4">
@@ -70,7 +77,6 @@
 
 
             </section>
-
 
 
             <div class="submit d-flex justify-content-end">

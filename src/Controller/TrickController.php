@@ -13,6 +13,7 @@ use App\Form\CommentFormType;
 use App\Form\TrickFormSingleImageType;
 use App\Form\TrickFormType;
 use App\Form\TrickFormVideoType;
+use App\Repository\TrickRepository;
 use App\Service\FileUploader;
 use DateTime;
 use DateTimeZone;
@@ -89,14 +90,8 @@ class TrickController extends AbstractController
 
         if ($trickForm->isSubmitted() && $trickForm->isValid()) {
 
-            $trick = $trickForm->getData();
 
-//            Possible solution ?
-//            foreach($trick->getTrickVideos() as $video) {
-//                if ($video->getEmbed() === '' | $video->getEmbed() === null) {
-//                    dd('coucou');
-//                }
-//            }
+            $trick = $trickForm->getData();
 
             $trick->setCreatedAt(new DateTime('now', new DateTimeZone('Europe/Paris')));
             $trick->setUser($user);
@@ -117,6 +112,17 @@ class TrickController extends AbstractController
 
             $this->addFlash('success', 'Figure Ajoutée.');
             return $this->redirectToRoute('home');
+
+        } elseif ($trickForm->isSubmitted() && !$trickForm->isValid()) {
+
+            $errors = array();
+            foreach ($trickForm as $fieldName => $formField) {
+                $errors[$fieldName] = $formField->getErrors(true);
+                if ($errors[$fieldName] != "") {
+                    $this->addFlash('error', str_replace('ERROR: ', '', $errors[$fieldName]));
+                }
+            }
+
         }
 
         return $this->render('layout/add-trick.html.twig', [
@@ -134,7 +140,7 @@ class TrickController extends AbstractController
      * @return Response
      * @throws Exception
      */
-    public function modifyTrick(Trick $trick, Request $request, SluggerInterface $slugger): Response
+    public function modifyTrick(Trick $trick, Request $request, SluggerInterface $slugger, TrickRepository $trickRepo): Response
     {
 
         $this->denyAccessUnlessGranted('ROLE_USER');
@@ -142,12 +148,12 @@ class TrickController extends AbstractController
         $trickForm = $this->createForm(TrickFormType::class, $trick, ['validation_groups' => 'edit']);
         $trickForm->handleRequest($request);
 
+
         if ($trickForm->isSubmitted() && $trickForm->isValid()) {
 
             $entityManager = $this->getDoctrine()->getManager();
             $fileUploader = new FileUploader('./images/tricks/', $slugger);
             $trick = $trickForm->getData();
-
 
 //         Main image edit
             if ($trick->getMainImageFile() != null) {
@@ -156,11 +162,42 @@ class TrickController extends AbstractController
                 $trick->setMainImage($fileName);
             }
 
+//          Image collection add & edit
+            $this->uploadImages($trick, $fileUploader);
+
             $this->addFlash('success', 'Figure modifiée.');
 
             $trick->setUpdatedAt(new DateTime('now', new DateTimeZone('Europe/Paris')));
             $entityManager->flush();
+
             $trickForm = $this->createForm(TrickFormType::class, $trick, ['validation_groups' => 'edit']);
+
+        } elseif ($trickForm->isSubmitted() && !$trickForm->isValid()) {
+
+            $errors = array();
+            foreach ($trickForm as $fieldName => $formField) {
+                $errors[$fieldName] = $formField->getErrors(true);
+                if ($errors[$fieldName] != "") {
+                    $this->addFlash('error', str_replace('ERROR: ', '', $errors[$fieldName]));
+                }
+            }
+
+
+            foreach ($trick->getTrickImages() as $image) {
+                if ($image->getId() === null && $image->getFile() === null) {
+                    $trick->removeTrickImage($image);
+                }
+            }
+
+            foreach ($trick->getTrickVideos() as $video) {
+                if ($video->getId() === null && $video->getEmbed() === null) {
+                    $trick->removeTrickVideo($video);
+                }
+            }
+
+
+            $trickForm = $this->createForm(TrickFormType::class, $trick, ['validation_groups' => 'edit']);
+
         }
 
         return $this->render('layout/modify-trick.html.twig', [
@@ -171,168 +208,6 @@ class TrickController extends AbstractController
     }
 
     /**
-     * @Route("/add-video/{slug}",name="addVideo")
-     * @param Trick $trick
-     * @param Request $request
-     * @param SluggerInterface $slugger
-     * @return Response
-     * @throws Exception
-     */
-    public function addVideo(Trick $trick, Request $request, SluggerInterface $slugger): Response
-    {
-
-        $this->denyAccessUnlessGranted('ROLE_USER');
-
-        $trickVideo = new TrickVideo();
-
-        $trickVideoForm = $this->createForm(TrickFormVideoType::class, $trickVideo, ['validation_groups' => 'edit']);
-        $trickVideoForm->handleRequest($request);
-
-        if ($trickVideoForm->isSubmitted() && $trickVideoForm->isValid()) {
-
-            $entityManager = $this->getDoctrine()->getManager();
-
-            $trick->addTrickVideo($trickVideo);
-
-            $trick->setUpdatedAt(new DateTime('now', new DateTimeZone('Europe/Paris')));
-            $entityManager->flush();
-
-            $this->addFlash('success', 'Video ajoutée.');
-            return $this->redirectToRoute('modifyTrick', array('slug' => $trick->getSlug()));
-        }
-
-        return $this->render('layout/add-video.html.twig', [
-            'header' => 'fullheight',
-            'trickVideoForm' => $trickVideoForm->createView(),
-            'trickVideo' => $trickVideo,
-            'trick' => $trick
-        ]);
-    }
-
-
-    /**
-     * @Route("/add-image/{slug}",name="addImage")
-     * @param Trick $trick
-     * @param Request $request
-     * @param SluggerInterface $slugger
-     * @return Response
-     * @throws Exception
-     */
-    public function addImage(Trick $trick, Request $request, SluggerInterface $slugger): Response
-    {
-
-        $this->denyAccessUnlessGranted('ROLE_USER');
-
-        $trickImage = new TrickImage();
-
-        $trickImageForm = $this->createForm(TrickFormSingleImageType::class, $trickImage, ['validation_groups' => 'edit']);
-        $trickImageForm->handleRequest($request);
-
-        if ($trickImageForm->isSubmitted() && $trickImageForm->isValid()) {
-
-            $entityManager = $this->getDoctrine()->getManager();
-            $fileUploader = new FileUploader('./images/tricks/', $slugger);
-
-            //          Single image collection edit
-            $this->uploadImage($trick, $trickImage, $fileUploader);
-
-            $trick->setUpdatedAt(new DateTime('now', new DateTimeZone('Europe/Paris')));
-            $entityManager->flush();
-
-            $this->addFlash('success', 'Image ajoutée.');
-            return $this->redirectToRoute('modifyTrick', array('slug' => $trick->getSlug()));
-        }
-
-        return $this->render('layout/add-image.html.twig', [
-            'header' => 'fullheight',
-            'trickImageForm' => $trickImageForm->createView(),
-            'trickImage' => $trickImage,
-            'trick' => $trick
-        ]);
-    }
-
-
-    /**
-     * @Route("/modify-image/{slug}/{trickImage_id}",name="modifyImage")
-     * @param Trick $trick
-     * @param TrickImage $trickImage
-     * @param Request $request
-     * @param SluggerInterface $slugger
-     * @return Response
-     * @throws Exception
-     */
-    public function modifyImage(Trick $trick, TrickImage $trickImage, Request $request, SluggerInterface $slugger): Response
-    {
-
-        $this->denyAccessUnlessGranted('ROLE_USER');
-
-
-        $trickImageForm = $this->createForm(TrickFormSingleImageType::class, $trickImage, ['validation_groups' => 'edit']);
-        $trickImageForm->handleRequest($request);
-
-        if ($trickImageForm->isSubmitted() && $trickImageForm->isValid()) {
-
-            $entityManager = $this->getDoctrine()->getManager();
-            $fileUploader = new FileUploader('./images/tricks/', $slugger);
-
-            //          Single image collection edit
-            $this->uploadImage($trick, $trickImage, $fileUploader);
-
-            $trick->setUpdatedAt(new DateTime('now', new DateTimeZone('Europe/Paris')));
-            $entityManager->flush();
-
-            $this->addFlash('success', 'Image modifié.');
-            return $this->redirectToRoute('modifyTrick', array('slug' => $trick->getSlug()));
-        }
-
-        return $this->render('layout/modify-image.html.twig', [
-            'header' => 'fullheight',
-            'trickImageForm' => $trickImageForm->createView(),
-            'trickImage' => $trickImage,
-            'trick' => $trick
-        ]);
-    }
-
-    /**
-     * @Route("/modify-video/{slug}/{trickVideo_id}",name="modifyVideo")
-     * @param Trick $trick
-     * @param TrickVideo $trickVideo
-     * @param Request $request
-     * @param SluggerInterface $slugger
-     * @return Response
-     * @throws Exception
-     */
-    public function modifyVideo(Trick $trick, TrickVideo $trickVideo, Request $request): Response
-    {
-
-        $this->denyAccessUnlessGranted('ROLE_USER');
-
-
-        $trickVideoForm = $this->createForm(TrickFormVideoType::class, $trickVideo, ['validation_groups' => 'edit']);
-        $trickVideoForm->handleRequest($request);
-
-        if ($trickVideoForm->isSubmitted() && $trickVideoForm->isValid()) {
-
-            $entityManager = $this->getDoctrine()->getManager();
-
-            $trick->setUpdatedAt(new DateTime('now', new DateTimeZone('Europe/Paris')));
-            $entityManager->flush();
-
-            $this->addFlash('success', 'Video modifié.');
-            return $this->redirectToRoute('modifyTrick', array('slug' => $trick->getSlug()));
-        }
-
-        return $this->render('layout/modify-video.html.twig', [
-            'header' => 'fullheight',
-            'trickVideoForm' => $trickVideoForm->createView(),
-            'trickVideo' => $trickVideo,
-            'trick' => $trick
-        ]);
-    }
-
-
-
-    /**
      * @Route("/deleteMainImageTrick/{id}", name="deleteMainImageTrick")
      * @param Trick $trick
      * @return Response
@@ -341,18 +216,27 @@ class TrickController extends AbstractController
     public function deleteMainImage(Trick $trick): Response
     {
 
-        $this->denyAccessUnlessGranted('ROLE_USER');
+        if ($trick->getMainImage() != null) {
 
-        $trick->deleteMainImage();
+            $this->denyAccessUnlessGranted('ROLE_USER');
 
-        $trick->setUpdatedAt(new DateTime('now', new DateTimeZone('Europe/Paris')));
+            $trick->deleteMainImage();
 
-        $entityManager = $this->getDoctrine()->getManager();
+            $trick->setUpdatedAt(new DateTime('now', new DateTimeZone('Europe/Paris')));
 
-        $entityManager->persist($trick);
-        $entityManager->flush();
+            $entityManager = $this->getDoctrine()->getManager();
 
-        $this->addFlash('success', 'Image supprimée.');
+            $entityManager->persist($trick);
+            $entityManager->flush();
+
+            $this->addFlash('success', 'Image supprimée.');
+
+        } else {
+
+            $this->addFlash('error', 'Aucune image principal associée à la figure.');
+
+        }
+
 
 
         return $this->redirectToRoute('modifyTrick', ['slug' => $trick->getSlug()]);
@@ -432,9 +316,10 @@ class TrickController extends AbstractController
             unlink('images/tricks/' . $path);
         }
 
-
-        $path = $trick->getMainImage();
-        unlink('images/tricks/' . $path);
+        if ($trick->getMainImage() != null) {
+            $path = $trick->getMainImage();
+            unlink('images/tricks/' . $path);
+        }
 
         $entityManager->remove($trick);
         $entityManager->flush();
@@ -465,27 +350,6 @@ class TrickController extends AbstractController
                 }
             }
         }
-    }
-
-    public function uploadImage($trick, $trickImage, $fileUploader)
-    {
-            $id = $trickImage->getId();
-            $fileNameOriginal = $trickImage->getFile();
-            if ($fileNameOriginal != null) {
-                $fileName = $fileUploader->upload($fileNameOriginal);
-//                    If is a modified image
-                if ($id != null) {
-                    $oldPath = $trickImage->getPath();
-                    unlink('images/tricks/' . $oldPath);
-                    $trickImage->setPath($fileName);
-                    $trickImage->setUpdatedAt(new DateTime('now', new DateTimeZone('Europe/Paris')));
-//                        Else is a new image
-                } else {
-                    $trickImage->setPath($fileName);
-                    $trick->addTrickImage($trickImage);
-                }
-            }
-
     }
 
 }

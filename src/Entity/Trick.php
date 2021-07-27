@@ -28,7 +28,7 @@ class Trick
 
     /**
      * @ORM\Column(type="string", length=255, unique=true)
-     * @Assert\NotBlank(message="Veuillez reinseigner un nom de figure.", groups={"new","edit"})
+     * @Assert\NotBlank(message="Veuillez renseigner un nom de figure.", groups={"new","edit"})
      */
     private ?string $name;
 
@@ -68,11 +68,13 @@ class Trick
 
     /**
      * @ORM\OneToMany(targetEntity=TrickVideo::class, mappedBy="trick", orphanRemoval=true, cascade={"persist","remove"})
+     * @Assert\Valid(groups={"new","edit"})
      */
     private Collection $trickVideos;
 
     /**
      * @ORM\OneToMany(targetEntity=TrickImage::class, mappedBy="trick", orphanRemoval=true, cascade={"persist","remove"})
+     * @Assert\Valid(groups={"new","edit"})
      */
     private Collection $trickImages;
 

@@ -7,6 +7,9 @@
 
   .image-list, .video-list {
     list-style: none;
+    li {
+      margin: 10px 0;
+    }
   }
 
   label[for="trick_form_mainImage"] {

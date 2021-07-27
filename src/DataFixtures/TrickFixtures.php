@@ -69,128 +69,112 @@ class TrickFixtures extends Fixture implements DependentFixtureInterface
                 'description' => 'Saisie de la carre frontside de la planche entre les deux pieds avec la main avant',
                 'group' => $this->grabs,
                 'user' => $this->jason,
-                'ref' => self::MUTE_TRICK_REFERENCE,
-                'mainImage' => 'mute.jpg'
+                'ref' => self::MUTE_TRICK_REFERENCE
             ],
             [
                 'name' => 'Sad',
                 'description' => 'Saisie de la carre backside de la planche, entre les deux pieds, avec la main avant',
                 'group' => $this->grabs,
                 'user' => $this->stella,
-                'ref' => self::SAD_TRICK_REFERENCE,
-                'mainImage' => 'sad.jpg'
+                'ref' => self::SAD_TRICK_REFERENCE
             ],
             [
                 'name' => 'Indy',
                 'description' => 'Saisie de la carre frontside de la planche, entre les deux pieds, avec la main arrière',
                 'group' => $this->grabs,
                 'user' => $this->jason,
-                'ref' => self::INDY_TRICK_REFERENCE,
-                'mainImage' => 'indy.jpg'
+                'ref' => self::INDY_TRICK_REFERENCE
             ],
             [
                 'name' => 'Stalefish',
                 'description' => 'Saisie de la carre backside de la planche entre les deux pieds avec la main arrière',
                 'group' => $this->grabs,
                 'user' => $this->jason,
-                'ref' => self::STALEFISH_TRICK_REFERENCE,
-                'mainImage' => 'stalefish.jpg'
+                'ref' => self::STALEFISH_TRICK_REFERENCE
             ],
             [
                 'name' => 'Tail grab',
                 'description' => 'Saisie de la partie arrière de la planche, avec la main arrière',
                 'group' => $this->grabs,
                 'user' => $this->jason,
-                'ref' => self::TAIL_GRAB_TRICK_REFERENCE,
-                'mainImage' => 'mute2.jpg'
+                'ref' => self::TAIL_GRAB_TRICK_REFERENCE
             ],
             [
                 'name' => 'Nose grab',
                 'description' => 'Saisie de la partie avant de la planche, avec la main avant',
                 'group' => $this->grabs,
                 'user' => $this->stella,
-                'ref' => self::NOSE_GRAB_TRICK_REFERENCE,
-                'mainImage' => 'sad.jpg'
+                'ref' => self::NOSE_GRAB_TRICK_REFERENCE
             ],
             [
                 'name' => 'Japan',
                 'description' => 'Saisie de l\'avant de la planche, avec la main avant, du côté de la carre frontside',
                 'group' => $this->grabs,
                 'user' => $this->stella,
-                'ref' => self::JAPAN_TRICK_REFERENCE,
-                'mainImage' => 'mute.jpg'
+                'ref' => self::JAPAN_TRICK_REFERENCE
             ],
             [
                 'name' => 'Seat belt',
                 'description' => 'Saisie de l\'avant de la planche, avec la main avant, du côté de la carre frontside',
                 'group' => $this->grabs,
                 'user' => $this->stella,
-                'ref' => self::SEAT_BELT_TRICK_REFERENCE,
-                'mainImage' => 'mute2.jpg'
+                'ref' => self::SEAT_BELT_TRICK_REFERENCE
             ],
             [
                 'name' => 'Truck driver',
                 'description' => 'Saisie du carre avant et carre arrière avec chaque main (comme tenir un volant de voiture)',
                 'group' => $this->grabs,
                 'user' => $this->stella,
-                'ref' => self::TRUCK_DRIVER_TRICK_REFERENCE,
-                'mainImage' => 'stalefish.jpg'
+                'ref' => self::TRUCK_DRIVER_TRICK_REFERENCE
             ],
             [
                 'name' => 'Rotation 180°',
                 'description' => 'Un 180 désigne un demi-tour, soit 180 degrés d\'angle',
                 'group' => $this->rotations,
                 'user' => $this->stella,
-                'ref' => self::ROTATION_180_TRICK_REFERENCE,
-                'mainImage' => '180.jpg'
+                'ref' => self::ROTATION_180_TRICK_REFERENCE
             ],
             [
                 'name' => 'Rotation 360°',
                 'description' => '360, trois six pour un tour complet',
                 'group' => $this->rotations,
                 'user' => $this->stella,
-                'ref' => self::ROTATION_360_TRICK_REFERENCE,
-                'mainImage' => '360.jpg'
+                'ref' => self::ROTATION_360_TRICK_REFERENCE
             ],
             [
                 'name' => 'Rotation 540°',
                 'description' => '540, cinq quatre pour un tour et demi',
                 'group' => $this->rotations,
                 'user' => $this->stella,
-                'ref' => self::ROTATION_540_TRICK_REFERENCE,
-                'mainImage' => '540.jpg'
+                'ref' => self::ROTATION_540_TRICK_REFERENCE
             ],
             [
                 'name' => 'Rotation 720°',
                 'description' => '720, sept deux pour deux tours complets',
                 'group' => $this->rotations,
                 'user' => $this->stella,
-                'ref' => self::ROTATION_720_TRICK_REFERENCE,
-                'mainImage' => '720.jpg'
+                'ref' => self::ROTATION_720_TRICK_REFERENCE
             ],
             [
                 'name' => 'Flip',
                 'description' => 'Un flip est une rotation verticale.',
                 'group' => $this->flips,
                 'user' => $this->jason,
-                'ref' => self::FLIP_TRICK_REFERENCE,
-                'mainImage' => 'flip.jpg'
+                'ref' => self::FLIP_TRICK_REFERENCE
             ],
             [
                 'name' => 'Front flip',
                 'description' => 'On distingue les front flips, rotations en avant.',
                 'group' => $this->flips,
                 'user' => $this->jason,
-                'ref' => self::FRONT_FLIP_TRICK_REFERENCE,
-                'mainImage' => 'frontflip.jpg'
+                'ref' => self::FRONT_FLIP_TRICK_REFERENCE
             ],
             [
                 'name' => 'Back flip',
                 'description' => 'On distingue les back flips, rotations en arrière.',
                 'group' => $this->flips,
                 'user' => $this->stella,
-                'ref' => self::BACK_FLIP_TRICK_REFERENCE,
-                'mainImage' => 'backflip.jpg'
+                'ref' => self::BACK_FLIP_TRICK_REFERENCE
             ],
         ];
 
@@ -201,7 +185,6 @@ class TrickFixtures extends Fixture implements DependentFixtureInterface
             $trick->setCreatedAt(new \DateTime());
             $trick->setUser($elt['user']);
             $trick->setGroup($elt['group']);
-            $trick->setMainImage($elt['mainImage']);
             $this->addReference($elt['ref'], $trick);
             $manager->persist($trick);
         }
