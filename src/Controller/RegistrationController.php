@@ -20,7 +20,6 @@ use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 use Symfony\Component\Security\Guard\GuardAuthenticatorHandler;
 use Symfony\Component\String\Slugger\SluggerInterface;
 use SymfonyCasts\Bundle\VerifyEmail\Exception\VerifyEmailExceptionInterface;
-use Doctrine\Migrations\Finder\Finder;
 
 class RegistrationController extends AbstractController
 {
@@ -67,13 +66,13 @@ class RegistrationController extends AbstractController
             // generate a signed url and email it to the user
             $this->emailVerifier->sendEmailConfirmation('app_verify_email', $user,
                 (new TemplatedEmail())
-                    ->from(new Address('jason.cooke@hotmail.fr', 'Snow Tricks'))
+                    ->from(new Address('jasonpcooke88@gmail.com', 'Snow Tricks'))
                     ->to($user->getEmail())
                     ->subject('Please Confirm your Email')
                     ->htmlTemplate('registration/confirmation_email.html.twig')
             );
 
-            $this->addFlash('success', 'Veuillez verifier votre boite mail pour confirmer la création de votre compte.');
+            $this->addFlash('success', 'Veuillez vérifier votre boîte mail pour confirmer la création de votre compte.');
 
             return $this->redirectToRoute('home');
 

@@ -20,7 +20,7 @@ class TrickVideo
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Assert\NotBlank,
+     * @Assert\NotBlank(groups={"new","edit"}, message="Le champ embed d'une vidéo ne peut pas être vide.")
      */
     private ?string $embed = null;
 

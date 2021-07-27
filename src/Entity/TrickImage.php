@@ -6,6 +6,7 @@ use App\Repository\TrickImageRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Component\Validator\Context\ExecutionContextInterface;
 
 /**
  * @ORM\Entity(repositoryClass=TrickImageRepository::class)
@@ -25,7 +26,22 @@ class TrickImage
      */
     private ?Trick $trick;
 
-    private $file;
+    /**
+     * @Assert\NotBlank(groups={"new"}, message="Le champ fichier d'une image ne peut pas être vide.")
+     */
+    private $file = null;
+
+    /**
+     * @Assert\Callback(groups={"edit"})
+     */
+    public function validate(ExecutionContextInterface $context)
+    {
+        if($this->getId() === null && $this->getFile() === null) {
+            $context->buildViolation('Le champ fichier d\'une image ne peut pas être vide.')
+                ->atPath('file')
+                ->addViolation();
+        }
+    }
 
     /**
      * @return mixed
@@ -45,9 +61,8 @@ class TrickImage
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Assert\NotBlank
      */
-    private ?string $path;
+    private ?string $path = null;
 
     /**
      * @ORM\Column(type="datetime")

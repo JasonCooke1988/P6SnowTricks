@@ -4,15 +4,16 @@
 namespace App\DataFixtures;
 
 
-use App\Entity\TrickImage;
+use App\Entity\Comment;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Doctrine\Persistence\ObjectManager;
 
-class TrickImageFixtures extends Fixture implements DependentFixtureInterface
+class CommentFixtures extends Fixture implements DependentFixtureInterface
 {
-
     public $args;
+    private object $jason;
+    private object $stella;
 
     /**
      * @inheritDoc
@@ -20,91 +21,80 @@ class TrickImageFixtures extends Fixture implements DependentFixtureInterface
     public function load(ObjectManager $manager)
     {
 
+        $this->jason = $this->getReference(UserFixtures::JASON_USER_REFERENCE);
+        $this->stella = $this->getReference(UserFixtures::STELLA_USER_REFERENCE);
+
         $this->args = [
             [
-                'path' => 'mute.jpg',
                 'trick' => TrickFixtures::MUTE_TRICK_REFERENCE
             ],
             [
-                'path' => 'mute2.jpg',
                 'trick' => TrickFixtures::MUTE_TRICK_REFERENCE
             ],
             [
-                'path' => 'tailgrab.jpg',
                 'trick' => TrickFixtures::TAIL_GRAB_TRICK_REFERENCE
             ],
             [
-                'path' => 'mute3.jpg',
                 'trick' => TrickFixtures::MUTE_TRICK_REFERENCE
             ],
             [
-                'path' => 'nosegrab.jpg',
                 'trick' => TrickFixtures::NOSE_GRAB_TRICK_REFERENCE
             ],
             [
-                'path' => '180.jpg',
                 'trick' => TrickFixtures::ROTATION_180_TRICK_REFERENCE
             ],
             [
-                'path' => '360.jpg',
                 'trick' => TrickFixtures::ROTATION_360_TRICK_REFERENCE
             ],
             [
-                'path' => 'japan.jpg',
                 'trick' => TrickFixtures::JAPAN_TRICK_REFERENCE
             ],
             [
-                'path' => '540.jpg',
                 'trick' => TrickFixtures::ROTATION_540_TRICK_REFERENCE
             ],
             [
-                'path' => '720.jpg',
                 'trick' => TrickFixtures::ROTATION_720_TRICK_REFERENCE
             ],
             [
-                'path' => 'flip.jpg',
                 'trick' => TrickFixtures::FLIP_TRICK_REFERENCE
             ],
             [
-                'path' => 'frontflip.jpg',
                 'trick' => TrickFixtures::FRONT_FLIP_TRICK_REFERENCE
             ],
             [
-                'path' => 'seatbelt.jpg',
                 'trick' => TrickFixtures::SEAT_BELT_TRICK_REFERENCE
             ],
             [
-                'path' => 'backflip.jpg',
                 'trick' => TrickFixtures::BACK_FLIP_TRICK_REFERENCE
             ],
             [
-                'path' => 'indy.jpg',
                 'trick' => TrickFixtures::INDY_TRICK_REFERENCE
             ],
             [
-                'path' => 'sad.jpg',
                 'trick' => TrickFixtures::SAD_TRICK_REFERENCE
             ],
             [
-                'path' => 'truckdriver.jpg',
                 'trick' => TrickFixtures::TRUCK_DRIVER_TRICK_REFERENCE
             ],
             [
-                'path' => 'stalefish.jpg',
                 'trick' => TrickFixtures::STALEFISH_TRICK_REFERENCE
             ]
         ];
 
 
-
-        foreach($this->args as $elt) {
-            $trickImage = new TrickImage();
-            $trickImage->setPath($elt['path']);
-            $trickImage->setCreatedAt(new \DateTime());
-            $trickImage->setTrick($this->getReference($elt['trick']));
-            $manager->persist($trickImage);
+        foreach ($this->args as $elt) {
+            for ($i = 0; $i <= 30; $i++) {
+                $comment = new Comment();
+                $comment->setTrick($this->getReference($elt['trick']));
+                $comment->setUser($i % 2 == 0 ? $this->jason : $this->stella);
+                $comment->setContent("Lorem ipsum dolor sit amet, consectetur adipisicing elit. 
+                Ab asperiores dignissimos explicabo id, 
+                illum labore minus nihil nulla, perferendis quas quia quidem reiciendis similique sint sit, 
+                soluta tempora vel veniam.");
+                $comment->setCreatedAt(new \DateTime());
+                $manager->persist($comment);
+            }
         }
-
         $manager->flush();
     }
 
@@ -112,7 +102,8 @@ class TrickImageFixtures extends Fixture implements DependentFixtureInterface
     public function getDependencies()
     {
         return [
-            TrickFixtures::class
+            TrickFixtures::class,
+            UserFixtures::class
         ];
     }
 }

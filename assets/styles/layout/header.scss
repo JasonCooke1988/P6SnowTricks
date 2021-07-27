@@ -1,18 +1,23 @@
 header.fullheight {
   height: 100vh;
   border-bottom: 1px solid;
+
   .banner.fullheight {
     position: relative;
+
     h1 {
       color: white;
       z-index: 99;
       text-shadow: 1px 1px 2px black;
     }
+
     a {
       color: black;
+
       &:hover {
-        color:black;
+        color: black;
       }
+
       .icon-arrow-down {
         position: absolute;
         right: 1rem;
@@ -28,6 +33,7 @@ header {
   .topbar {
     padding: 15px 0;
   }
+
   .logo {
     img {
       max-width: 100px;
@@ -38,10 +44,22 @@ header {
   .menu {
     margin-right: 2rem;
     height: min-content;
+    @include bp(md) {
+      margin-right: 0;
+    }
+    @include bp(sm) {
+      flex-wrap: wrap;
+      padding-right: 0;
+    }
+
     a {
       font-size: 40px;
       color: black;
-      font-family: 'snowboarding',sans-serif;
+      font-family: 'snowboarding', sans-serif;
+      @include bp(sm) {
+        font-size: 30px;
+      }
+
       &:hover {
         text-decoration: none;
       }
