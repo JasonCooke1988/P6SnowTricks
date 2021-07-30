@@ -53,11 +53,14 @@ header {
     }
 
     a {
-      font-size: 40px;
+      font-size: 20px;
       color: black;
-      font-family: 'snowboarding', sans-serif;
+      font-family: 'Roboto', sans-serif;
+      @include bp(md) {
+        font-size: 18px;
+      }
       @include bp(sm) {
-        font-size: 30px;
+        font-size: 20px;
       }
 
       &:hover {

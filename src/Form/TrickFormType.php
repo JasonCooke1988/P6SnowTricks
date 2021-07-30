@@ -73,6 +73,7 @@ class TrickFormType extends AbstractType
                 'label' => 'Copier le code \'embed\' pour la vidéo à ajouter / modifier :',
                 'required' => true,
                 'allow_add' => true,
+                'allow_delete' => true,
                 'prototype' => true,
             ])
             ->add('trickImages', CollectionType::class, [
@@ -81,6 +82,7 @@ class TrickFormType extends AbstractType
                 'label' => 'Ajouter une image',
                 'required' => true,
                 'allow_add' => true,
+                'allow_delete' => true,
                 'prototype' => true,
             ]);
     }

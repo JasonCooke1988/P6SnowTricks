@@ -1,4 +1,4 @@
-.banner.modify-trick {
+.banner.modify-trick,.banner.single-trick {
   position: relative;
 
   .trick-action {
@@ -46,6 +46,23 @@
   #video-form, #add-video-form {
     .form-group {
       width: 100% !important;
+    }
+  }
+
+  .video-wrapper {
+    @include bp(md) {
+      height: 420px;
+    }
+    @include bp(sm) {
+      height: 300px;
+    }
+    iframe {
+      @include bp(md) {
+        height: 90%;
+      }
+      @include bp(sm) {
+        height: 80%;
+      }
     }
   }
 }

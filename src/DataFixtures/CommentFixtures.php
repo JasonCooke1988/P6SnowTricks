@@ -88,9 +88,7 @@ class CommentFixtures extends Fixture implements DependentFixtureInterface
                 $comment->setTrick($this->getReference($elt['trick']));
                 $comment->setUser($i % 2 == 0 ? $this->jason : $this->stella);
                 $comment->setContent("Lorem ipsum dolor sit amet, consectetur adipisicing elit. 
-                Ab asperiores dignissimos explicabo id, 
-                illum labore minus nihil nulla, perferendis quas quia quidem reiciendis similique sint sit, 
-                soluta tempora vel veniam.");
+                Ab asperiores dignissimos explicabo id.");
                 $comment->setCreatedAt(new \DateTime());
                 $manager->persist($comment);
             }

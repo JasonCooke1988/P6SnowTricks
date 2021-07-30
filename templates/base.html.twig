@@ -29,15 +29,15 @@
 
         {% block header %}
             <div class="topbar d-flex justify-content-between align-items-center">
-                <div class="logo col-lg-2">
+                <div class="logo col-lg-2 col-4">
                     <a href="{{ path('home') }}"><img src="{{ asset('images/snowboardinglogo.jpg') }}"
                                                       alt="Logo du site"></a>
                 </div>
-                <div class="menu col-lg-6 col-md-8 d-flex justify-content-end align-items-center">
+                <div class="menu col-lg-6 col-md-8 col-8 d-flex justify-content-end align-items-center">
                     <a class="mx-4" href="{{ path('home') }}">Accueil</a><span class="d-none d-sm-block">|</span>
                     {% if not app.user %}
                         <a class="mx-4" href="{{ path('app_register') }}">Inscription</a><span class="d-none d-sm-block">|</span>
-                        <a class="mx-4" href="{{ path('app_login') }}">Connexion</a><span class="d-none d-sm-block">|</span>
+                        <a class="mx-4" href="{{ path('app_login') }}">Connexion</a>
                     {% else %}
                         <a class="mx-4" href="{{ path('addTrick') }}">Ajouter une figure</a><span class="d-none d-sm-block">|</span>
                         <a class="mx-4" href="{{ path('app_logout') }}">Déconnexion</a>

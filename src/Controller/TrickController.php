@@ -36,7 +36,7 @@ class TrickController extends AbstractController
      * @return Response
      * @throws Exception
      */
-    public function singleTrick(Trick $trick, Request $request): Response
+    public function view(Trick $trick, Request $request): Response
     {
 
         $comment = new Comment();
@@ -78,7 +78,7 @@ class TrickController extends AbstractController
      * @return Response
      * @throws Exception
      */
-    public function addTrick(Request $request, UserInterface $user, SluggerInterface $slugger): Response
+    public function add(Request $request, UserInterface $user, SluggerInterface $slugger): Response
     {
 
         $this->denyAccessUnlessGranted('ROLE_USER');
@@ -89,7 +89,6 @@ class TrickController extends AbstractController
         $trickForm->handleRequest($request);
 
         if ($trickForm->isSubmitted() && $trickForm->isValid()) {
-
 
             $trick = $trickForm->getData();
 
@@ -140,7 +139,7 @@ class TrickController extends AbstractController
      * @return Response
      * @throws Exception
      */
-    public function modifyTrick(Trick $trick, Request $request, SluggerInterface $slugger, TrickRepository $trickRepo): Response
+    public function edit(Trick $trick, Request $request, SluggerInterface $slugger, TrickRepository $trickRepo): Response
     {
 
         $this->denyAccessUnlessGranted('ROLE_USER');
@@ -182,7 +181,6 @@ class TrickController extends AbstractController
                 }
             }
 
-
             foreach ($trick->getTrickImages() as $image) {
                 if ($image->getId() === null && $image->getFile() === null) {
                     $trick->removeTrickImage($image);
@@ -194,7 +192,6 @@ class TrickController extends AbstractController
                     $trick->removeTrickVideo($video);
                 }
             }
-
 
             $trickForm = $this->createForm(TrickFormType::class, $trick, ['validation_groups' => 'edit']);
 
@@ -238,65 +235,6 @@ class TrickController extends AbstractController
         }
 
 
-
-        return $this->redirectToRoute('modifyTrick', ['slug' => $trick->getSlug()]);
-    }
-
-    /**
-     * @Route("/deleteSingleImageTrick/{id}/{trickImage_id}", name="deleteSingleImageTrick")
-     * @ParamConverter("trickImage", options={"id" = "trickImage_id"})
-     * @param Trick $trick
-     * @param TrickImage $trickImage
-     * @return RedirectResponse
-     * @throws Exception
-     */
-    public function deleteSingleImage(Trick $trick, TrickImage $trickImage): RedirectResponse
-    {
-
-        $this->denyAccessUnlessGranted('ROLE_USER');
-
-        $path = $trickImage->getPath();
-
-        unlink('images/tricks/' . $path);
-
-        $trick->removeTrickImage($trickImage);
-
-        $trick->setUpdatedAt(new DateTime('now', new DateTimeZone('Europe/Paris')));
-
-        $entityManager = $this->getDoctrine()->getManager();
-
-        $entityManager->persist($trick);
-        $entityManager->flush();
-
-        $this->addFlash('success', 'Image supprimée.');
-
-        return $this->redirectToRoute('modifyTrick', ['slug' => $trick->getSlug()]);
-    }
-
-    /**
-     * @Route("/deleteTrickVideo/{id}/{trickVideo_id}", name="deleteTrickVideo")
-     * @ParamConverter("trickVideo", options={"id" = "trickVideo_id"})
-     * @param Trick $trick
-     * @param TrickVideo $trickVideo
-     * @return RedirectResponse
-     * @throws Exception
-     */
-    public function deleteTrickVideo(Trick $trick, TrickVideo $trickVideo): RedirectResponse
-    {
-
-        $this->denyAccessUnlessGranted('ROLE_USER');
-
-        $trick->removeTrickVideo($trickVideo);
-
-        $trick->setUpdatedAt(new DateTime('now', new DateTimeZone('Europe/Paris')));
-
-        $entityManager = $this->getDoctrine()->getManager();
-
-        $entityManager->persist($trick);
-        $entityManager->flush();
-
-        $this->addFlash('success', 'Video supprimée.');
-
         return $this->redirectToRoute('modifyTrick', ['slug' => $trick->getSlug()]);
     }
 
@@ -305,7 +243,7 @@ class TrickController extends AbstractController
      * @param Trick $trick
      * @return RedirectResponse
      */
-    public function deleteTrick(Trick $trick): RedirectResponse
+    public function delete(Trick $trick): RedirectResponse
     {
         $this->denyAccessUnlessGranted('ROLE_USER');
 

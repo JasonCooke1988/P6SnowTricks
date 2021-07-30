@@ -4,6 +4,23 @@
   }
 }
 
+main.single-trick,main.modify-trick {
+  .single-image, .single-video, .image-wrapper img  {
+    height: 121px;
+    @include bp(md) {
+      height: 400px;
+    }
+    @include bp(sm) {
+      height: 200px;
+    }
+  }
+
+  iframe {
+    height: 100%;
+    width: 100%;
+  }
+}
+
 main.single-trick {
   #display-medias {
     display: none;
@@ -20,12 +37,10 @@ main.single-trick {
       display: none;
     }
 
+
+
     .single-image {
       align-self: center;
-      height: 121px;
-      @include bp(md) {
-        height: 320px;
-      }
 
       img {
         height: 100%;
@@ -35,17 +50,9 @@ main.single-trick {
     }
 
     .single-video {
-      @include bp(md) {
-        height: 320px;
-      }
-
 
       iframe {
-        height: 121px;
-        width: 100%;
-        @include bp(md) {
-          min-height: 100%;
-        }
+
       }
     }
   }
@@ -57,9 +64,17 @@ main.single-trick {
   }
 
   .stats {
+
+    @include bp(sm) {
+      font-size: 11px;
+    }
+
     p {
       border: solid black 1px;
       padding: .25rem;
+      display: flex;
+      justify-content: center;
+      align-items: center;
     }
   }
 
