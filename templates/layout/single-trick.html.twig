@@ -19,6 +19,15 @@
         {% endif %}
 
         <h1>{{ trick.name }}</h1>
+
+        {% if app.user %}
+            <div class="trick-action py-2 px-1 d-flex justify-content-around">
+                <a href="{{ path('modifyTrick', {slug: trick.slug}) }}"><i class="icon-pencil"></i></a>
+                <a href="#" id="delete-trick" data-toggle="modal"
+                   data-target="#delete-modal"
+                   data-href="{{ path('deleteTrick', {slug: trick.slug}) }}"><i class="icon-bin"></i></a>
+            </div>
+        {% endif %}
     </div>
 {% endblock %}
 
@@ -36,7 +45,9 @@
             {% if trick.trickImages is defined %}
                 {% for image in trick.trickImages %}
                     <div class="single-image col-lg-2 my-4">
-                        <img class="trick-image" src="{{ asset('images/tricks/' ~ image.path) }}" alt="Trick image">
+                        <a href="{{ asset('images/tricks/' ~ image.path) }}" title="Image de figure" target="_blank">
+                            <img class="trick-image" src="{{ asset('images/tricks/' ~ image.path) }}" alt="Trick image">
+                        </a>
                     </div>
                 {% endfor %}
             {% endif %}
@@ -56,11 +67,11 @@
 
         <div class="stats d-flex offset-lg-2 col-lg-8 justify-content-around">
             <p class="group p-2">{{ trick.group.name }}</p>
-            <p class="creation p-2">Figure créée le
-                : {{ trick.createdAt|format_datetime('full', 'none', locale='fr') }}</p>
+            <p class="creation p-2">Figure créée le : <br>
+                {{ trick.createdAt|format_datetime('full', 'none', locale='fr') }}</p>
             {% if trick.updatedAt is defined and trick.updatedAt is not null %}
-                <p class="update p-2">Figure modifié le
-                    : {{ trick.updatedAt|format_datetime('full', 'none', locale='fr') }} </p>
+                <p class="update p-2">Figure modifié le : <br>
+                    {{ trick.updatedAt|format_datetime('full', 'none', locale='fr') }} </p>
             {% endif %}
         </div>
 
@@ -74,34 +85,26 @@
             </div>
             <hr>
 
-            {% if app.user %}
-                <div class="d-flex justify-content-end mr-4">
-                    <a id="delete-trick-submit" class="btn btn-lg btn-danger" href="#" data-toggle="modal"
-                       data-target="#delete-modal" data-href="{{ path('deleteTrick',{slug: trick.slug}) }}">Supprimer</a>
-                    <a href="{{ path('modifyTrick',{slug: trick.slug}) }}" class="btn btn-lg btn-primary ml-2">Modifier
-                        la
-                        figure</a>
-                </div>
-            {% endif %}
-
         {% endif %}
 
         {% if trick.comments is defined %}
             <div class="comment-list d-flex flex-column align-items-center mt-4">
                 {% for comment in trick.comments|sort((a,b) => a.createdAt < b.createdAt) %}
 
-                        <div class="single-comment {% if loop.index > 10 %} above-max {% endif %} col-lg-5 col-10 align-items-center my-3">
-                            <p>{{ comment.user.firstName ~ ' ' ~ comment.user.lastName }} - Crée le {{ comment.createdAt|format_datetime('full', 'none', locale='fr') }}</p>
-                            <div class="content">
+                    <div class="single-comment {% if loop.index > 10 %} above-max {% endif %} col-lg-5 col-10 align-items-center my-3">
+                        <p>{{ comment.user.firstName ~ ' ' ~ comment.user.lastName }} - Crée
+                            le {{ comment.createdAt|format_datetime('full', 'none', locale='fr') }}</p>
+                        <div class="content">
                             {% if comment.user.photo is defined and comment.user.photo is not null %}
-                                <img src="{{ asset('images/users/' ~ comment.user.photo) }}" alt="Image de profile utilisateur" class="user-image mr-2">
+                                <img src="{{ asset('images/users/' ~ comment.user.photo) }}"
+                                     alt="Image de profile utilisateur" class="user-image mr-2">
                             {% else %}
                                 <img src="https://via.placeholder.com/150" alt="User profile image"
                                      class="user-image mr-2">
                             {% endif %}
-                                <p class="comment mb-0 p-2">{{ comment.content }}</p>
-                            </div>
+                            <p class="comment mb-0 p-2">{{ comment.content }}</p>
                         </div>
+                    </div>
 
                 {% endfor %}
 
