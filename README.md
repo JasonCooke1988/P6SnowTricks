@@ -35,6 +35,10 @@ and load data fixtures :
 
 `php bin/console doctrine:fixtures:load`
 
+## Start project
+
+From terminal `symfony server:start`
+
 ## Structure
 
 1. assets
