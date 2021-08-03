@@ -1,51 +1,59 @@
 @font-face {
-  font-family: 'icomoon';
-  src:  url('icomoon.eot?l73waf');
-  src:  url('icomoon.eot?l73waf#iefix') format('embedded-opentype'),
+    font-family: 'icomoon';
+    src: url('icomoon.eot?l73waf');
+    src: url('icomoon.eot?l73waf#iefix') format('embedded-opentype'),
     url('icomoon.ttf?l73waf') format('truetype'),
     url('icomoon.woff?l73waf') format('woff'),
     url('icomoon.svg?l73waf#icomoon') format('svg');
-  font-weight: normal;
-  font-style: normal;
-  font-display: block;
+    font-weight: normal;
+    font-style: normal;
+    font-display: block;
 }
 
-[class^="icon-"], [class*=" icon-"] {
-  /* use !important to prevent issues with browser extensions that change fonts */
-  font-family: 'icomoon',sans-serif !important;
-  speak: never;
-  font-style: normal;
-  font-weight: normal;
-  font-variant: normal;
-  text-transform: none;
-  line-height: 1;
+[class^="icon-"],
+[class*=" icon-"] {
+    /* use !important to prevent issues with browser extensions that change fonts */
+    font-family: 'icomoon', sans-serif !important;
+    speak: never;
+    font-style: normal;
+    font-weight: normal;
+    font-variant: normal;
+    text-transform: none;
+    line-height: 1;
 
-  /* Better Font Rendering =========== */
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+    /* Better Font Rendering =========== */
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
 }
 
-.icon-home3:before {
-  content: "\e902";
+.icon-home3::before {
+    content: "\e902";
 }
-.icon-enter:before {
-  content: "\ea13";
+
+.icon-enter::before {
+    content: "\ea13";
 }
-.icon-exit:before {
-  content: "\ea14";
+
+.icon-exit::before {
+    content: "\ea14";
 }
-.icon-pencil:before {
-  content: "\e905";
+
+.icon-pencil::before {
+    content: "\e905";
 }
-.icon-spinner:before {
-  content: "\e97a";
+
+.icon-spinner::before {
+    content: "\e97a";
 }
-.icon-bin:before {
-  content: "\e9ac";
+
+.icon-bin::before {
+    content: "\e9ac";
 }
-.icon-arrow-up:before {
-  content: "\ea32";
+
+.icon-arrow-up::before {
+    content: "\ea32";
 }
-.icon-arrow-down:before {
-  content: "\ea36";
+
+.icon-arrow-down::before {
+    content: "\ea36";
 }

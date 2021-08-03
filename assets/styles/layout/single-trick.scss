@@ -4,8 +4,11 @@
   }
 }
 
-main.single-trick,main.modify-trick {
-  .single-image, .single-video, .image-wrapper img  {
+main.single-trick,
+main.modify-trick {
+  .single-image,
+  .single-video,
+  .image-wrapper img {
     height: 180px;
     @include bp(md) {
       height: 400px;
@@ -30,14 +33,12 @@ main.single-trick {
   }
 
   .image-videos {
-    margin: .5rem .5rem;
+    margin: 0.5rem 0.5rem;
     display: flex;
 
     @include bp(sm) {
       display: none;
     }
-
-
 
     .single-image {
       align-self: center;
@@ -46,13 +47,6 @@ main.single-trick {
         height: 100%;
         width: 100%;
         object-fit: cover;
-      }
-    }
-
-    .single-video {
-
-      iframe {
-
       }
     }
   }
@@ -71,7 +65,7 @@ main.single-trick {
 
     p {
       border: solid black 1px;
-      padding: .25rem;
+      padding: 0.25rem;
       display: flex;
       justify-content: center;
       align-items: center;
@@ -81,7 +75,7 @@ main.single-trick {
   .comment-form {
     .btn {
       max-height: 3rem;
-      box-shadow: 2px 2px 5px 0px rgba(0, 0, 0, 0.75);
+      box-shadow: 2px 2px 5px 0 rgba(0, 0, 0, 0.75);
     }
 
     .form-group {
@@ -106,7 +100,7 @@ main.single-trick {
 
         .comment {
           border: 1px solid black;
-          box-shadow: 2px 2px 5px 0px rgba(0, 0, 0, 0.75);
+          box-shadow: 2px 2px 5px 0 rgba(0, 0, 0, 0.75);
           width: 100%;
         }
 

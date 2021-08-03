@@ -1,17 +1,20 @@
 .form-wrapper {
   margin-top: 4rem;
+
   h1 {
     margin-bottom: 2rem;
     @include bp(md) {
       font-size: 30px;
     }
   }
+
   form {
     border: 2px solid black;
     display: flex;
     flex-direction: column;
     align-items: center;
     padding: 1rem;
+
     .form-group {
       width: 50%;
       display: flex;
@@ -20,16 +23,18 @@
       @include bp(sm) {
         width: 75px;
       }
+
       input {
         border: none;
         border-bottom: 2px solid black;
         border-radius: 0;
       }
     }
+
     button[type="submit"] {
       margin-top: 2rem;
       border: 2px solid black;
-      box-shadow: 3px 3px 2px 0px rgba(0,0,0,0.75);
+      box-shadow: 3px 3px 2px 0 rgba(0, 0, 0, 0.75);
     }
   }
 
@@ -41,10 +46,10 @@
   box-shadow: $box-shadow;
   width: 8rem;
 
-
   i {
     color: black;
     font-size: 24px;
+
     &:hover {
       color: black;
       text-decoration: none;

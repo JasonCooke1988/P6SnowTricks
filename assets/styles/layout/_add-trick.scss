@@ -1,12 +1,15 @@
 .single-trick.add-trick {
   .media-row {
-    .single-image, .single-video {
+    .single-image,
+    .single-video {
       display: none;
     }
   }
 
-  .image-list, .video-list {
+  .image-list,
+  .video-list {
     list-style: none;
+
     li {
       margin: 10px 0;
     }

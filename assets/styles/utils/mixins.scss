@@ -19,24 +19,31 @@ $container-max-widths: (
 
 @mixin bp($point) {
 
-
-  @if $point == sm{
-    @media (max-width: 576px){ @content ; }
+  @if $point == sm {
+    @media (max-width: 576px) {
+      @content ;
+    }
   }
 
   @if $point == md {
-    @media (max-width: 768px){ @content ; }
+    @media (max-width: 768px) {
+      @content ;
+    }
   }
 
   @if $point == lg {
-    @media (max-width: 992px){ @content ; }
+    @media (max-width: 992px) {
+      @content ;
+    }
   }
 
   @if $point == xl {
-    @media (max-width: 1280px) { @content ; }
-  }
-
-  @else if $point == xxl {
-    @media (max-width: 1440px){ @content ; }
+    @media (max-width: 1280px) {
+      @content ;
+    }
+  } @else if $point == xxl {
+    @media (max-width: 1440px) {
+      @content ;
+    }
   }
 }

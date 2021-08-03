@@ -1,4 +1,5 @@
-.banner.modify-trick,.banner.single-trick {
+.banner.modify-trick,
+.banner.single-trick {
   position: relative;
 
   .trick-action {
@@ -32,18 +33,21 @@
     div.media-row {
       width: 100%;
       flex-wrap: wrap;
+
       div.image-wrapper {
         display: flex;
         flex-direction: column;
 
       }
+
       .hide-input {
         display: none;
       }
     }
   }
 
-  #video-form, #add-video-form {
+  #video-form,
+  #add-video-form {
     .form-group {
       width: 100% !important;
     }
@@ -56,6 +60,7 @@
     @include bp(sm) {
       height: 300px;
     }
+
     iframe {
       @include bp(md) {
         height: 90%;
