@@ -6,7 +6,7 @@
 
 main.single-trick,main.modify-trick {
   .single-image, .single-video, .image-wrapper img  {
-    height: 121px;
+    height: 180px;
     @include bp(md) {
       height: 400px;
     }
@@ -16,7 +16,7 @@ main.single-trick,main.modify-trick {
   }
 
   iframe {
-    height: 100%;
+    height: 73%;
     width: 100%;
   }
 }
