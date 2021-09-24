@@ -33,6 +33,7 @@
     div.media-row {
       width: 100%;
       flex-wrap: wrap;
+      margin-bottom: 100px;
 
       div.image-wrapper {
         display: flex;
@@ -53,22 +54,4 @@
     }
   }
 
-  .video-wrapper {
-    @include bp(md) {
-      height: 420px;
-    }
-    @include bp(sm) {
-      height: 300px;
-    }
-
-    iframe {
-      @include bp(md) {
-        height: 90%;
-      }
-      @include bp(sm) {
-        height: 80%;
-      }
-    }
-  }
 }
-

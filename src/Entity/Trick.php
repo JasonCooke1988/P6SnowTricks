@@ -11,11 +11,13 @@ use Gedmo\Mapping\Annotation as Gedmo;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\Validator\Constraints as Assert;
+use App\Validator as CustomAssert;
 
 /**
  * @ORM\Entity(repositoryClass=TrickRepository::class)
  * @ORM\Cache(usage="NONSTRICT_READ_WRITE")
  * @UniqueEntity(fields="name", message="Une figure portant ce nom existe déjà", groups={"new"})
+ * @CustomAssert\TrickName(groups={"edit"})
  */
 class Trick
 {
@@ -89,7 +91,14 @@ class Trick
      */
     private ?string $slug;
 
-    private $mainImageFile;
+    private ?UploadedFile $mainImageFile = null;
+
+    public function __construct()
+    {
+        $this->comments = new ArrayCollection();
+        $this->trickVideos = new ArrayCollection();
+        $this->trickImages = new ArrayCollection();
+    }
 
     /**
      * @return mixed
@@ -107,12 +116,6 @@ class Trick
         $this->mainImageFile = $mainImageFile;
     }
 
-    public function __construct()
-    {
-        $this->comments = new ArrayCollection();
-        $this->trickVideos = new ArrayCollection();
-        $this->trickImages = new ArrayCollection();
-    }
 
     public function getId(): ?int
     {
@@ -313,7 +316,7 @@ class Trick
 
     public function deleteMainImage()
     {
-        unlink('images/tricks/'.$this->mainImage);
+        unlink('images/tricks/' . $this->mainImage);
 
         $this->mainImage = null;
 

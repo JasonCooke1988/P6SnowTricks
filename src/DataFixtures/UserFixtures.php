@@ -10,12 +10,10 @@ use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 class UserFixtures extends Fixture
 {
 
-    private $passwordEncoder;
+    private UserPasswordEncoderInterface $passwordEncoder;
 
     public const JASON_USER_REFERENCE = "jason-user";
     public const STELLA_USER_REFERENCE = "stella-user";
-
-    public $args;
 
     public function __construct(UserPasswordEncoderInterface $passwordEncoder)
     {
@@ -24,7 +22,7 @@ class UserFixtures extends Fixture
 
     public function load(ObjectManager $manager)
     {
-        $this->args = [
+        $args = [
             [
                 'firstName' => 'Jason',
                 'lastName' => 'Cooke',
@@ -32,6 +30,7 @@ class UserFixtures extends Fixture
                 'userName' => 'Jason',
                 'password' => 'testing',
                 'photo' => 'man.png',
+                'is_verified' => '1',
                 'ref' => self::JASON_USER_REFERENCE
             ],
             [
@@ -41,11 +40,12 @@ class UserFixtures extends Fixture
                 'userName' => 'Stella',
                 'password' => 'testing',
                 'photo' => 'female.png',
+                'is_verified' => '1',
                 'ref' => self::STELLA_USER_REFERENCE
             ]
         ];
 
-        foreach($this->args as $elt) {
+        foreach($args as $elt) {
 
             $user = new User();
 
@@ -58,6 +58,7 @@ class UserFixtures extends Fixture
                 $user,
                 $elt['password']
             ));
+            $user->setIsVerified($elt['is_verified']);
             $user->setCreatedAt(new \DateTime());
             $this->addReference($elt['ref'], $user);
 

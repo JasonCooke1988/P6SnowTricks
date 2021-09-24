@@ -42,6 +42,8 @@
             }) }}
             {{ form_row(registrationForm.file) }}
             <button type="submit" class="btn btn-lg btn-primary">Créer un compte</button>
+
+            <a class="my-4" href="{{ path('app_login') }}">Vous avez déjà un compte ?</a>
             {{ form_end(registrationForm) }}
 
         </div>

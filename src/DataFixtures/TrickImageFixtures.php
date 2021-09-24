@@ -11,8 +11,7 @@ use Doctrine\Persistence\ObjectManager;
 
 class TrickImageFixtures extends Fixture implements DependentFixtureInterface
 {
-
-    public $args;
+    
 
     /**
      * @inheritDoc
@@ -20,7 +19,7 @@ class TrickImageFixtures extends Fixture implements DependentFixtureInterface
     public function load(ObjectManager $manager)
     {
 
-        $this->args = [
+        $args = [
             [
                 'path' => 'mute.jpg',
                 'trick' => TrickFixtures::MUTE_TRICK_REFERENCE
@@ -97,7 +96,7 @@ class TrickImageFixtures extends Fixture implements DependentFixtureInterface
 
 
 
-        foreach($this->args as $elt) {
+        foreach($args as $elt) {
             $trickImage = new TrickImage();
             $trickImage->setPath($elt['path']);
             $trickImage->setCreatedAt(new \DateTime());
@@ -109,7 +108,7 @@ class TrickImageFixtures extends Fixture implements DependentFixtureInterface
     }
 
 
-    public function getDependencies()
+    public function getDependencies(): array
     {
         return [
             TrickFixtures::class

@@ -37,9 +37,6 @@ class TrickFixtures extends Fixture implements DependentFixtureInterface
     private object $flips;
     private object $slides;
 
-    public $args;
-
-
 
     /**
      * @inheritDoc
@@ -63,7 +60,7 @@ class TrickFixtures extends Fixture implements DependentFixtureInterface
         $this->slides = $this->getReference(GroupFixtures::SLIDES_GROUP_REFERENCE);
         $this->oldSchool = $this->getReference(GroupFixtures::OLD_SCHOOL_GROUP_REFERENCE);
 
-        $this->args =  [
+        $args =  [
             [
                 'name' => 'Mute',
                 'description' => 'Saisie de la carre frontside de la planche entre les deux pieds avec la main avant',
@@ -178,7 +175,7 @@ class TrickFixtures extends Fixture implements DependentFixtureInterface
             ],
         ];
 
-        foreach($this->args as $elt) {
+        foreach($args as $elt) {
             $trick = new Trick();
             $trick->setName($elt['name']);
             $trick->setDescription($elt['description']);
