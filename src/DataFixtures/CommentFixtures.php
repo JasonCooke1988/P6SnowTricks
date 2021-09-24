@@ -11,7 +11,6 @@ use Doctrine\Persistence\ObjectManager;
 
 class CommentFixtures extends Fixture implements DependentFixtureInterface
 {
-    public $args;
     private object $jason;
     private object $stella;
 
@@ -24,7 +23,7 @@ class CommentFixtures extends Fixture implements DependentFixtureInterface
         $this->jason = $this->getReference(UserFixtures::JASON_USER_REFERENCE);
         $this->stella = $this->getReference(UserFixtures::STELLA_USER_REFERENCE);
 
-        $this->args = [
+        $args = [
             [
                 'trick' => TrickFixtures::MUTE_TRICK_REFERENCE
             ],
@@ -82,7 +81,7 @@ class CommentFixtures extends Fixture implements DependentFixtureInterface
         ];
 
 
-        foreach ($this->args as $elt) {
+        foreach ($args as $elt) {
             for ($i = 0; $i <= 30; $i++) {
                 $comment = new Comment();
                 $comment->setTrick($this->getReference($elt['trick']));

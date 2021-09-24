@@ -29,7 +29,7 @@ class TrickImage
     /**
      * @Assert\NotBlank(groups={"new"}, message="Le champ fichier d'une image ne peut pas être vide.")
      */
-    private $file = null;
+    private ?UploadedFile $file = null;
 
     /**
      * @Assert\Callback(groups={"edit"})

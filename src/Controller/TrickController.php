@@ -6,19 +6,14 @@ namespace App\Controller;
 
 use App\Entity\Comment;
 use App\Entity\Trick;
-use App\Entity\TrickImage;
-use App\Entity\TrickVideo;
 use App\Entity\User;
 use App\Form\CommentFormType;
-use App\Form\TrickFormSingleImageType;
 use App\Form\TrickFormType;
-use App\Form\TrickFormVideoType;
 use App\Repository\TrickRepository;
 use App\Service\FileUploader;
 use DateTime;
 use DateTimeZone;
 use Exception;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -150,6 +145,7 @@ class TrickController extends AbstractController
 
         if ($trickForm->isSubmitted() && $trickForm->isValid()) {
 
+
             $entityManager = $this->getDoctrine()->getManager();
             $fileUploader = new FileUploader('./images/tricks/', $slugger);
             $trick = $trickForm->getData();
@@ -172,6 +168,7 @@ class TrickController extends AbstractController
             $trickForm = $this->createForm(TrickFormType::class, $trick, ['validation_groups' => 'edit']);
 
         } elseif ($trickForm->isSubmitted() && !$trickForm->isValid()) {
+
 
             $errors = array();
             foreach ($trickForm as $fieldName => $formField) {
@@ -279,7 +276,9 @@ class TrickController extends AbstractController
                 if ($id != null) {
                     $trickImage = $trick->getTrickImage($id);
                     $oldPath = $trickImage->getPath();
-                    unlink('images/tricks/' . $oldPath);
+                    if ($oldPath != "") {
+                        unlink('images/tricks/' . $oldPath);
+                    }
                     $trickImage->setPath($fileName);
                     $trickImage->setUpdatedAt(new DateTime('now', new DateTimeZone('Europe/Paris')));
 //                        Else is a new image

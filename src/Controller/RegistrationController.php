@@ -34,6 +34,7 @@ class RegistrationController extends AbstractController
      * @Route("/register", name="app_register")
      * @param Request $request
      * @param UserPasswordEncoderInterface $passwordEncoder
+     * @param SluggerInterface $slugger
      * @return Response
      * @throws Exception
      */
@@ -52,7 +53,8 @@ class RegistrationController extends AbstractController
                 )
             );
 
-            if(($file = $user->getFile()) != null) {
+            if($user->getFile() != null) {
+                $file = $user->getFile();
                 $fileUploader = new FileUploader('./images/users/', $slugger);
                 $this->uploadImage($file, $user, $fileUploader);
             }

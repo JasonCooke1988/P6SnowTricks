@@ -9,19 +9,34 @@ main.modify-trick {
   .single-image,
   .single-video,
   .image-wrapper img {
-    height: 180px;
+    height: 130px;
     @include bp(md) {
       height: 400px;
     }
     @include bp(sm) {
       height: 200px;
     }
+
+  }
+  iframe {
+    height: 100%;
+  }
+  .video-wrapper {
+    iframe {
+      height: 130px;
+      width: 100%;
+      @include bp(md) {
+        height: 400px;
+      }
+      @include bp(sm) {
+        height: 200px;
+      }
+    }
+    textarea {
+      width: 100%;
+    }
   }
 
-  iframe {
-    height: 73%;
-    width: 100%;
-  }
 }
 
 main.single-trick {

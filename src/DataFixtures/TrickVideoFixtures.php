@@ -11,17 +11,13 @@ use Doctrine\Persistence\ObjectManager;
 
 class TrickVideoFixtures extends Fixture implements DependentFixtureInterface
 {
-
-    public $args;
-    public $tricksRef;
-
     /**
      * @inheritDoc
      */
     public function load(ObjectManager $manager)
     {
 
-        $this->tricksRef = [
+        $tricksRef = [
             TrickFixtures::MUTE_TRICK_REFERENCE,
             TrickFixtures::ROTATION_180_TRICK_REFERENCE,
             TrickFixtures::ROTATION_360_TRICK_REFERENCE,
@@ -41,7 +37,7 @@ class TrickVideoFixtures extends Fixture implements DependentFixtureInterface
         ];
 
 
-        foreach ($this->tricksRef as $ref) {
+        foreach ($tricksRef as $ref) {
             $trickVideo = new TrickVideo();
             $trickVideo->setEmbed('<iframe width="560" height="315" src="https://www.youtube.com/embed/SQyTWk7OxSI" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>');
             $trickVideo->setCreatedAt(new \DateTime());
